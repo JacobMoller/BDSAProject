@@ -15,9 +15,15 @@ jobs:
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: 5.0.x
+      - name: Install dependencies
+        run: dotnet restore ./Application
+      - name: Build
+        run: dotnet build ./Application --configuration Release --no-restore
+      - name: Test
+        run: cd Application.Tests && dotnet test ./Application --no-restore --verbosity normal --collect:"XPlat Code Coverage" && cd ..
       - name: ReportGenerator
         uses: danielpalme/ReportGenerator-GitHub-Action@4.5.8
         with:
-          reports: 'coverage.xml' # REQUIRED # The coverage reports that should be parsed (separated by semicolon). Globbing is supported.
+          reports: 'coverage.cobertura.xml' # REQUIRED # The coverage reports that should be parsed (separated by semicolon). Globbing is supported.
           targetdir: 'CoverageReports' # REQUIRED # The directory where the generated report should be saved.
           reporttypes: 'HtmlInline;Cobertura' # The output formats
