@@ -1,0 +1,4 @@
+DROP DATABASE IF EXISTS ProjectBank;
+
+CREATE DATABASE ProjectBank;
+GO

@@ -1,0 +1,14 @@
+USE ProjectBank;
+GO
+
+CREATE TABLE [User](
+  Id INT IDENTITY(1,1) PRIMARY KEY,
+  Name VARCHAR(50)
+);
+
+CREATE TABLE Project(
+  Id INT IDENTITY(1,1) PRIMARY KEY,
+  Title VARCHAR(50), 
+  Description VARCHAR(100),
+);
+GO
