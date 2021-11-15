@@ -1,10 +1,10 @@
 ﻿@using Data.Core;
 @using Data.Infrastructure;
-@page "/project"
+@page "/project/{Id:int}"
 
 <PageTitle>Project</PageTitle>
 
-<h1>Project</h1>
+<h1>Project with id:@Id</h1>
 <p>Title: @test.Title</p>
 <p>Description: @test.Description</p>
 <p>Status: @test.Status</p>
@@ -17,5 +17,9 @@
 }
 
 @code {
+
+    [Parameter]
+    public int Id { get; set; }
+
     Project test = new Project("test", Status.Active, 1) { Description = "Bla bla", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}};
 }
