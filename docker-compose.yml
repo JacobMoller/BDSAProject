@@ -1,31 +1,46 @@
-version: "3"
-services:
-  mssqldata:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    entrypoint: /bin/bash
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
 
-  mssql:
+version: '3.9'
+
+services:
+  db:
     image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_SA_PASSWORD_FILE: /run/secrets/db_password
     ports:
       - 1433:1433
-    volumes:
-      - /var/opt/mssql
-      # we copy our scripts onto the container
-      - ./sql:/usr/src/app
-    # bash will be executed from that path, our scripts folder
-    working_dir: /usr/src/app
-    # run the entrypoint.sh that will import the data AND sqlserver
-    command: sh -c ' chmod +x ./entrypoint.sh; ./entrypoint.sh & /opt/mssql/bin/sqlservr;'
-    environment:
-      ACCEPT_EULA: Y
-      MSSQL_SA_PASSWORD_FILE: /run/secrets/db_password
-      #SA_PASSWORD: P@55w0rd
-
-    # don't use this if you don't want to persit data between docker up and down
-    volumes_from:
-      - mssqldata
     secrets:
       - db_password
+
+  # storage:
+  #   image: mcr.microsoft.com/azure-storage/azurite
+  #   ports:
+  #     - 10000:10000
+  #     - 10001:10001
+  #     - 10002:10002
+  #   volumes:
+  #     - /data:./_data
+
+  server:
+    image: server
+    build:
+      context: .
+      dockerfile: ./ProjectBank.Server/Dockerfile
+    environment:
+      ConnectionStrings__ProjectBank:
+    ports:
+      - 5077:5077
+      - 7207:7207
+    depends_on:
+      - db
+      #- storage
+    secrets:
+      - source: connection_string
+        target: ConnectionStrings__ProjectBank
+
 secrets:
   db_password:
     file: ./.local/db_password.txt
+  connection_string:
+    file: ./.local/connection_string.txt
