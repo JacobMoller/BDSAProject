@@ -1,0 +1,21 @@
+@using ProjectBank.Core;
+@using ProjectBank.Infrastructure;
+@page "/project"
+
+<PageTitle>Project</PageTitle>
+
+<h1>Project</h1>
+<p>Title: @test.Title</p>
+<p>Description: @test.Description</p>
+<p>Status: @test.Status</p>
+<p>Creation date: @test.CreationDate</p>
+<p>OwnerId: @test.UserId</p>
+<p>Tags:</p>
+@foreach (var tag in test.Tags)
+{
+    <p>@tag.Name</p>
+}
+
+@code {
+    Project test = new Project("test", Status.Active, 1) { Description = "Bla bla", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}};
+}
