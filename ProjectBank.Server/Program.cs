@@ -49,6 +49,7 @@ app.UseRouting();
 
 app.MapRazorPages();
 app.MapControllers();
+//app.MapBlazorHub();
 app.MapFallbackToFile("/_Host");
 
 app.Seed();
