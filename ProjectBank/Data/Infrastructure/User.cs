@@ -5,10 +5,13 @@ public class User
     [Key]
     public int Id { get; init; }
 
+    [StringLength(50)]
     public string Name { get; init; }
 
+    [EmailAddress]
     public string Email { get; init; }
 
+    [StringLength(50)]
     public string Password { get; init; }
 
     public Role Role { get; init; }
