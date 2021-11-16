@@ -3,17 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-
-
-
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBank.Core", "ProjectBank.Core\ProjectBank.Core.csproj", "{E4D88FFA-9CEF-4C28-9E48-D9B6E7BEC4CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBank.Infrastructure", "ProjectBank.Infrastructure\ProjectBank.Infrastructure.csproj", "{69358867-4ADD-44F4-9B5D-42164A05B27F}"
 EndProject
-
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBank.Server", "ProjectBank.Server\ProjectBank.Server.csproj", "{CD15BAEC-7FB7-46D7-8FB3-47E947AC3D9F}"
 EndProject
-
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBank.Infrastructure.Tests", "ProjectBank.Infrastructure.Tests\ProjectBank.Infrastructure.Tests.csproj", "{ADA3128A-731F-40E4-A8DB-32B57DFCB9A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,5 +76,9 @@ Global
 		{90D5B805-9714-4955-A17F-30108B236DA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90D5B805-9714-4955-A17F-30108B236DA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90D5B805-9714-4955-A17F-30108B236DA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADA3128A-731F-40E4-A8DB-32B57DFCB9A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADA3128A-731F-40E4-A8DB-32B57DFCB9A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADA3128A-731F-40E4-A8DB-32B57DFCB9A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADA3128A-731F-40E4-A8DB-32B57DFCB9A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
