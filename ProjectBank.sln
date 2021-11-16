@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBank.Core", "Project
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBank.Infrastructure", "ProjectBank.Infrastructure\ProjectBank.Infrastructure.csproj", "{BD0EB1FD-CD02-488A-AA9E-15610B9FDDA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBank.Infrastructure.Tests", "ProjectBank.Infrastructure.Tests\ProjectBank.Infrastructure.Tests.csproj", "{ADA3128A-731F-40E4-A8DB-32B57DFCB9A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{BD0EB1FD-CD02-488A-AA9E-15610B9FDDA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD0EB1FD-CD02-488A-AA9E-15610B9FDDA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD0EB1FD-CD02-488A-AA9E-15610B9FDDA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADA3128A-731F-40E4-A8DB-32B57DFCB9A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADA3128A-731F-40E4-A8DB-32B57DFCB9A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADA3128A-731F-40E4-A8DB-32B57DFCB9A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADA3128A-731F-40E4-A8DB-32B57DFCB9A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

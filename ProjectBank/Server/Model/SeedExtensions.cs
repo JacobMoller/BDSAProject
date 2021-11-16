@@ -26,15 +26,15 @@ public static class SeedExtensions
             var Disys = new Tag("Disys");
 
 
-            
-             var Hans = new User("Hans", "HansTheStudent@gmail.com", "2222", Role.Student);
-             var Grete = new User("Grete", "GreteTheStudent@gmail.com", "5555", Role.Student);
 
-             
+            var Hans = new User("Hans", "HansTheStudent@gmail.com", "2222");
+            var Grete = new User("Grete", "GreteTheStudent@gmail.com", "5555");
+
+
             context.Users.AddRange(
-                new User("Bob", "BobTheSupervisor@gmail.com", "1234", Role.Supervisor),
-                new User("Alice", "AliceTheSupervisor@gmail.com", "9876", Role.Supervisor),
-                Hans, 
+                new User("Bob", "BobTheSupervisor@gmail.com", "1234"),
+                new User("Alice", "AliceTheSupervisor@gmail.com", "9876"),
+                Hans,
                 Grete
             );
 
