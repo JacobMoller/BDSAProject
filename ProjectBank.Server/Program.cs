@@ -42,7 +42,7 @@ else
 
 app.UseHttpsRedirection();
 
-app.UseBlazorFrameworkFiles();
+//app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
