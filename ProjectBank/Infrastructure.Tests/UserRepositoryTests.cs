@@ -4,7 +4,7 @@ public class UserRepositoryTests : TestSetup, IDisposable
     [Fact]
     public void testExample()
     {
-        var testUser = new User("Jeppe", "korg@itu.dk", "test", Role.Student);
+        var testUser = new User("Jeppe", "korg@itu.dk", "test");
         _context.Add(testUser);
         _context.SaveChanges();
 
