@@ -1,7 +1,5 @@
 @page "/createproject"
-@using Microsoft.AspNetCore.Components.Forms
-@using Microsoft.AspNetCore.Componnents
-@using ProjectBank.Infrastructure
+<!--@using ProjectBank.Infrastructure-->
 
 <PageTitle>Create Project</PageTitle>
 
@@ -14,24 +12,52 @@
     tag input field
     create button  
 </form>
--->  
+-->
 
-<EditForm Model="@project" >
+ <EditForm Model="@project" OnValidSubmt="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
+
+    <label>Title
+        <InputText id="title" @bind-Value="project.Title" />
+    </label>
+
+    <label>Description
+        <InputTextArea id="description" @bind-Value="project.Description" />
+    </label>
+
+    <label>Tags
+        <!--<InputText id="tags" @bind-Value=/> -->
+        <!--@bind-Value="project.Tags" this needs to be converted from the input string to a new tag-->
+        <InputSelect @bind-Value="project.Tags">
+                <option value="@NewTag">Algo</option>
+        </InputSelect>
+    </label>
+
+    <button type="submit">Create</button>
+</EditForm> 
+
+<!-- Version 2 -->
+
+<!--<form>
     <label for="title">Title</label>
-    <InputText id="title" @bind-Value="project.Title"/>
+    <input id="title" type="text" />
 
     <label for="description">Description</label>
-    <InputTextArea id="description" @bind-Value="project.Description"/>
+    <input id="description" type="textarea" />
 
     <label for="tags">Tags</label>
-    <InputText id="tags" @bind-Value="project.Tags"/>
-    
-    <button type="submit">Create</button>
-</EditForm>
+    <input id="tags" type="text" />
+</form>-->
 
 @code {
-    private Project project = new();
+    private Project project = new("Title", Status.Active, 1);
+    private void HandleValidSubmit() {
+        //handle submit + assign values??
+    }
+
+    private Tag NewTag() {
+        return new Tag("Algo");
+    }
 }
