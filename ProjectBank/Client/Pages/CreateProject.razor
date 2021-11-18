@@ -1,18 +1,8 @@
 @page "/createproject"
-<!--@using ProjectBank.Infrastructure-->
 
 <PageTitle>Create Project</PageTitle>
 
 <h1>Create a new project</h1>
-
-<!-- 
-<form>
-    title field
-    description text box 
-    tag input field
-    create button  
-</form>
--->
 
  <EditForm Model="@project" OnValidSubmt="@HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -54,7 +44,7 @@
 @code {
     private Project project = new("Title", Status.Active, 1);
     private void HandleValidSubmit() {
-        //handle submit + assign values??
+        //handle submit + assign values?
     }
 
     private Tag NewAlgoTag() {
