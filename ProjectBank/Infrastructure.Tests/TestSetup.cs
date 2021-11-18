@@ -2,8 +2,8 @@
 namespace ProjectBank.Infrastructure.Tests;
 public abstract class TestSetup
 {
-    protected readonly ProjectBankContext _context;
-    protected readonly ProjectRepository _repository;
+    protected readonly IProjectBankContext _context;
+    protected readonly IProjectRepository _repository;
     public TestSetup()
     {
         var connection = new SqliteConnection("Filename=:memory:");
