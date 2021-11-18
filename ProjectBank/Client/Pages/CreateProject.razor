@@ -31,7 +31,7 @@
         <!--<InputText id="tags" @bind-Value=/> -->
         <!--@bind-Value="project.Tags" this needs to be converted from the input string to a new tag-->
         <InputSelect @bind-Value="project.Tags">
-                <option value="@NewTag">Algo</option>
+                <option value="@NewAlgoTag">Algo</option>
         </InputSelect>
     </label>
 
@@ -57,7 +57,7 @@
         //handle submit + assign values??
     }
 
-    private Tag NewTag() {
+    private Tag NewAlgoTag() {
         return new Tag("Algo");
     }
 }
