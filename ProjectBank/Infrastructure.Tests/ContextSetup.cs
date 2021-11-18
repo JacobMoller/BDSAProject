@@ -1,10 +1,9 @@
-
 namespace ProjectBank.Infrastructure.Tests;
-public abstract class TestSetup
+public abstract class ContextSetup
 {
-    protected readonly IProjectBankContext _context;
-    protected readonly IProjectRepository _repository;
-    public TestSetup()
+    protected readonly ProjectBankContext _context;
+    protected readonly ProjectRepository _repository;
+    public ContextSetup()
     {
         var connection = new SqliteConnection("Filename=:memory:");
         connection.Open();
