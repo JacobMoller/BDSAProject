@@ -2,13 +2,13 @@ namespace ProjectBank.Core;
 
 public interface IUserRepository
 {
-    int createUser(CreateUserDTO user);
-    void updateUser(UpdateUserDTO user);
-    void deleteUser(int id);
-    UserDTO getUserById(int id);
-    UserDTO getUserByEmail(string email);
-    UserDTO getSupervisorOnProject(int projectId);
-    ICollection<UserDTO> getAllUsers();
-    ICollection<UserDTO> getAllUsersByRole(Role role);
-    ICollection<UserDTO> getUsersAssignedToProject(int projectId);
+    async int createUser(CreateUserDTO user);
+    async void updateUser(UpdateUserDTO user);
+    async void deleteUser(int id);
+    async UserDTO getUserById(int id);
+    async UserDTO getUserByEmail(string email);
+    async UserDTO getSupervisorOnProject(int projectId);
+    async ICollection<UserDTO> getAllUsers();
+    async ICollection<UserDTO> getAllUsersByRole(Role role);
+    async ICollection<UserDTO> getUsersAssignedToProject(int projectId);
 }
