@@ -1,14 +1,14 @@
 namespace ProjectBank.Infrastructure.Tests;
-public class UserRepositoryTests : TestSetup, IDisposable
+public class UserRepositoryTests : ContextSetup, IDisposable
 {
     [Fact]
     public void testExample()
     {
-        var testUser = new User("Jeppe", "korg@itu.dk", "test");
+        var testUser = new User("Alice", "email@email.com", "password123");
         _context.Add(testUser);
         _context.SaveChanges();
 
-        var expected = "Jeppe";
+        var expected = "Alice";
         var actual = _context.Users.Find(1).Name;
 
         Assert.Equal(expected, actual);
