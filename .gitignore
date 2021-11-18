@@ -11,6 +11,7 @@
 *.sln.docstates
 **/.DS_Store
 **/.local
+Reports/*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
