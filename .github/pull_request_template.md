@@ -8,7 +8,6 @@ _What functionality was add/changed/removed with this code_
 - [ ] I've added a screenshot of the Coverlet test report
 - [ ] The code is formattet with a C# formatter
 - [ ] I reviewed this pr myself
-- [ ] I've have added relevant information about this pr to the release notes
 
 ### Screenshots
 
