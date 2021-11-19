@@ -15,13 +15,11 @@ public class ProjectBankContext : DbContext, IProjectBankContext
         modelBuilder
             .Entity<Project>()
             .Property(e => e.Status)
-            .HasMaxLength(50)
             .HasConversion(new EnumToStringConverter<Status>());
 
         modelBuilder
             .Entity<User>()
             .Property(e => e.Role)
-            .HasMaxLength(50)
             .HasConversion(new EnumToStringConverter<Role>());
 
         modelBuilder.Entity<Project>()
