@@ -27,11 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
-    <ProjectReference Include="..\ProjectBank.Infrastructure\ProjectBank.Infrastructure.csproj" />
-  </ItemGroup>
-
-=======
     <ProjectReference Include="..\Infrastructure\ProjectBank.Infrastructure.csproj" />
   </ItemGroup>
 
@@ -41,5 +36,4 @@
 
 
 
->>>>>>> main
 </Project>
