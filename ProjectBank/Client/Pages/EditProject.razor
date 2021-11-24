@@ -1,41 +1,53 @@
-@page "/editproject"
+@page "/editproject/{Id:int}"
 @using Microsoft.AspNetCore.Components.Forms
-@using Microsoft.AspNetCore.Componnents
+@using Microsoft.AspNetCore.Components
 @using ProjectBank.Infrastructure
 
 <PageTitle>Edit Project</PageTitle>
 
 <h1>Edit project</h1>
 
-<!-- 
-<form>
-    title field
-    description text box 
-    tag input field
-    create button  
-</form>
--->  
-
-<EditForm Model="@project" OnValidSubmit="@HandleValidSubmit">
+<EditForm Model="@project" OnValidSubmt="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <label for="title">Title</label>
-    <InputText id="title" @bind-Value="project.Title"/>
+    <label>Title
+        <InputText id="title" @bind-Value="project.Title" />
+    </label>
 
-    <label for="description">Description</label>
-    <InputTextArea id="description" @bind-Value="project.Description"/>
+    <label>Description
+        <InputTextArea id="description" @bind-Value="project.Description" />
+    </label>
 
-    <label for="tags">Tags</label>
-    <InputText id="tags" @bind-Value="project.Tags"/>
-    
-    <button type="submit">Submit</button>
-</EditForm>
+    <label>Tags
+        <InputText id="tags" @bind-Value="@TagListString"/>
+    </label>
+
+    <button type="submit" onclick="@HandleValidSubmit">Create</button>
+</EditForm> 
 
 @code {
-    private Project project = new();
+    [Parameter]
+    public int Id { get; set; }
+
+    //get the project to edit from the db using efcore from projectrepository?
+    private Project project = new("", Status.Active, 1); 
+    private string TagListString {get; set;}
 
     private void HandleValidSubmit() {
-        //process valid form
+        //handle submit + send/persist to db?
+        TagStringToList();
+        Console.WriteLine(project.Title);
+        Console.WriteLine(project.Tags.ElementAt(0).Name);
+    }
+
+    private void TagStringToList() {
+        string[] tagNames = TagListString.Replace(" ","").Split(',');
+        var tagList = new List<Tag>();
+        foreach (var tagName in tagNames)
+        {
+            tagList.Add(new Tag(tagName));
+        }
+        project.Tags = tagList;
     }
 }
