@@ -17,12 +17,15 @@
             <InputText id="tags" class="form-control" @bind-Value="@TagListString"/>
     </div>
 
-    <button type="submit" class="btn btn-primary" onclick="@HandleValidSubmit">Create</button>
+    <button type="submit" class="btn btn-success" onclick="@HandleValidSubmit">@ButtonName</button>
 </EditForm> 
 
 @code {
     [Parameter]
     public Project Project {get; set;}
+
+    [Parameter]
+    public string ButtonName {get; set;}
 
     private string TagListString = "";
     
