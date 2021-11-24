@@ -1,0 +1,43 @@
+<EditForm Model="@project" OnValidSubmt="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label class="form-label">Title</label>
+        <InputText id="title" class="form-control" @bind-Value="project.Title" />
+    </div>
+
+    <div>
+        <label class="form-label">Description</label>
+            <InputTextArea id="description" class="form-control" @bind-Value="project.Description" />
+    </div>
+
+    <div>
+        <label class="form-label">Tags</label>
+            <InputText id="tags" class="form-control" @bind-Value="@TagListString"/>
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary" onclick="@HandleValidSubmit">Create</button>
+    </div>
+</EditForm> 
+
+@code {
+    private Project project = new("", Status.Active, 1);
+    private string TagListString {get; set;}
+
+    private void HandleValidSubmit() {
+        //handle submit + send/persist to db?
+        TagStringToList();
+    }
+
+    private void TagStringToList() {
+        string[] tagNames = TagListString.Replace(" ","").Split(',');
+        var tagList = new List<Tag>();
+        foreach (var tagName in tagNames)
+        {
+            tagList.Add(new Tag(tagName));
+        }
+        project.Tags = tagList;
+    }
+}

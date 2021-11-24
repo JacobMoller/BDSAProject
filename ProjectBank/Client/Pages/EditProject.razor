@@ -7,30 +7,7 @@
 
 <h1>Edit project</h1>
 
-<EditForm Model="@project" OnValidSubmt="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div>
-        <label class="form-label">Title
-            <InputText id="title" class="form-control" @bind-Value="project.Title" />
-        </label>
-    </div>
-
-    <div>
-        <label class="form-label">Description
-            <InputTextArea id="description" class="form-control" @bind-Value="project.Description" />
-        </label>
-    </div>
-
-    <div>
-        <label class="form-label">Tags
-            <InputText id="tags" class="form-control" @bind-Value="@TagListString"/>
-        </label>
-    </div>
-
-    <button type="submit" class="btn btn-primary" onclick="@HandleValidSubmit">Create</button>
-</EditForm> 
+<FormComponent />
 
 @code {
     [Parameter]
