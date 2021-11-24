@@ -25,6 +25,17 @@
     public Project Project {get; set;}
 
     private string TagListString {get; set;}
+    //receiving a list of tags that have to be displayed
+
+    protected override void OnInitialized() {
+        if (Project.Tags != null) {
+            foreach (var tag in Project.Tags)
+            {
+                TagListString += tag.Name + ", ";
+            }
+            TagListString = TagListString.TrimEnd(',',' ');
+        }
+    }
 
     private void HandleValidSubmit() {
         //handle submit + send/persist to db?
