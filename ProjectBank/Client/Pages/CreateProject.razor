@@ -8,26 +8,8 @@
 
 <h1>Create a new project</h1>
 
-<FormComponent />
+<FormComponent Project="@project"/>
 
 @code {
     private Project project = new("", Status.Active, 1);
-    private string TagListString {get; set;}
-
-    private void HandleValidSubmit() {
-        //handle submit + send/persist to db?
-        TagStringToList();
-        Console.WriteLine(project.Title);
-        Console.WriteLine(project.Tags.ElementAt(0).Name);
-    }
-
-    private void TagStringToList() {
-        string[] tagNames = TagListString.Replace(" ","").Split(',');
-        var tagList = new List<Tag>();
-        foreach (var tagName in tagNames)
-        {
-            tagList.Add(new Tag(tagName));
-        }
-        project.Tags = tagList;
-    }
 }

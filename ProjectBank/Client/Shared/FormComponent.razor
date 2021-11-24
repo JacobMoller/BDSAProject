@@ -23,7 +23,9 @@
 </EditForm> 
 
 @code {
-    private Project project = new("", Status.Active, 1);
+    [Parameter]
+    public Project Project {get; set;}
+
     private string TagListString {get; set;}
 
     private void HandleValidSubmit() {
