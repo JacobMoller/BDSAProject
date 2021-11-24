@@ -2,14 +2,13 @@ namespace ProjectBank.Core;
 
 public interface IUserRepository
 {
-
-    Task<int> createUser(CreateUserDTO user);
-    void updateUser(UpdateUserDTO user);
-    void deleteUser(int id);
-    Task<UserDTO> getUserById(int id);
-    Task<UserDTO> getUserByEmail(string email);
-    Task<UserDTO> getSupervisorOnProject(int projectId);
-    Task<ICollection<UserDTO>> getAllUsers();
-    Task<ICollection<UserDTO>> getAllUsersByRole(Role role);
-    Task<ICollection<UserDTO>> getUsersAssignedToProject(int projectId);
+    Task<UserDTO> CreateUserAsync(CreateUserDTO user);
+    void UpdateUserAsync(UpdateUserDTO user);
+    void DeleteUserAsync(int id);
+    Task<UserDTO> ReadUserByIdAsync(int id);
+    Task<UserDTO> ReadUserByEmailAsync(string email);
+    Task<UserDTO> ReadSupervisorOnProjectByIdAsync(int projectId);
+    Task<IReadOnlyCollection<UserDTO>> ReadUsersAsync();
+    Task<IReadOnlyCollection<UserDTO>> ReadUsersByRoleAsync(Role role);
+    Task<IReadOnlyCollection<UserDTO>> ReadUsersAssignedToProjectAsync(int projectId);
 }

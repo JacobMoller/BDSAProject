@@ -13,13 +13,6 @@ public abstract class ContextSetup
         context.Database.EnsureCreated();
 
         _context = context;
-        _repository = new ProjectRepository();
-
-        addTestData();
-    }
-
-    public void addTestData()
-    {
-        //Testdata should be added to _context.
+        _repository = new ProjectRepository(_context);
     }
 }
