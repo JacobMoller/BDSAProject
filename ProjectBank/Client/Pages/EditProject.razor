@@ -1,0 +1,41 @@
+@page "/editproject"
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Componnents
+@using ProjectBank.Infrastructure
+
+<PageTitle>Edit Project</PageTitle>
+
+<h1>Edit project</h1>
+
+<!-- 
+<form>
+    title field
+    description text box 
+    tag input field
+    create button  
+</form>
+-->  
+
+<EditForm Model="@project" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <label for="title">Title</label>
+    <InputText id="title" @bind-Value="project.Title"/>
+
+    <label for="description">Description</label>
+    <InputTextArea id="description" @bind-Value="project.Description"/>
+
+    <label for="tags">Tags</label>
+    <InputText id="tags" @bind-Value="project.Tags"/>
+    
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    private Project project = new();
+
+    private void HandleValidSubmit() {
+        //process valid form
+    }
+}
