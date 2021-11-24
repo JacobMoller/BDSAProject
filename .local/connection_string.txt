@@ -1,1 +1,0 @@
-Server=localhost;Database=ProjectBank;User Id=sa;Password=P@55w0rd
