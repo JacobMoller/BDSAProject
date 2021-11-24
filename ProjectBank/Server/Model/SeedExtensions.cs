@@ -25,11 +25,8 @@ public static class SeedExtensions
             var DMAT = new Tag("DMAT");
             var Disys = new Tag("Disys");
 
-
-
             var Charlie = new User("Charlie", "CharlieTheStudent@gmail.com", "2222");
             var Dave = new User("Dave", "DaveTheStudent@gmail.com", "5555");
-
 
 
             context.Users.AddRange(

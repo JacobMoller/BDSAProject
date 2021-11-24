@@ -37,6 +37,4 @@
     <ProjectReference Include="..\Core\ProjectBank.Core.csproj" />
   </ItemGroup>
 
-
-
 </Project>

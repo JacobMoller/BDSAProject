@@ -1,0 +1,54 @@
+@page "/MyProjects"
+
+<PageTitle>My Projects</PageTitle>
+
+<h1>My Projects</h1>
+
+<div class="container MyProjectsContainer">
+    <div class="row p-3">
+        <div class="col-8"><strong>Name</strong></div>
+        <div class="col-4"><strong>Tools</strong></div>
+    </div>
+    @foreach (var project in user.Projects)
+    {
+    <div class="row p-3">
+        <div class="col-8">@project.Title</div>
+        <div class="col-4">
+            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Edit
+            </button>
+            <button type="button" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                Delete
+            </button>
+        </div>
+    </div>
+    }
+</div>
+
+
+<div class="modal" tabindex="-1" id="deleteModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure that you want to delete?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@code {
+
+    User user = new User("Alice", "Alice@email.com", "password123")
+    {
+        Projects = new List<Project>() { new Project("Super Duper Fun Algo Project", Status.Active, 2), new Project("Super Fun Project", Status.Active, 1) }
+    };
+
+}
