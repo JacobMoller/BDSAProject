@@ -1,25 +1,23 @@
-<EditForm Model="@project" OnValidSubmt="@HandleValidSubmit">
+<EditForm Model="@Project" OnValidSubmt="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <div>
+    <div class="mb-3">
         <label class="form-label">Title</label>
-        <InputText id="title" class="form-control" @bind-Value="project.Title" />
+        <InputText id="title" class="form-control" @bind-Value="Project.Title" />
     </div>
 
-    <div>
+    <div class="mb-3">
         <label class="form-label">Description</label>
-            <InputTextArea id="description" class="form-control" @bind-Value="project.Description" />
+            <InputTextArea id="description" class="form-control" @bind-Value="Project.Description" />
     </div>
 
-    <div>
+    <div class="mb-3">
         <label class="form-label">Tags</label>
             <InputText id="tags" class="form-control" @bind-Value="@TagListString"/>
     </div>
 
-    <div class="mb-3">
-        <button type="submit" class="btn btn-primary" onclick="@HandleValidSubmit">Create</button>
-    </div>
+    <button type="submit" class="btn btn-primary" onclick="@HandleValidSubmit">Create</button>
 </EditForm> 
 
 @code {
@@ -40,6 +38,6 @@
         {
             tagList.Add(new Tag(tagName));
         }
-        project.Tags = tagList;
+        Project.Tags = tagList;
     }
 }
