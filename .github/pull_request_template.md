@@ -6,7 +6,7 @@ _What functionality was add/changed/removed with this code_
 
 - [ ] I've run the tests and verified that nothing explodes
 - [ ] I've added a screenshot of the test report
-- [ ] The code is formattet with a C# formatter
+- [ ] The code is formatted with a C# formatter
 - [ ] I reviewed this pr myself
 
 ### Screenshots
