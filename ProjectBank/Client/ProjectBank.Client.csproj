@@ -13,11 +13,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
   </ItemGroup>
-
   <ItemGroup>
+    <ProjectReference Include="..\Core\ProjectBank.Core.csproj" />
     <ProjectReference Include="..\Shared\ProjectBank.Shared.csproj" />
     <ProjectReference Include="..\Infrastructure\ProjectBank.Infrastructure.csproj" />
-    <ProjectReference Include="..\Core\ProjectBank.Core.csproj" />
   </ItemGroup>
+
+ 
 
 </Project>

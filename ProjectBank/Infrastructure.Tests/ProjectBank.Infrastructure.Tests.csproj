@@ -31,9 +31,6 @@
   <ItemGroup>
 
     <ProjectReference Include="..\Infrastructure\ProjectBank.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Core\ProjectBank.Core.csproj" />
   </ItemGroup>
 
