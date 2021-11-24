@@ -37,6 +37,7 @@ public static class SeedExtensions
                 new User("Alice", "AliceTheSupervisor@gmail.com", "9876"),
                 Charlie,
                 Dave
+
             );
 
             context.Projects.AddRange(

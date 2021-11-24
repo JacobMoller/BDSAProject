@@ -2,6 +2,7 @@ namespace ProjectBank.Core;
 
 public interface IUserRepository
 {
+
     Task<int> createUser(CreateUserDTO user);
     void updateUser(UpdateUserDTO user);
     void deleteUser(int id);
