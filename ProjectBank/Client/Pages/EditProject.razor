@@ -11,19 +11,25 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <label>Title
-        <InputText id="title" @bind-Value="project.Title" />
-    </label>
+    <div>
+        <label class="form-label">Title
+            <InputText id="title" class="form-control" @bind-Value="project.Title" />
+        </label>
+    </div>
 
-    <label>Description
-        <InputTextArea id="description" @bind-Value="project.Description" />
-    </label>
+    <div>
+        <label class="form-label">Description
+            <InputTextArea id="description" class="form-control" @bind-Value="project.Description" />
+        </label>
+    </div>
 
-    <label>Tags
-        <InputText id="tags" @bind-Value="@TagListString"/>
-    </label>
+    <div>
+        <label class="form-label">Tags
+            <InputText id="tags" class="form-control" @bind-Value="@TagListString"/>
+        </label>
+    </div>
 
-    <button type="submit" onclick="@HandleValidSubmit">Create</button>
+    <button type="submit" class="btn btn-primary" onclick="@HandleValidSubmit">Create</button>
 </EditForm> 
 
 @code {
