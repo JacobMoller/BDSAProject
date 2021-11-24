@@ -34,9 +34,9 @@
 @code {
     List<Project> yourProjects = new List<Project>();
     List<Project> projectsList = new List<Project>() {
-        new Project("Test Title!", Status.Active, 1) { Description = "Bla bla", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
-        new Project("Another Test Title!", Status.Active, 1) { Description = "Bla bla bla", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
-        new Project("This is a title!", Status.Active, 1) { Description = "Bla bla bla bla", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
-        new Project("This is another Title!", Status.Active, 1) { Description = "Bla bla bla bla bla", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
+        new Project("Test Title!", Status.Active, 1) { Description = "This is a description", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
+        new Project("Another Test Title!", Status.Active, 1) { Description = "This is a description with content", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
+        new Project("This is a title!", Status.Active, 1) { Description = "This is a description with even more content", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
+        new Project("This is another Title!", Status.Active, 1) { Description = "This is a description with the most content and that is very cool", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
     };
 }
