@@ -28,6 +28,7 @@ public static class SeedExtensions
             var Charlie = new User("Charlie", "CharlieTheStudent@gmail.com", "2222");
             var Dave = new User("Dave", "DaveTheStudent@gmail.com", "5555");
 
+
             context.Users.AddRange(
                 new User("Bob", "BobTheSupervisor@gmail.com", "1234"),
                 new User("Alice", "AliceTheSupervisor@gmail.com", "9876"),
@@ -39,6 +40,7 @@ public static class SeedExtensions
                 new Project("Super Fun Project", Status.Active, 1) { Tags = new List<Tag>() { Algo, DMAT } },
                 new Project("Super Closed Project", Status.Closed, 2) { Tags = new List<Tag>() { DMAT, DMAT } },
                 new Project("Super Participants Project", Status.Active, 1) { Tags = new List<Tag>() { Algo, Disys }, Participants = new List<User>() { Dave, Charlie } }
+
             );
 
             context.SaveChanges();

@@ -1,5 +1,7 @@
 namespace ProjectBank.Infrastructure.Tests;
+
 public class UserRepositoryTests : ContextSetup, IDisposable
+
 {
     [Fact]
     public void testExample()
