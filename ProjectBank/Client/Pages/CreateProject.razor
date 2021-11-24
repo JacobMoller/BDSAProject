@@ -1,4 +1,8 @@
 @page "/createproject"
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components
+@using ProjectBank.Infrastructure
+@using System
 
 <PageTitle>Create Project</PageTitle>
 
@@ -7,7 +11,6 @@
  <EditForm Model="@project" OnValidSubmt="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
-
 
     <label>Title
         <InputText id="title" @bind-Value="project.Title" />
@@ -18,36 +21,30 @@
     </label>
 
     <label>Tags
-        <!--<InputText id="tags" @bind-Value=/> -->
-        <!--@bind-Value="project.Tags" this needs to be converted from the input string to a new tag-->
-        <InputSelect @bind-Value="project.Tags">
-                <option value="@NewAlgoTag">Algo</option>
-        </InputSelect>
+        <InputText id="tags" @bind-Value="@TagListString"/>
     </label>
 
-    <button type="submit">Create</button>
+    <button type="submit" onclick="@HandleValidSubmit">Create</button>
 </EditForm> 
 
-<!-- Version 2 -->
-
-<!--<form>
-    <label for="title">Title</label>
-    <input id="title" type="text" />
-
-    <label for="description">Description</label>
-    <input id="description" type="textarea" />
-
-    <label for="tags">Tags</label>
-    <input id="tags" type="text" />
-</form>-->
-
 @code {
-    private Project project = new("Title", Status.Active, 1);
+    private Project project = new("", Status.Active, 1);
+    private string TagListString {get; set;}
+
     private void HandleValidSubmit() {
-        //handle submit + assign values?
+        //handle submit + send/persist to db?
+        TagStringToList();
+        Console.WriteLine(project.Title);
+        Console.WriteLine(project.Tags.ElementAt(0).Name);
     }
 
-    private Tag NewAlgoTag() {
-        return new Tag("Algo");
+    private void TagStringToList() {
+        string[] tagNames = TagListString.Replace(" ","").Split(',');
+        var tagList = new List<Tag>();
+        foreach (var tagName in tagNames)
+        {
+            tagList.Add(new Tag(tagName));
+        }
+        project.Tags = tagList;
     }
 }
