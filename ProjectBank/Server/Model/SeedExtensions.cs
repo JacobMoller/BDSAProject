@@ -25,23 +25,20 @@ public static class SeedExtensions
             var DMAT = new Tag("DMAT");
             var Disys = new Tag("Disys");
 
-
-
-            var Hans = new User("Hans", "HansTheStudent@gmail.com", "2222");
-            var Grete = new User("Grete", "GreteTheStudent@gmail.com", "5555");
-
+            var Charlie = new User("Charlie", "CharlieTheStudent@gmail.com", "2222");
+            var Dave = new User("Dave", "DaveTheStudent@gmail.com", "5555");
 
             context.Users.AddRange(
                 new User("Bob", "BobTheSupervisor@gmail.com", "1234"),
                 new User("Alice", "AliceTheSupervisor@gmail.com", "9876"),
-                Hans,
-                Grete
+                Charlie,
+                Dave
             );
 
             context.Projects.AddRange(
                 new Project("Super Fun Project", Status.Active, 1) { Tags = new List<Tag>() { Algo, DMAT } },
                 new Project("Super Closed Project", Status.Closed, 2) { Tags = new List<Tag>() { DMAT, DMAT } },
-                new Project("Super Participants Project", Status.Active, 1) { Tags = new List<Tag>() { Algo, Disys }, Participants = new List<User>() { Hans, Grete } }
+                new Project("Super Participants Project", Status.Active, 1) { Tags = new List<Tag>() { Algo, Disys }, Participants = new List<User>() { Dave, Charlie } }
             );
 
             context.SaveChanges();
