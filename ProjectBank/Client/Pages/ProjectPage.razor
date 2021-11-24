@@ -5,18 +5,18 @@
 <div class="conatiner">
     <div class="row">
         <div class="col-8"> 
-            <h1>@test.Title</h1>
-            <h3>By @test.UserId</h3>
+            <h1>@Project.Title</h1>
+            <h3>By @Project.UserId</h3>
             <h4>Tags
-                @foreach (var tag in test.Tags)
+                @foreach (var tag in Project.Tags)
                 {
                     <span class="badge bg-secondary me-2">@tag.Name</span>
                 }
             </h4>
-            <p>@test.Description</p>
+            <p>@Project.Description</p>
         </div>
         <div class="col"> 
-            <button class="btn btn-primary px-4 mt-2" type="submit">Apply</button>
+            <button class="btn btn-primary px-4 mt-2" type="submit" onclick="@Apply">Apply</button>
         </div>
     </div>
 </div>
@@ -24,5 +24,11 @@
 @code {
     [Parameter]
     public int Id { get; set; }
-    Project test = new Project("test", Status.Active, 1) { Description = "Bla bla", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}};
+
+    //get project from database based on id
+    Project Project = new Project("Project", Status.Active, 1) { Description = "Bla bla", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}};
+
+    private void Apply() {
+        //take id from student user and make a connection with the project
+    }
 }
