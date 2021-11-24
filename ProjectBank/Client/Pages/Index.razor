@@ -2,40 +2,43 @@
 
 <PageTitle>Index</PageTitle>
 
-<h1>Your Projects</h1>
-
+@if (yourProjects.Count > 0){
+    <h1>Your Projects</h1>
+    <div class="row justify-content-around">
+        @foreach (var project in yourProjects)
+        {
+            <div class="card col col-xs-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
+                <img src="https://picsum.photos/300" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">@project.Title</h5>
+                    <p class="card-text">@project.Description</p>
+                    <a href="project/@project.Id/" class="btn btn-primary stretched-link">View Project</a>
+                </div>
+            </div>
+        }
+    </div>
+}
 <h1>Explore</h1>
 <div class="row justify-content-around">
-    <div class="card col col-xs-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
-        <img src="https://picsum.photos/300" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Card with stretched link</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary stretched-link">View Project</a>
+    @foreach (var project in projectsList)
+    {
+        <div class="card mt-4 col col-xs-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
+            <img src="https://picsum.photos/280" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">@project.Title</h5>
+                <p class="card-text">@project.Description</p>
+                <a href="project/@project.Id/" class="btn btn-primary stretched-link">View Project</a>
+            </div>
         </div>
-    </div>
-    <div class="card col col-xs-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
-        <img src="https://picsum.photos/300" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Card with stretched link</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary stretched-link">View Project</a>
-        </div>
-    </div>
-    <div class="card col col-xs-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
-        <img src="https://picsum.photos/300" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Card with stretched link</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary stretched-link">View Project</a>
-        </div>
-    </div>
-    <div class="card col col-xs-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
-        <img src="https://picsum.photos/300" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Card with stretched link</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary stretched-link">View Project</a>
-        </div>
-    </div>
+    }
 </div>
+
+@code {
+    List<Project> yourProjects = new List<Project>();
+    List<Project> projectsList = new List<Project>() {
+        new Project("Test Title!", Status.Active, 1) { Description = "Bla bla", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
+        new Project("Another Test Title!", Status.Active, 1) { Description = "Bla bla bla", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
+        new Project("This is a title!", Status.Active, 1) { Description = "Bla bla bla bla", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
+        new Project("This is another Title!", Status.Active, 1) { Description = "Bla bla bla bla bla", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
+    };
+}
