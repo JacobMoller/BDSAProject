@@ -2,7 +2,7 @@
 
 public record ProjectDTO(int Id, string Title, Status Status, int UserId);
 
-public record ProjectDetailsDTO(int Id, string Title, Status Status, int UserId, string? Description, DateTime CreationDate, DateTime UpdatedDate, IReadOnlyCollection<string> Tags, IReadOnlyCollection<User> Participants): ProjectDTO(Id, Title, Status, UserId);
+public record ProjectDetailsDTO(int Id, string Title, Status Status, int UserId, string? Description, DateTime CreationDate, DateTime UpdatedDate, IReadOnlyCollection<string> Tags, IReadOnlyCollection<UserDTO> Participants) : ProjectDTO(Id, Title, Status, UserId);
 
 public record CreateProjectDTO
 {
@@ -15,7 +15,7 @@ public record CreateProjectDTO
     public int UserId { get; set; }
     public ICollection<string>? Tags { get; set; }
 
-    public ICollection<User>? Participants { get; set; }
+    public ICollection<UserDTO>? Participants { get; set; }
 }
 
 public record UpdateProjectDTO : CreateProjectDTO
