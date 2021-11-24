@@ -7,13 +7,13 @@
 
 <h1>Edit project</h1>
 
-<FormComponent Project="@project"/>
+<FormComponent Project="@Project"/>
 
 @code {
     [Parameter]
     public int Id { get; set; }
 
     //get the project to edit from the db using efcore from projectrepository?
-    private Project project = new("", Status.Active, 1); 
+    private Project Project = new("", Status.Active, 1); 
 
 }
