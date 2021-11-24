@@ -2,20 +2,18 @@
 
 <PageTitle>Project</PageTitle>
 
-<h1>Project with id:@Id</h1>
 <div class="conatiner">
     <div class="row">
         <div class="col-8"> 
-            <p>Title: @test.Title</p>
-            <p>Description: @test.Description</p>
-            <p>Status: @test.Status</p>
-            <p>Creation date: @test.CreationDate</p>
-            <p>OwnerId: @test.UserId</p>
-            <p>Tags:</p>
-            @foreach (var tag in test.Tags)
-            {
-                <p>@tag.Name</p>
-            }
+            <h1>@test.Title</h1>
+            <h3>By @test.UserId</h3>
+            <h4>Tags
+                @foreach (var tag in test.Tags)
+                {
+                    <span class="badge bg-secondary me-2">@tag.Name</span>
+                }
+            </h4>
+            <p>@test.Description</p>
         </div>
         <div class="col"> 
             <button class="btn btn-primary">Apply</button>
