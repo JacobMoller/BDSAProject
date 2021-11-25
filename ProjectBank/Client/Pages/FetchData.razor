@@ -1,5 +1,7 @@
 ﻿@page "/fetchdata"
+@using Microsoft.AspNetCore.Authorization
 @using ProjectBank.Shared
+@attribute [Authorize]
 @inject HttpClient Http
 
 <PageTitle>Weather forecast</PageTitle>

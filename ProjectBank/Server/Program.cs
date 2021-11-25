@@ -1,11 +1,20 @@
 ﻿
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddKeyPerFile("/run/secrets", optional: true);
 
+//Adds auth
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+
+builder.Services.Configure<JwtBearerOptions>(
+    JwtBearerDefaults.AuthenticationScheme, options =>
+    {
+        options.TokenValidationParameters.NameClaimType = "name";
+    });
 
 // Add services to the container.
-
 builder.Services.AddControllersWithViews().AddJsonOptions(c =>
 {
     c.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
@@ -51,6 +60,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
