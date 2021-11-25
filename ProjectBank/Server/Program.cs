@@ -5,6 +5,8 @@ builder.Configuration.AddKeyPerFile("/run/secrets", optional: true);
 
 
 // Add services to the container.
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 builder.Services.AddControllersWithViews().AddJsonOptions(c =>
 {
@@ -51,6 +53,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
