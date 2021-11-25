@@ -4,7 +4,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
 {
     [Fact]
-    public async Task CreateAsync_creates_new_character_with_generated_id()
+    public async Task CreateProject_given_CreateProjectDTO_returns_ProjectDTO()
     {
         //Needs to return a ProjectDetailedDTO
         //Arrange
@@ -28,7 +28,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
     [Fact]
 
-    public void DeleteProject_deletes_projects_with_id()
+    public void DeleteProjectById_given_Id_deletes_projects()
     {
 
         //Arrange
@@ -50,7 +50,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
     [Fact]
 
-    public async void UpdateProject_projects_with_id()
+    public async void EditProject_given_Algo_updates_to_something_else()
     {
         //Arrange
         var project = new CreateProjectDTO
@@ -84,47 +84,96 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         Assert.Equal(1, updatedProject.UserId);
     }
 
-    // [Fact]
+    [Fact]
 
-    // public async Task ReadAllAsync()
-    // {
-    // //Arrange
-    // var project1 = new CreateProjectDTO
-    // {
-    //     Title = "Algo",
-    //     UserId = 1,
-    // };
+    public async void ReadAll_returns_list_of_projects()
+    {
+        //Arrange
+        _context.Projects.AddRange(
+        new Project("Algo", Status.Active, 1),
+        new Project("DMAT", Status.Active, 2),
+        new Project("Disys", Status.Active, 3)
+        );
+        _context.SaveChanges();
 
-    // var project2 = new CreateProjectDTO
-    // {
-    //     Title = "DMAT",
-    //     UserId = 2,
-    // };
-    // var project3 = new CreateProjectDTO
-    // {
-    //     Title = "Fun Project",
-    //     UserId = 3,
-    // };
+        var projects = await _repository.ReadAllAsync();
 
-    // var expected = new List<ProjectDTO>();
+        //Assert
+        Assert.Collection(projects,
+        project => Assert.Equal(new ProjectDTO(1, "Algo", Status.Active, 1), project),
+        project => Assert.Equal(new ProjectDTO(2, "DMAT", Status.Active, 2), project),
+        project => Assert.Equal(new ProjectDTO(3, "Disys", Status.Active, 3), project)
+        );
+    }
 
-    // //Act
-    // var created = await _repository.CreateProjectAsync(project1);
-    // var created1 = await _repository.CreateProjectAsync(project2);
-    // var created2 = await _repository.CreateProjectAsync(project3);
+    [Fact]
+    public async void ReadProjectById_given_Id_returns_ProjectDTO()
+    {
+        //Arrange
+        _context.Projects.Add(new Project("Algo", Status.Active, 1));
+        _context.SaveChanges();
 
-    // var projects = await _repository.ReadAllAsync();
+        var expected = new ProjectDTO(1, "Algo", Status.Active, 1);
+        var actual = await _repository.ReadProjectByIdAsync(1);
 
+        //Assert
+        Assert.Equal(expected, actual);
+        Assert.Null(await _repository.ReadProjectByIdAsync(100));
+    }
 
-    // Assert.Collection(projects,
-    //     project => Assert.Equal(new ProjectDTO(1, "Algo", Status.Active, 1),
-    //     project => Assert.Equal(new ProjectDTO(2, "DMAT", Status.Active, 2),
-    //     project => Assert.Equal(new ProjectDTO(3, "Fun Project", Status.Active, 3)
-    // );
+    [Fact]
+    public async void ReadProjectsByTag_given_TagId_returns_list_of_ProjectDTO()
+    {
+        //Arrange
+        _context.Projects.Add(new Project("Algo", Status.Active, 1)
+        {
+            Tags = new List<Tag>() { new Tag("Economy") }
+        });
+        _context.SaveChanges();
 
-    // }
+        var expected = new List<ProjectDTO>() { new ProjectDTO(1, "Algo", Status.Active, 1) };
 
+        var actual = await _repository.ReadProjectsByTagIdAsync(1);
 
+        //Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public async void ReadProjectsByUserId_given_UserId_returns_list_of_ProjectDTO()
+    {
+        //Arrange
+        _context.Projects.AddRange(
+        new Project("Algo", Status.Active, 1),
+        new Project("DMAT", Status.Active, 2),
+        new Project("Disys", Status.Active, 2)
+        );
+        _context.SaveChanges();
+
+        var projects = await _repository.ReadProjectsByUserIdAsync(2);
+
+        //Assert
+        Assert.Collection(projects,
+        project => Assert.Equal(new ProjectDTO(2, "DMAT", Status.Active, 2), project),
+        project => Assert.Equal(new ProjectDTO(3, "Disys", Status.Active, 2), project)
+        );
+    }
+
+    [Fact]
+    public async Task UpdateProjectStatusById_given_ProjectId_changes_status()
+    {
+        //Arrange
+        _context.Projects.Add(new Project("DMAT", Status.Active, 1));
+        await _context.SaveChangesAsync();
+
+        await _repository.UpdateProjectStatusByIdAsync(1);
+
+        var expected = Status.Closed;
+        var actual = await _context.Projects.FindAsync(1);
+        //Assert
+        Assert.Equal(expected, actual.Status);
+
+    }
 
     public void Dispose()
     {

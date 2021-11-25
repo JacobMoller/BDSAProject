@@ -6,7 +6,7 @@ public interface IProjectRepository
     Task<ProjectDTO> ReadProjectByIdAsync(int projectId);
     Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByUserIdAsync(int userId);
     Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByTagIdAsync(int tagId);
-    void EditProjectAsync(UpdateProjectDTO project);
-    void UpdateProjectStatusByIdAsync(int projectId);
-    void DeleteProjectByIdAsync(int projectId);
+    Task EditProjectAsync(UpdateProjectDTO project);
+    Task UpdateProjectStatusByIdAsync(int projectId);
+    Task DeleteProjectByIdAsync(int projectId);
 }

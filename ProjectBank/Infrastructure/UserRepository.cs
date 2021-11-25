@@ -8,48 +8,96 @@ public class UserRepository : IUserRepository
     {
         _context = context;
     }
-    public Task<UserDTO> CreateUserAsync(CreateUserDTO user)
+    public async Task<UserDTO> CreateUserAsync(CreateUserDTO user)
     {
-        throw new NotImplementedException();
+        var entity = new User(user.Name, user.Email, user.Password)
+        {
+            Role = user.Role,
+        };
+
+        _context.Users.Add(entity);
+
+        await _context.SaveChangesAsync();
+
+        return new UserDTO(
+            entity.Id,
+            entity.Name
+        );
     }
 
-    public void DeleteUserAsync(int id)
+    public async void DeleteUserAsync(int userId)
     {
-        throw new NotImplementedException();
+        var entity = await _context.Users.FindAsync(userId);
+        // make sure to give a proper response if null (http statuscode?)
+        if (entity != null)
+        {
+            _context.Users.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 
-    public Task<UserDTO> ReadSupervisorOnProjectByIdAsync(int projectId)
+    public async Task<UserDTO> ReadSupervisorOnProjectByIdAsync(int projectId)
     {
-        throw new NotImplementedException();
+        var supervisorID = await _context.Projects.FindAsync(projectId);
+        var user = await _context.Users.FindAsync(supervisorID);
+        if (user != null)
+        {
+            return new UserDTO(
+                user.Id,
+                user.Name
+            );
+        }
+        else return null;
     }
 
-    public Task<UserDTO> ReadUserByEmailAsync(string email)
+    public async Task<UserDTO> ReadUserByEmailAsync(string email)
     {
-        throw new NotImplementedException();
+        var user = await _context.Users.Where(user => user.Email == email).SingleOrDefaultAsync();
+        if (user != null)
+        {
+            return new UserDTO(user.Id, user.Name);
+        }
+        else return null;
     }
 
-    public Task<UserDTO> ReadUserByIdAsync(int id)
+    public async Task<UserDTO> ReadUserByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var user = await _context.Users.FindAsync(id);
+        if (user != null)
+        {
+            return new UserDTO(user.Id, user.Name);
+        }
+        else return null;
     }
 
-    public Task<IReadOnlyCollection<UserDTO>> ReadUsersAssignedToProjectAsync(int projectId)
+    public async Task<IReadOnlyCollection<UserDTO>> ReadUsersAssignedToProjectAsync(int projectId)
     {
-        throw new NotImplementedException();
+        var project = await _context.Projects.FindAsync(projectId);
+        var listOfParticipants = new List<UserDTO>();
+        foreach (var user in project.Participants)
+        {
+            listOfParticipants.Add(new UserDTO(user.Id, user.Name));
+        }
+        return listOfParticipants;
     }
 
-    public Task<IReadOnlyCollection<UserDTO>> ReadUsersAsync()
+    public async Task<IReadOnlyCollection<UserDTO>> ReadUsersAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Users.Select(user => new UserDTO(
+            user.Id,
+            user.Name)).ToListAsync();
     }
 
-    public Task<IReadOnlyCollection<UserDTO>> ReadUsersByRoleAsync(Role role)
+    public async Task<IReadOnlyCollection<UserDTO>> ReadUsersByRoleAsync(Role role)
     {
-        throw new NotImplementedException();
+        return await _context.Users.Where(user => user.Role == role).Select(user => new UserDTO(
+            user.Id,
+            user.Name
+        )).ToListAsync();
     }
 
-    public void UpdateUserAsync(UpdateUserDTO user)
+    public async void UpdateUserAsync(UpdateUserDTO user)
     {
-        throw new NotImplementedException();
+        //do we want this since all fields in user are init and cant be updated
     }
 }

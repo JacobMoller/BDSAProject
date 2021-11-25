@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace ProjectBank.Infrastructure;
 
 public class ProjectRepository : IProjectRepository
@@ -30,7 +32,7 @@ public class ProjectRepository : IProjectRepository
         );
     }
 
-    public async void DeleteProjectByIdAsync(int projectId)
+    public async Task DeleteProjectByIdAsync(int projectId)
     {
         var entity = await _context.Projects.FindAsync(projectId);
         // make sure to give a proper response if null (http statuscode?)
@@ -41,7 +43,7 @@ public class ProjectRepository : IProjectRepository
         }
     }
 
-    public async void EditProjectAsync(UpdateProjectDTO project)
+    public async Task EditProjectAsync(UpdateProjectDTO project)
     {
         var entity = await _context.Projects.FindAsync(project.Id);
         //Should projectDTO title be nullable? We need it for create but not for update
@@ -74,6 +76,7 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<ProjectDTO> ReadProjectByIdAsync(int projectId)
     {
+
         var entity = await _context.Projects.FindAsync(projectId);
         if (entity != null)
         {
@@ -92,7 +95,13 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByTagIdAsync(int tagId)
     {
-        throw new NotImplementedException();
+        var tag = await _context.Tags.FindAsync(tagId);
+        return (from project in tag.Projects
+                select new ProjectDTO(
+                project.Id,
+                project.Title,
+                project.Status,
+                project.UserId)).ToList();
     }
 
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByUserIdAsync(int userId)
@@ -105,7 +114,7 @@ public class ProjectRepository : IProjectRepository
                .ToListAsync();
     }
 
-    public async void UpdateProjectStatusByIdAsync(int projectId)
+    public async Task UpdateProjectStatusByIdAsync(int projectId)
     {
         var entity = await _context.Projects.FindAsync(projectId);
         if (entity != null)
