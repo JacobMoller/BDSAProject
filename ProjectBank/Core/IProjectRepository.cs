@@ -1,7 +1,7 @@
 namespace ProjectBank.Core;
 public interface IProjectRepository
 {
-    Task<ProjectDTO> CreateProjectAsync(ProjectCreateDTO project);
+    Task<ProjectDTO> CreateProjectAsync(CreateProjectDTO project);
     Task<IReadOnlyCollection<ProjectDTO>> ReadAllAsync();
     Task<ProjectDTO> ReadProjectByIdAsync(int projectId);
     Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByUserAsync(int userId);
