@@ -2,7 +2,8 @@ namespace ProjectBank.Infrastructure.Tests;
 public abstract class ContextSetup
 {
     protected readonly ProjectBankContext _context;
-    protected readonly ProjectRepository _repository;
+    protected readonly ProjectRepository _projectRepository;
+    protected readonly UserRepository _userRepository;
     public ContextSetup()
     {
         var connection = new SqliteConnection("Filename=:memory:");
@@ -13,6 +14,7 @@ public abstract class ContextSetup
         context.Database.EnsureCreated();
 
         _context = context;
-        _repository = new ProjectRepository(_context);
+        _projectRepository = new ProjectRepository(_context);
+        _userRepository = new UserRepository(_context);
     }
 }

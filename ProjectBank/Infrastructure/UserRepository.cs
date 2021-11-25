@@ -25,7 +25,7 @@ public class UserRepository : IUserRepository
         );
     }
 
-    public async void DeleteUserAsync(int userId)
+    public async Task DeleteUserAsync(int userId)
     {
         var entity = await _context.Users.FindAsync(userId);
         // make sure to give a proper response if null (http statuscode?)
@@ -96,7 +96,7 @@ public class UserRepository : IUserRepository
         )).ToListAsync();
     }
 
-    public async void UpdateUserAsync(UpdateUserDTO user)
+    public async Task UpdateUserAsync(UpdateUserDTO user)
     {
         //do we want this since all fields in user are init and cant be updated
     }

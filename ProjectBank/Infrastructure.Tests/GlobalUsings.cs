@@ -5,3 +5,4 @@ global using System.Threading.Tasks;
 global using Microsoft.Data.Sqlite;
 global using Microsoft.EntityFrameworkCore;
 global using Xunit;
+global using System.Linq;

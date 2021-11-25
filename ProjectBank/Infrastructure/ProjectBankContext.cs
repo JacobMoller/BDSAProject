@@ -14,16 +14,16 @@ public class ProjectBankContext : DbContext, IProjectBankContext
     {
         modelBuilder
             .Entity<Project>()
-            .Property(e => e.Status)
+            .Property(p => p.Status)
             .HasConversion(new EnumToStringConverter<Status>());
 
         modelBuilder
             .Entity<User>()
-            .Property(e => e.Role)
+            .Property(u => u.Role)
             .HasConversion(new EnumToStringConverter<Role>());
 
         modelBuilder.Entity<Project>()
-                    .HasIndex(s => s.Title)
+                    .HasIndex(p => p.Title)
                     .IsUnique();
     }
 }

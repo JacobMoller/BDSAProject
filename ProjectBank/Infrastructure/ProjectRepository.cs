@@ -17,8 +17,11 @@ public class ProjectRepository : IProjectRepository
             Description = project.Description,
             CreationDate = DateTime.Now,
             UpdatedDate = DateTime.Now,
-            Tags = project.Tags != null ? GetTags(project.Tags) : null,
         };
+        if (project.Tags != null)
+        {
+            entity.Tags = await SetTagsAsync(project.Tags);
+        }
 
         _context.Projects.Add(entity);
 
@@ -51,15 +54,7 @@ public class ProjectRepository : IProjectRepository
         entity.Description = project.Description;
         if (project.Tags != null)
         {
-            if (entity.Tags == null)
-            {
-                entity.Tags = new List<Tag>();
-            }
-            foreach (var tagName in project.Tags)
-            {
-                entity.Tags.Add(new Tag(tagName));
-            }
-
+            entity.Tags = await SetTagsAsync(project.Tags);
         }
         await _context.SaveChangesAsync();
     }
@@ -124,13 +119,25 @@ public class ProjectRepository : IProjectRepository
         await _context.SaveChangesAsync();
     }
 
-    private static ICollection<Tag> GetTags(ICollection<string> tags)
+    private async Task<ICollection<Tag>> SetTagsAsync(ICollection<string> tags)
     {
-        var list = new List<Tag>();
+        var listToReturn = new List<Tag>();
+        var listFromDB = _context.Tags.Select(t => t.Name);
         foreach (var tag in tags)
         {
-            list.Add(new Tag(tag));
+            if (!listFromDB.Contains(tag))
+            {
+                listToReturn.Add(new Tag(tag));
+            }
+            else
+            {
+                var existingTag = await _context.Tags.Where(t => t.Name == tag).SingleOrDefaultAsync();
+                if (existingTag != null)
+                {
+                    listToReturn.Add(existingTag);
+                }
+            }
         }
-        return list;
+        return listToReturn;
     }
 }
