@@ -28,11 +28,16 @@ public class ProjectRepository : IProjectRepository
 
         await _context.SaveChangesAsync();
 
-        return new ProjectDTO(
+        return new ProjectDetailsDTO(
             entity.Id,
             entity.Title,
             entity.Status,
-            entity.UserId
+            entity.UserId,
+            entity.Description,
+            entity.CreationDate,
+            entity.UpdatedDate,
+            TagsToString(entity.Tags),
+            new List<UserDTO>()
         );
     }
 
@@ -110,7 +115,7 @@ public class ProjectRepository : IProjectRepository
                .ToListAsync();
     }
 
-    public async Task UpdateProjectStatusByIdAsync(int projectId)
+    public async Task CloseProjectByIdAsync(int projectId)
     {
         var entity = await _context.Projects.FindAsync(projectId);
         if (entity != null)
@@ -153,5 +158,15 @@ public class ProjectRepository : IProjectRepository
             }
         }
         return listToReturn;
+    }
+
+    private static IReadOnlyCollection<string> TagsToString(ICollection<Tag> tags)
+    {
+        var list = new List<string>();
+        foreach (var tag in tags)
+        {
+            list.Add(tag.Name);
+        }
+        return list;
     }
 }

@@ -133,7 +133,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     {
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = 1 });
 
-        await _projectRepository.UpdateProjectStatusByIdAsync(1);
+        await _projectRepository.CloseProjectByIdAsync(1);
 
         var expected = Status.Closed;
         var actual = _context.Projects.Find(1).Status;
