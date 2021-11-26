@@ -5,7 +5,7 @@ using ProjectBank.Shared;
 
 namespace ProjectBank.Server.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Student")]
 [ApiController]
 [Route("[controller]")]
 [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]

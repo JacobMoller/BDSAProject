@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddKeyPerFile("/run/secrets", optional: true);
@@ -13,6 +15,10 @@ builder.Services.AddControllersWithViews().AddJsonOptions(c =>
     c.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     c.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+
+builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options => {
+    options.TokenValidationParameters.RoleClaimType = "roles";
+}); 
 
 builder.Services.AddRazorPages();
 
