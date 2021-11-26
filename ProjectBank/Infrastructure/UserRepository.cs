@@ -39,16 +39,20 @@ public class UserRepository : IUserRepository
     public async Task<UserDTO> ReadSupervisorOnProjectByIdAsync(int projectId)
     {
         var project = await _context.Projects.FindAsync(projectId);
-        var supervisorID = project.UserId;
-        var user = await _context.Users.FindAsync(supervisorID);
-        if (user != null)
+        if (project != null)
         {
-            return new UserDTO(
-                user.Id,
-                user.Name
-            );
+            var supervisorID = project.UserId;
+            var user = await _context.Users.FindAsync(supervisorID);
+            if (user != null)
+            {
+                return new UserDTO(
+                    user.Id,
+                    user.Name
+                );
+            }
+            else return null;
         }
-        else return null;
+        return null;
     }
 
     public async Task<UserDTO> ReadUserByEmailAsync(string email)

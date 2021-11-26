@@ -53,11 +53,19 @@ public class UserRepositoryTests : ContextSetup, IDisposable
             Description = "Cool algorithms",
             UserId = 1
         });
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO()
+        {
+            Title = "Math",
+            Description = "Cool equations",
+            UserId = 100
+        });
 
         var expected = new UserDTO(1, "Alice");
         var actual = await _userRepository.ReadSupervisorOnProjectByIdAsync(1);
 
         Assert.Equal(expected, actual);
+        Assert.Null(await _userRepository.ReadSupervisorOnProjectByIdAsync(100));
+        Assert.Null(await _userRepository.ReadSupervisorOnProjectByIdAsync(2));
     }
 
     [Fact]
@@ -75,6 +83,7 @@ public class UserRepositoryTests : ContextSetup, IDisposable
         var actual = await _userRepository.ReadUserByEmailAsync("email@email.com");
 
         Assert.Equal(expected, actual);
+        Assert.Null(await _userRepository.ReadUserByEmailAsync("nonExistingEmail@email.com"));
     }
 
     [Fact]
@@ -92,6 +101,7 @@ public class UserRepositoryTests : ContextSetup, IDisposable
         var actual = await _userRepository.ReadUserByIdAsync(1);
 
         Assert.Equal(expected, actual);
+        Assert.Null(await _userRepository.ReadUserByIdAsync(100));
     }
 
     [Fact]

@@ -154,7 +154,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
             Role = Role.Student
         });
         await _projectRepository.AddUserToProjectAsync(1, 1);
-
+        await _projectRepository.AddUserToProjectAsync(2, 1);
 
         var project = await _context.Projects.FindAsync(1);
 
@@ -162,6 +162,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         var expected = await _context.Users.FindAsync(1);
 
         Assert.Equal(expected, actual);
+        Assert.Throws<System.ArgumentOutOfRangeException>(() => project.Participants.ElementAt(1));
     }
 
     public void Dispose()

@@ -126,8 +126,8 @@ public class ProjectRepository : IProjectRepository
         if (user != null && project != null)
         {
             project.Participants.Add(user);
+            await _context.SaveChangesAsync();
         }
-        await _context.SaveChangesAsync();
     }
 
     private async Task<ICollection<Tag>> SetTagsAsync(ICollection<string> tags)
