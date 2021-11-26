@@ -6,11 +6,19 @@
 
 <AuthorizeView>
     <Authorized>
-        Hello, @context.User.Identity?.Name!
-        <button class="nav-link btn btn-link" @onclick="BeginLogout">Log out</button>
+        <div class="nav-item p-3" @onclick="BeginLogout">
+            Hello, @context.User.Identity?.Name!
+            <NavLink class="nav-link" href="Login">
+                <span class="oi oi-account-logout" aria-hidden="true"></span> Log out
+            </NavLink>
+        </div>
     </Authorized>
     <NotAuthorized>
-        <a href="authentication/login">Log in</a>
+        <div class="nav-item p-3">
+            <NavLink class="nav-link" href="authentication/login">
+                    <span class="oi oi-account-login" aria-hidden="true"></span> Log in
+            </NavLink>
+        </div>
     </NotAuthorized>
 </AuthorizeView>
 
@@ -20,5 +28,6 @@
         await SignOutManager.SetSignOutState();
         Navigation.NavigateTo("authentication/logout");
     }
+    
 }
 
