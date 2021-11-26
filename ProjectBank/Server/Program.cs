@@ -16,9 +16,10 @@ builder.Services.AddControllersWithViews().AddJsonOptions(c =>
     c.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options => {
-    options.TokenValidationParameters.RoleClaimType = "roles";
-}); 
+builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+{
+    options.TokenValidationParameters.RoleClaimType = "Roles";
+});
 
 builder.Services.AddRazorPages();
 
