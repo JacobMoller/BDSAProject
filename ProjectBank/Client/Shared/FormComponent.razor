@@ -1,0 +1,57 @@
+<EditForm Model="@Project" OnValidSubmt="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <InputText id="title" class="form-control" @bind-Value="Project.Title" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+            <InputTextArea id="description" class="form-control" @bind-Value="Project.Description" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Tags</label>
+            <InputText id="tags" class="form-control" @bind-Value="@TagListString"/>
+    </div>
+
+    <button type="submit" class="btn btn-success" onclick="@HandleValidSubmit">@ButtonName</button>
+</EditForm> 
+
+@code {
+    [Parameter]
+    public Project Project {get; set;}
+
+    [Parameter]
+    public string ButtonName {get; set;}
+
+    private string TagListString = "";
+    
+    //receiving a list of tags that have to be displayed
+    protected override void OnInitialized() {
+        if (Project.Tags != null) {
+            foreach (var tag in Project.Tags)
+            {
+                TagListString += tag.Name + ", ";
+            }
+            TagListString = TagListString.TrimEnd(',',' ');
+        }
+    }
+
+    private void HandleValidSubmit() {
+        //handle submit + send/persist to db?
+        TagStringToList();
+    }
+
+    private void TagStringToList() {
+        string[] tagNames = TagListString.Replace(" ","").Split(',');
+        var tagList = new List<Tag>();
+        foreach (var tagName in tagNames)
+        {
+            tagList.Add(new Tag(tagName));
+        }
+        Project.Tags = tagList;
+    }
+}
