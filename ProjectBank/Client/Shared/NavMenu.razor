@@ -1,3 +1,5 @@
+
+
 <nav class="navbar topbar navbar-dark">
 
     <div class="container-fluid @NavMenuColCssClass"> 
@@ -14,11 +16,18 @@
                     <span class="oi oi-home" aria-hidden="true"></span> Explore
                 </NavLink>
             </div>
-            <div class="nav-item p-3">
-                <NavLink class="nav-link" href="fetchdata">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Create Project
-                </NavLink>
-            </div>
+            <AuthorizeView>
+                <Authorized>
+                    @if (@context.User.IsInRole("Student"))
+                    {
+                        <div class="nav-item p-3">
+                            <NavLink class="nav-link" href="fetchdata">
+                                <span class="oi oi-plus" aria-hidden="true"></span> Create Project
+                            </NavLink>
+                        </div>   
+                    }
+                </Authorized>
+            </AuthorizeView>
             <div class="nav-item p-3">
                 <NavLink class="nav-link" href="project/1/">
                     <span class="oi oi-list-rich" aria-hidden="true"></span> My Projects
@@ -35,18 +44,16 @@
 
     private bool loggedin = true;
 
+
     private string? NavMenuCssClass => collapseNavMenu ? "collapse col-md-auto" : null;
     private string? NavMenuFlexCssClass => collapseNavMenu ? "d-flex justify-content-end" : null;
     private string? NavMenuColCssClass => collapseNavMenu ? "col" : null;
 
-    private string? User => loggedin ? "logout" : "login";
+   
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
 
-    private void SwitchLogIn(){
-        loggedin = !loggedin;
-    }
 }
