@@ -142,6 +142,28 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
     }
 
+    [Fact]
+    public async Task AddUserToProject_given_ProjectId_and_UserId_adds_user()
+    {
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = 1 });
+        await _userRepository.CreateUserAsync(new CreateUserDTO
+        {
+            Name = "Alice",
+            Email = "email@email.com",
+            Password = "Password123",
+            Role = Role.Student
+        });
+        await _projectRepository.AddUserToProjectAsync(1, 1);
+
+
+        var project = await _context.Projects.FindAsync(1);
+
+        var actual = project.Participants.ElementAt(0);
+        var expected = await _context.Users.FindAsync(1);
+
+        Assert.Equal(expected, actual);
+    }
+
     public void Dispose()
     {
         _context.Dispose();

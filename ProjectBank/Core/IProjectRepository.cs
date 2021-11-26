@@ -9,4 +9,5 @@ public interface IProjectRepository
     Task EditProjectAsync(UpdateProjectDTO project);
     Task UpdateProjectStatusByIdAsync(int projectId);
     Task DeleteProjectByIdAsync(int projectId);
+    Task AddUserToProjectAsync(int userId, int projectId);
 }

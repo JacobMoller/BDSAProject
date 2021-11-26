@@ -38,7 +38,8 @@ public class UserRepository : IUserRepository
 
     public async Task<UserDTO> ReadSupervisorOnProjectByIdAsync(int projectId)
     {
-        var supervisorID = await _context.Projects.FindAsync(projectId);
+        var project = await _context.Projects.FindAsync(projectId);
+        var supervisorID = project.UserId;
         var user = await _context.Users.FindAsync(supervisorID);
         if (user != null)
         {
@@ -94,10 +95,5 @@ public class UserRepository : IUserRepository
             user.Id,
             user.Name
         )).ToListAsync();
-    }
-
-    public async Task UpdateUserAsync(UpdateUserDTO user)
-    {
-        //do we want this since all fields in user are init and cant be updated
     }
 }

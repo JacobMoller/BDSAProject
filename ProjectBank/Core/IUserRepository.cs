@@ -3,7 +3,6 @@ namespace ProjectBank.Core;
 public interface IUserRepository
 {
     Task<UserDTO> CreateUserAsync(CreateUserDTO user);
-    Task UpdateUserAsync(UpdateUserDTO user);
     Task DeleteUserAsync(int id);
     Task<UserDTO> ReadUserByIdAsync(int id);
     Task<UserDTO> ReadUserByEmailAsync(string email);

@@ -17,6 +17,7 @@ public class ProjectRepository : IProjectRepository
             Description = project.Description,
             CreationDate = DateTime.Now,
             UpdatedDate = DateTime.Now,
+            Participants = new List<User>()
         };
         if (project.Tags != null)
         {
@@ -38,7 +39,6 @@ public class ProjectRepository : IProjectRepository
     public async Task DeleteProjectByIdAsync(int projectId)
     {
         var entity = await _context.Projects.FindAsync(projectId);
-        // make sure to give a proper response if null (http statuscode?)
         if (entity != null)
         {
             _context.Projects.Remove(entity);
@@ -115,6 +115,17 @@ public class ProjectRepository : IProjectRepository
         if (entity != null)
         {
             entity.Status = Status.Closed;
+        }
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AddUserToProjectAsync(int userId, int projectId)
+    {
+        var user = await _context.Users.FindAsync(userId);
+        var project = await _context.Projects.FindAsync(projectId);
+        if (user != null && project != null)
+        {
+            project.Participants.Add(user);
         }
         await _context.SaveChangesAsync();
     }
