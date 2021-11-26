@@ -11,11 +11,7 @@ public record CreateProjectDTO
 
     [StringLength(500)]
     public string? Description { get; set; }
-
     public int UserId { get; set; }
-
-    public Role UserRole { get; set; }
-
     public ICollection<string>? Tags { get; set; }
 }
 

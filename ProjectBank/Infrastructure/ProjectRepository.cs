@@ -52,6 +52,7 @@ public class ProjectRepository : IProjectRepository
         //Should projectDTO title be nullable? We need it for create but not for update
         entity.Title = project.Title;
         entity.Description = project.Description;
+        entity.UpdatedDate = DateTime.Now;
         if (project.Tags != null)
         {
             entity.Tags = await SetTagsAsync(project.Tags);
@@ -115,8 +116,9 @@ public class ProjectRepository : IProjectRepository
         if (entity != null)
         {
             entity.Status = Status.Closed;
+            entity.UpdatedDate = DateTime.Now;
+            await _context.SaveChangesAsync();
         }
-        await _context.SaveChangesAsync();
     }
 
     public async Task AddUserToProjectAsync(int userId, int projectId)
@@ -126,6 +128,7 @@ public class ProjectRepository : IProjectRepository
         if (user != null && project != null)
         {
             project.Participants.Add(user);
+            project.UpdatedDate = DateTime.Now;
             await _context.SaveChangesAsync();
         }
     }

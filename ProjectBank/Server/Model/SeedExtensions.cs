@@ -4,46 +4,76 @@ namespace ProjectBank.Server.Model;
 
 public static class SeedExtensions
 {
-    public static IHost Seed(this IHost host)
+    public async static Task<IHost> Seed(this IHost host)
     {
         using (var scope = host.Services.CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<ProjectBankContext>();
 
-            SeedProjects(context);
+            await SeedProjects(context);
         }
         return host;
     }
 
-    private static void SeedProjects(ProjectBankContext context)
+    private async static Task SeedProjects(ProjectBankContext context)
     {
         context.Database.EnsureDeleted();
         context.Database.Migrate();
 
-        if (!context.Projects.Any())
+        var userRepository = new UserRepository(context);
+        var ProjectRepository = new ProjectRepository(context);
+
+        await userRepository.CreateUserAsync(new CreateUserDTO
         {
-            var Algo = new Tag("Algo");
-            var DMAT = new Tag("DMAT");
-            var Disys = new Tag("Disys");
-
-            var Charlie = new User("Charlie", "CharlieTheStudent@gmail.com", "2222", Role.Student);
-            var Dave = new User("Dave", "DaveTheStudent@gmail.com", "5555", Role.Student);
-
-
-            context.Users.AddRange(
-                new User("Bob", "BobTheSupervisor@gmail.com", "1234", Role.Supervisor),
-                new User("Alice", "AliceTheSupervisor@gmail.com", "9876", Role.Supervisor),
-                Charlie,
-                Dave
-            );
-
-            context.Projects.AddRange(
-                new Project("Super Fun Project", Status.Active, 1) { Tags = new List<Tag>() { Algo, DMAT } },
-                new Project("Super Closed Project", Status.Closed, 2) { Tags = new List<Tag>() { DMAT, DMAT } },
-                new Project("Super Participants Project", Status.Active, 1) { Tags = new List<Tag>() { Algo, Disys }, Participants = new List<User>() { Dave, Charlie } }
-            );
-
-            context.SaveChanges();
-        }
+            Name = "Alice",
+            Email = "alice@alice.com",
+            Password = "AlicesPassword",
+            Role = Role.Supervisor
+        });
+        await userRepository.CreateUserAsync(new CreateUserDTO
+        {
+            Name = "Bob",
+            Email = "bob@bob.com",
+            Password = "BobsPassword",
+            Role = Role.Supervisor
+        });
+        await userRepository.CreateUserAsync(new CreateUserDTO
+        {
+            Name = "Charlie",
+            Email = "charlie@charlie.com",
+            Password = "CharliesPassword",
+            Role = Role.Student
+        });
+        await userRepository.CreateUserAsync(new CreateUserDTO
+        {
+            Name = "Dave",
+            Email = "dave@dave.com",
+            Password = "DavesPassword",
+            Role = Role.Student
+        });
+        await ProjectRepository.CreateProjectAsync(new CreateProjectDTO
+        {
+            Title = "Super Fun Project",
+            Description = "Fun",
+            UserId = 1,
+            Tags = new List<string>() { "Algorithm", "Economy" }
+        });
+        await ProjectRepository.CreateProjectAsync(new CreateProjectDTO
+        {
+            Title = "Super Participants Project",
+            Description = "People",
+            UserId = 1,
+            Tags = new List<string>() { "Algorithm", "Math" }
+        });
+        await ProjectRepository.CreateProjectAsync(new CreateProjectDTO
+        {
+            Title = "Super Closed Project",
+            Description = "I was a fun project",
+            UserId = 2,
+            Tags = new List<string>() { "Math" }
+        });
+        await ProjectRepository.AddUserToProjectAsync(3, 2);
+        await ProjectRepository.AddUserToProjectAsync(4, 2);
+        await ProjectRepository.UpdateProjectStatusByIdAsync(3);
     }
 }
