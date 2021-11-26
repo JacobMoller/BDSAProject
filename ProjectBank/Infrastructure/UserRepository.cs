@@ -10,10 +10,7 @@ public class UserRepository : IUserRepository
     }
     public async Task<UserDTO> CreateUserAsync(CreateUserDTO user)
     {
-        var entity = new User(user.Name, user.Email, user.Password)
-        {
-            Role = user.Role,
-        };
+        var entity = new User(user.Name, user.Email, user.Password, user.Role);
 
         _context.Users.Add(entity);
 

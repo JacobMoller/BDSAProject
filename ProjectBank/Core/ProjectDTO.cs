@@ -14,6 +14,8 @@ public record CreateProjectDTO
 
     public int UserId { get; set; }
 
+    public Role UserRole { get; set; }
+
     public ICollection<string>? Tags { get; set; }
 }
 
