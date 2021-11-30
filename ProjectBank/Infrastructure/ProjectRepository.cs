@@ -1,6 +1,3 @@
-
-using System.Collections.ObjectModel;
-
 namespace ProjectBank.Infrastructure;
 
 public class ProjectRepository : IProjectRepository
@@ -16,17 +13,12 @@ public class ProjectRepository : IProjectRepository
         var entity = new Project(project.Title, Status.Active, project.UserId)
         {
             Description = project.Description,
-            CreationDate = DateTime.Now,
-            UpdatedDate = DateTime.Now,
-            UserId = 1
+            CreationDate = DateTime.UtcNow,
+            UpdatedDate = DateTime.UtcNow,
+            Tags = project.Tags != null ? await SetTagsAsync(project.Tags) : new List<Tag>()
         };
-        if (project.Tags != null)
-        {
-            entity.Tags = await SetTagsAsync(project.Tags);
-        }
 
         _context.Projects.Add(entity);
-
         await _context.SaveChangesAsync();
 
         return new ProjectDTO(
@@ -37,7 +29,7 @@ public class ProjectRepository : IProjectRepository
             entity.Description,
             entity.CreationDate,
             entity.UpdatedDate,
-            TagsToString(entity.Tags),
+            entity.Tags.Select(tag => new string(tag.Name)).ToList().AsReadOnly(),
             new List<UserDTO>()
         );
     }
@@ -55,13 +47,12 @@ public class ProjectRepository : IProjectRepository
     public async Task EditProjectAsync(UpdateProjectDTO project)
     {
         var entity = await _context.Projects.FindAsync(project.Id);
-        //Should projectDTO title be nullable? We need it for create but not for update
         if (entity != null)
         {
             entity.Title = project.Title;
             entity.Description = project.Description;
-            entity.UpdatedDate = DateTime.Now;
-            if (project.Tags.Count > 0)
+            entity.UpdatedDate = DateTime.UtcNow;
+            if (project.Tags != null && project.Tags.Count > 0)
             {
                 entity.Tags = await SetTagsAsync(project.Tags);
             }
@@ -71,18 +62,17 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadAllAsync()
     {
-        return await _context.Projects.Select(project => new ProjectDTO(
-               project.Id,
-               project.Title,
-               project.Status,
-               project.UserId,
-               project.Description,
-               project.CreationDate,
-               project.UpdatedDate,
-               TagsToString(project.Tags),
-               await project.Participants.AsEnumerable().Select(a => new UserDTO(a.Id, a.Name)).ToList().AsReadOnly()
-        ))
-
+        return await (_context.Projects.Select(project => new ProjectDTO(
+            project.Id,
+            project.Title,
+            project.Status,
+            project.UserId,
+            project.Description,
+            project.CreationDate,
+            project.UpdatedDate,
+            project.Tags.Select(tag => new string(tag.Name)).ToList(),
+            project.Participants.Select(user => new UserDTO(user.Id, user.Name)).ToList()
+            ))).ToListAsync();
     }
 
     public async Task<ProjectDTO> ReadProjectByIdAsync(int projectId)
@@ -92,37 +82,52 @@ public class ProjectRepository : IProjectRepository
         if (entity != null)
         {
             return new ProjectDTO(
-                entity.Id,
-                entity.Title,
-                entity.Status,
-                entity.UserId
-            );
+            entity.Id,
+            entity.Title,
+            entity.Status,
+            entity.UserId,
+            entity.Description,
+            entity.CreationDate,
+            entity.UpdatedDate,
+            entity.Tags != null ? entity.Tags.Select(tag => new string(tag.Name)).ToList() : new List<string>(),
+            entity.Participants != null ? entity.Participants.Select(user => new UserDTO(user.Id, user.Name)).ToList() : new List<UserDTO>()
+        );
         }
         else
         {
             return null;
         }
-    }
 
+    }
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByTagIdAsync(int tagId)
     {
-        var tag = await _context.Tags.FindAsync(tagId);
-        return (from project in tag.Projects
-                select new ProjectDTO(
-                project.Id,
-                project.Title,
-                project.Status,
-                project.UserId)).ToList();
+        var projectsInTags = await _context.Tags.FindAsync(tagId);
+        return await (_context.Projects.Where(p => projectsInTags.Projects.Contains(p)).Select(project => new ProjectDTO(
+            project.Id,
+            project.Title,
+            project.Status,
+            project.UserId,
+            project.Description,
+            project.CreationDate,
+            project.UpdatedDate,
+            project.Tags.Select(t => new string(t.Name)).ToList(),
+            project.Participants.Select(u => new UserDTO(u.Id, u.Name)).ToList()
+            ))).ToListAsync();
     }
 
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByUserIdAsync(int userId)
     {
-        return await _context.Projects.Where(project => project.UserId == userId).Select(project => new ProjectDTO(
-               project.Id,
-               project.Title,
-               project.Status,
-               project.UserId))
-               .ToListAsync();
+        return await (_context.Projects.Where(project => project.UserId == userId).Select(project => new ProjectDTO(
+            project.Id,
+            project.Title,
+            project.Status,
+            project.UserId,
+            project.Description,
+            project.CreationDate,
+            project.UpdatedDate,
+            project.Tags.Select(t => new string(t.Name)).ToList().AsReadOnly(),
+            project.Participants.Select(u => new UserDTO(u.Id, u.Name)).ToList().AsReadOnly()
+            ))).ToListAsync();
     }
 
     public async Task CloseProjectByIdAsync(int projectId)
@@ -142,7 +147,14 @@ public class ProjectRepository : IProjectRepository
         var project = await _context.Projects.FindAsync(projectId);
         if (user != null && project != null)
         {
-            project.Participants.Add(user);
+            if (project.Participants != null)
+            {
+                project.Participants.Add(user);
+            }
+            else
+            {
+                project.Participants = new List<User>() { user };
+            }
             project.UpdatedDate = DateTime.Now;
             await _context.SaveChangesAsync();
         }
@@ -168,25 +180,5 @@ public class ProjectRepository : IProjectRepository
             }
         }
         return listToReturn;
-    }
-
-    private static IReadOnlyCollection<string> TagsToString(ICollection<Tag> tags)
-    {
-        var list = new List<string>();
-        foreach (var tag in tags)
-        {
-            list.Add(tag.Name);
-        }
-        return list;
-    }
-
-    private static async Task<IReadOnlyCollection<UserDTO>> UserToUserDTO(ICollection<User> users)
-    {
-        var list = new List<UserDTO>();
-        foreach (var user in users)
-        {
-            list.Add(new UserDTO(user.Id, user.Name));
-        }
-        return list;
     }
 }
