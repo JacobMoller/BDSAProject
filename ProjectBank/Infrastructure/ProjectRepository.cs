@@ -1,4 +1,5 @@
-using System.Linq;
+
+using System.Collections.ObjectModel;
 
 namespace ProjectBank.Infrastructure;
 
@@ -57,10 +58,10 @@ public class ProjectRepository : IProjectRepository
         //Should projectDTO title be nullable? We need it for create but not for update
         if (entity != null)
         {
-            entity.Title = project.Title != null ? project.Title : entity.Title;
-            entity.Description = project.Description != null ? project.Description : entity.Description;
+            entity.Title = project.Title;
+            entity.Description = project.Description;
             entity.UpdatedDate = DateTime.Now;
-            if (project.Tags != null)
+            if (project.Tags.Count > 0)
             {
                 entity.Tags = await SetTagsAsync(project.Tags);
             }
@@ -74,8 +75,14 @@ public class ProjectRepository : IProjectRepository
                project.Id,
                project.Title,
                project.Status,
-               project.UserId))
-               .ToListAsync();
+               project.UserId,
+               project.Description,
+               project.CreationDate,
+               project.UpdatedDate,
+               TagsToString(project.Tags),
+               await project.Participants.AsEnumerable().Select(a => new UserDTO(a.Id, a.Name)).ToList().AsReadOnly()
+        ))
+
     }
 
     public async Task<ProjectDTO> ReadProjectByIdAsync(int projectId)
@@ -169,6 +176,16 @@ public class ProjectRepository : IProjectRepository
         foreach (var tag in tags)
         {
             list.Add(tag.Name);
+        }
+        return list;
+    }
+
+    private static async Task<IReadOnlyCollection<UserDTO>> UserToUserDTO(ICollection<User> users)
+    {
+        var list = new List<UserDTO>();
+        foreach (var user in users)
+        {
+            list.Add(new UserDTO(user.Id, user.Name));
         }
         return list;
     }
