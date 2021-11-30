@@ -40,32 +40,21 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     [Fact]
     public async Task EditProject_given_CreateProjectDTO_updates_project()
     {
-        await _projectRepository.CreateProjectAsync(new CreateProjectDTO
-        {
-            Title = "Algo",
-            Description = "Sorting",
-            UserId = 1,
-            Tags = new List<string> { "DMAT", "Fun" }
-        });
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = 1, Description = "Very fun", Tags = new List<string> { "Sorting" } });
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "DMAT", UserId = 2, Description = "Very very fun", Tags = new List<string> { "Math" } });
+        await _projectRepository.EditProjectAsync(new UpdateProjectDTO { Id = 1, Title = "Something else than Algo", Description = "Not sorting", UserId = 1, Tags = new List<string> { "Economy", "Math" } });
+        await _projectRepository.EditProjectAsync(new UpdateProjectDTO { Id = 2, Title = "DMAT", UserId = 2, Description = "Very very fun" });
+        var editedProjectWithTags = await _context.Projects.FindAsync(1);
+        var editedProjectWithoutTags = await _context.Projects.FindAsync(2);
 
-        await _projectRepository.EditProjectAsync(new UpdateProjectDTO
-        {
-            Id = 1,
-            Title = "Something else than Algo",
-            Description = "Not sorting",
-            UserId = 1,
-            Tags = new List<string> { "Economy", "Math" }
-        });
-
-        var editedProject = await _context.Projects.FindAsync(1);
-
-        Assert.Equal(1, editedProject.Id);
-        Assert.Equal("Something else than Algo", editedProject.Title);
-        Assert.Equal(Status.Active, editedProject.Status);
-        Assert.Equal(1, editedProject.UserId);
-        Assert.Equal("Not sorting", editedProject.Description);
-        Assert.Equal(DateTime.UtcNow, editedProject.UpdatedDate, precision: TimeSpan.FromSeconds(5));
-        Assert.Equal(new List<string>() { "Economy", "Math" }, editedProject.Tags.Select(tag => new string(tag.Name)).ToList());
+        Assert.Equal(1, editedProjectWithTags.Id);
+        Assert.Equal("Something else than Algo", editedProjectWithTags.Title);
+        Assert.Equal(Status.Active, editedProjectWithTags.Status);
+        Assert.Equal(1, editedProjectWithTags.UserId);
+        Assert.Equal("Not sorting", editedProjectWithTags.Description);
+        Assert.Equal(DateTime.UtcNow, editedProjectWithTags.UpdatedDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(new List<string>() { "Economy", "Math" }, editedProjectWithTags.Tags.Select(tag => new string(tag.Name)).ToList());
+        Assert.Equal(new List<string>(), editedProjectWithoutTags.Tags.Select(tag => new string(tag.Name)).ToList());
     }
 
     [Fact]
@@ -116,6 +105,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     public async Task ReadProjectById_given_ProjectId_returns_ProjectDTO()
     {
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = 1, Description = "Very fun", Tags = new List<string> { "Sorting" } });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Alice", Email = "email@email.com", Password = "Password123", Role = Role.Student });
 
         var actual = await _projectRepository.ReadProjectByIdAsync(1);
 
@@ -129,6 +119,9 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         Assert.Equal(new List<string>() { "Sorting" }, actual.Tags);
         Assert.Equal(new List<UserDTO>(), actual.Participants);
         Assert.Null(await _projectRepository.ReadProjectByIdAsync(100));
+
+        await _projectRepository.AddUserToProjectAsync(1, 1);
+        Assert.Equal(new UserDTO(1, "Alice"), _projectRepository.ReadProjectByIdAsync(1).Result.Participants.ElementAt(0));
     }
 
     [Fact]
@@ -162,6 +155,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         Assert.Equal(DateTime.UtcNow, projects.ElementAt(1).UpdatedDate, precision: TimeSpan.FromSeconds(5));
         Assert.Equal(new List<string>() { "Sorting" }, projects.ElementAt(1).Tags);
         Assert.Equal(new List<UserDTO>(), projects.ElementAt(1).Participants);
+
 
         Assert.Throws<System.ArgumentOutOfRangeException>(() => projects.ElementAt(3));
     }
@@ -219,13 +213,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     public async Task AddUserToProject_given_ProjectId_and_UserId_adds_user()
     {
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = 1, Description = "Very fun", Tags = new List<string> { "Sorting" } });
-        await _userRepository.CreateUserAsync(new CreateUserDTO
-        {
-            Name = "Alice",
-            Email = "email@email.com",
-            Password = "Password123",
-            Role = Role.Student
-        });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Alice", Email = "email@email.com", Password = "Password123", Role = Role.Student });
         await _projectRepository.AddUserToProjectAsync(1, 1);
         await _projectRepository.AddUserToProjectAsync(2, 1);
 

@@ -56,6 +56,10 @@ public class ProjectRepository : IProjectRepository
             {
                 entity.Tags = await SetTagsAsync(project.Tags);
             }
+            else
+            {
+                entity.Tags = new List<Tag>();
+            }
             await _context.SaveChangesAsync();
         }
     }
