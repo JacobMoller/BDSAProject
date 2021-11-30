@@ -21,6 +21,11 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         Assert.Equal("Algorithm", created.Title);
         Assert.Equal(Status.Active, created.Status);
         Assert.Equal(1, created.UserId);
+        Assert.Equal("Sorting", created.Description);
+        Assert.Equal(DateTime.UtcNow, created.CreationDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(DateTime.UtcNow, created.UpdatedDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(new List<string>() { "DMAT", "Fun" }, created.Tags);
+        Assert.Null(created.Participants);
     }
 
     [Fact]
@@ -72,25 +77,54 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
     public async Task ReadAll_returns_list_of_ProjectDTO()
     {
-        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = 1 });
-        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "DMAT", UserId = 2 });
-        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Disys", UserId = 3 });
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = 1, Description = "Very fun", Tags = new List<string> { "Sorting" } });
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "DMAT", UserId = 2, Description = "Very very fun", Tags = new List<string> { "Math" } });
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Disys", UserId = 3, Description = "Very very very fun", Tags = new List<string> { "Servers" } });
 
         var projects = await _projectRepository.ReadAllAsync();
 
-        Assert.Collection(projects,
-        project => Assert.Equal(new ProjectDTO(1, "Algo", Status.Active, 1), project),
-        project => Assert.Equal(new ProjectDTO(2, "DMAT", Status.Active, 2), project),
-        project => Assert.Equal(new ProjectDTO(3, "Disys", Status.Active, 3), project)
-        );
+        //project 1
+        Assert.Equal(1, projects.ElementAt(0).Id);
+        Assert.Equal("Algo", projects.ElementAt(0).Title);
+        Assert.Equal(Status.Active, projects.ElementAt(0).Status);
+        Assert.Equal(1, projects.ElementAt(0).UserId);
+        Assert.Equal("Very fun", projects.ElementAt(0).Description);
+        Assert.Equal(DateTime.UtcNow, projects.ElementAt(0).CreationDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(DateTime.UtcNow, projects.ElementAt(0).UpdatedDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(new List<string>() { "Sorting" }, projects.ElementAt(0).Tags);
+        Assert.Equal(new List<UserDTO>(), projects.ElementAt(0).Participants);
+
+        //project 2
+        Assert.Equal(1, projects.ElementAt(1).Id);
+        Assert.Equal("DMAT", projects.ElementAt(1).Title);
+        Assert.Equal(Status.Active, projects.ElementAt(1).Status);
+        Assert.Equal(2, projects.ElementAt(1).UserId);
+        Assert.Equal("Very very fun", projects.ElementAt(1).Description);
+        Assert.Equal(DateTime.UtcNow, projects.ElementAt(1).CreationDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(DateTime.UtcNow, projects.ElementAt(1).UpdatedDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(new List<string>() { "Math" }, projects.ElementAt(1).Tags);
+        Assert.Equal(new List<UserDTO>(), projects.ElementAt(1).Participants);
+
+        //project 2
+        Assert.Equal(1, projects.ElementAt(2).Id);
+        Assert.Equal("Disys", projects.ElementAt(2).Title);
+        Assert.Equal(Status.Active, projects.ElementAt(2).Status);
+        Assert.Equal(3, projects.ElementAt(2).UserId);
+        Assert.Equal("Very very very fun", projects.ElementAt(2).Description);
+        Assert.Equal(DateTime.UtcNow, projects.ElementAt(2).CreationDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(DateTime.UtcNow, projects.ElementAt(2).UpdatedDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(new List<string>() { "Servers" }, projects.ElementAt(2).Tags);
+        Assert.Equal(new List<UserDTO>(), projects.ElementAt(2).Participants);
+
+
     }
 
     [Fact]
     public async Task ReadProjectById_given_ProjectId_returns_ProjectDTO()
     {
-        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = 1 });
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = 1, Description = "Very fun", Tags = new List<string> { "Sorting" } });
 
-        var expected = new ProjectDTO(1, "Algo", Status.Active, 1);
+        var expected = new ProjectDTO(1, "Algo", Status.Active, 1, "Very fun",);
         var actual = await _projectRepository.ReadProjectByIdAsync(1);
 
         Assert.Equal(expected, actual);
@@ -170,3 +204,4 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         _context.Dispose();
     }
 }
+

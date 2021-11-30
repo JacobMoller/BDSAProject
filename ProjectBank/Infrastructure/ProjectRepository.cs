@@ -17,7 +17,7 @@ public class ProjectRepository : IProjectRepository
             Description = project.Description,
             CreationDate = DateTime.Now,
             UpdatedDate = DateTime.Now,
-            Participants = new List<User>()
+            UserId = 1
         };
         if (project.Tags != null)
         {
@@ -28,7 +28,7 @@ public class ProjectRepository : IProjectRepository
 
         await _context.SaveChangesAsync();
 
-        return new ProjectDetailsDTO(
+        return new ProjectDTO(
             entity.Id,
             entity.Title,
             entity.Status,
@@ -55,14 +55,17 @@ public class ProjectRepository : IProjectRepository
     {
         var entity = await _context.Projects.FindAsync(project.Id);
         //Should projectDTO title be nullable? We need it for create but not for update
-        entity.Title = project.Title;
-        entity.Description = project.Description;
-        entity.UpdatedDate = DateTime.Now;
-        if (project.Tags != null)
+        if (entity != null)
         {
-            entity.Tags = await SetTagsAsync(project.Tags);
+            entity.Title = project.Title != null ? project.Title : entity.Title;
+            entity.Description = project.Description != null ? project.Description : entity.Description;
+            entity.UpdatedDate = DateTime.Now;
+            if (project.Tags != null)
+            {
+                entity.Tags = await SetTagsAsync(project.Tags);
+            }
+            await _context.SaveChangesAsync();
         }
-        await _context.SaveChangesAsync();
     }
 
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadAllAsync()
