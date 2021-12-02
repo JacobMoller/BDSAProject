@@ -18,11 +18,12 @@ public class User
 
     public ICollection<Project>? Projects { get; init; }
 
-    public User(string Name, string Email, string Password)
+    public User(string Name, string Email, string Password, Role Role)
     {
         this.Name = Name;
         this.Email = Email;
         this.Password = Password;
+        this.Role = Role;
     }
 
 }

@@ -12,6 +12,8 @@
 **/.DS_Store
 **/.local
 ProjectBank/Infrastructure.Tests/Reports/*
+**/.vscode
+
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)
