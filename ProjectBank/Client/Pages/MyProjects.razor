@@ -1,4 +1,6 @@
 @page "/MyProjects"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Supervisor")] 
 
 <PageTitle>My Projects</PageTitle>
 
