@@ -62,12 +62,12 @@ public class UserRepository : IUserRepository
         else return null;
     }
 
-    public async Task<UserDTO> ReadUserByIdAsync(int id)
+    public async Task<Option<UserDetailsDTO>> ReadUserByIdAsync(int id)
     {
         var user = await _context.Users.FindAsync(id);
         if (user != null)
         {
-            return new UserDTO(user.Id, user.Name);
+            return new UserDetailsDTO(user.Id, user.Name, user.Email, user.Password);
         }
         else return null;
     }

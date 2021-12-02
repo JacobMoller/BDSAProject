@@ -5,20 +5,21 @@ public record UserDetailsDTO(int Id, string? Name, string? Email, string? Passwo
 public record CreateUserDTO
 {
     [StringLength(50)]
-    public string? Name { get; init; }
+    public string? Name { get; set; }
 
     [EmailAddress]
-    public string? Email { get; init; }
+    public string? Email { get; set; }
 
     [StringLength(50)]
-    public string? Password { get; init; }
+    public string? Password { get; set; }
 
-    public Role Role { get; init; }
+    public Role Role { get; set; }
 }
 
 public record UpdateUserDTO : CreateUserDTO
 {
-    public int Id { get; init; }
+    public int Id { get; set; }
 
-    public ICollection<ProjectDTO>? Projects { get; init; }
+
+    public ICollection<ProjectDTO>? Projects { get; set; }
 }
