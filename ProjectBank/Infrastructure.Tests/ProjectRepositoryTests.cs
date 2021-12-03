@@ -255,6 +255,32 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         Assert.Throws<System.ArgumentOutOfRangeException>(() => project.Participants.ElementAt(1));
     }
 
+    [Fact]
+    public async Task AddUserToProject_with_5_users_changes_status_to_closed()
+    {
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = 1, Description = "Very fun", Tags = new List<string> { "Sorting" } });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Alice", Email = "alice@email.com", Password = "Password123", Role = Role.Student });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Bob", Email = "bob@email.com", Password = "Password123", Role = Role.Student });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Charlie", Email = "charlie@email.com", Password = "Password123", Role = Role.Student });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Dave", Email = "dave@email.com", Password = "Password123", Role = Role.Student });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Emma", Email = "emma@email.com", Password = "Password123", Role = Role.Student });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Felicia", Email = "felicia@email.com", Password = "Password123", Role = Role.Student });
+        await _projectRepository.AddUserToProjectAsync(1, 1);
+        await _projectRepository.AddUserToProjectAsync(2, 1);
+        await _projectRepository.AddUserToProjectAsync(3, 1);
+        await _projectRepository.AddUserToProjectAsync(4, 1);
+        await _projectRepository.AddUserToProjectAsync(5, 1);
+        await _projectRepository.AddUserToProjectAsync(6, 1);
+
+        var project = await _context.Projects.FindAsync(1);
+
+        var actual = project.Status;
+        var expected = Status.Closed;
+
+        Assert.Equal(expected, actual);
+        Assert.Equal(5, project.Participants.Count());
+    }
+
     public void Dispose()
     {
         _context.Dispose();

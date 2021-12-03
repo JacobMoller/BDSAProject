@@ -15,7 +15,9 @@ public class ProjectRepository : IProjectRepository
             Description = project.Description,
             CreationDate = DateTime.UtcNow,
             UpdatedDate = DateTime.UtcNow,
-            Tags = project.Tags != null ? await SetTagsAsync(project.Tags) : new List<Tag>()
+            Tags = project.Tags != null ? await SetTagsAsync(project.Tags) : new List<Tag>(),
+            Participants = new List<User>()
+
         };
 
         _context.Projects.Add(entity);
@@ -66,7 +68,7 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadAllAsync()
     {
-        return await (_context.Projects.Select(project => new ProjectDTO(
+        return await (_context.Projects.Where(project => project.Status == Status.Active).Select(project => new ProjectDTO(
             project.Id,
             project.Title,
             project.Status,
@@ -81,7 +83,6 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<ProjectDTO> ReadProjectByIdAsync(int projectId)
     {
-
         var entity = await _context.Projects.FindAsync(projectId);
         if (entity != null)
         {
@@ -93,20 +94,20 @@ public class ProjectRepository : IProjectRepository
             entity.Description,
             entity.CreationDate,
             entity.UpdatedDate,
-            entity.Tags != null ? entity.Tags.Select(tag => new string(tag.Name)).ToList() : new List<string>(),
-            entity.Participants != null ? entity.Participants.Select(user => new UserDTO(user.Id, user.Name)).ToList() : new List<UserDTO>()
+            entity.Tags.Select(tag => new string(tag.Name)).ToList(),
+            entity.Participants.Select(user => new UserDTO(user.Id, user.Name)).ToList()
         );
         }
         else
         {
-            return null;
+            return null; //throw new CouldNotFindEntityInDatabase
         }
 
     }
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByTagIdAsync(int tagId)
     {
-        var projectsInTags = await _context.Tags.FindAsync(tagId);
-        return await (_context.Projects.Where(p => projectsInTags.Projects.Contains(p)).Select(project => new ProjectDTO(
+        var searchTag = await _context.Tags.FindAsync(tagId);
+        return await (_context.Projects.Where(p => searchTag.Projects.Contains(p) && p.Status == Status.Active).Select(project => new ProjectDTO(
             project.Id,
             project.Title,
             project.Status,
@@ -151,13 +152,13 @@ public class ProjectRepository : IProjectRepository
         var project = await _context.Projects.FindAsync(projectId);
         if (user != null && project != null)
         {
-            if (project.Participants != null)
+            if (project.Participants.Count() < 5)
             {
+                if (project.Participants.Count() == 4)
+                {
+                    project.Status = Status.Closed;
+                }
                 project.Participants.Add(user);
-            }
-            else
-            {
-                project.Participants = new List<User>() { user };
             }
             project.UpdatedDate = DateTime.Now;
             await _context.SaveChangesAsync();
