@@ -11,12 +11,8 @@ public record CreateProjectDTO
 
     [StringLength(500)]
     public string? Description { get; set; }
-
     public int UserId { get; set; }
-    
     public ICollection<string>? Tags { get; set; }
-
-    public ICollection<UserDTO>? Participants { get; set; }
 }
 
 public record UpdateProjectDTO : CreateProjectDTO

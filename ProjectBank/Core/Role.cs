@@ -1,6 +1,7 @@
 namespace ProjectBank.Core;
 
-public enum Role{
-    Student,
-    Supervisor
+public enum Role
+{
+    Supervisor,
+    Student
 }
