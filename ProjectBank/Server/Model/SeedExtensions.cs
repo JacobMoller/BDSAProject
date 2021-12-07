@@ -74,7 +74,7 @@ public static class SeedExtensions
         });
         await ProjectRepository.AddUserToProjectAsync(3, 2);
         await ProjectRepository.AddUserToProjectAsync(4, 2);
-        await ProjectRepository.UpdateProjectStatusByIdAsync(3);
+        await ProjectRepository.CloseProjectByIdAsync(3);
         await ProjectRepository.EditProjectAsync(new UpdateProjectDTO()
         {
             Id = 1,
