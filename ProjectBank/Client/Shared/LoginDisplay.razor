@@ -4,7 +4,10 @@
 @inject NavigationManager Navigation
 @inject SignOutSessionStateManager SignOutManager
 
-<AuthorizeView>
+@inject HttpClient Http
+
+
+<AuthorizeView >
     <Authorized>
         <div class="nav-item p-3" @onclick="BeginLogout">
             Hello, @context.User.Identity?.Name!
@@ -28,6 +31,8 @@
         await SignOutManager.SetSignOutState();
         Navigation.NavigateTo("authentication/logout");
     }
+
+    
     
 }
 

@@ -4,7 +4,7 @@ public interface IUserRepository
 {
     Task<UserDTO> CreateUserAsync(CreateUserDTO user);
     Task DeleteUserAsync(int id);
-    Task<Option<UserDetailsDTO>> ReadUserByIdAsync(int id);
+    Task<UserDTO> ReadUserByIdAsync(int id);
     Task<UserDTO> ReadUserByEmailAsync(string email);
     Task<UserDTO> ReadSupervisorOnProjectByIdAsync(int projectId);
     Task<IReadOnlyCollection<UserDTO>> ReadUsersAsync();
