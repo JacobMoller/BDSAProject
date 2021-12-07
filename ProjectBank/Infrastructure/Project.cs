@@ -20,6 +20,7 @@ public class Project
 
     [DataType(DataType.Date)]
     public DateTime UpdatedDate { get; set; }
+    
     public ICollection<Tag>? Tags { get; set; }
 
     public ICollection<User>? Participants { get; set; }

@@ -10,6 +10,7 @@ public class ProjectRepository : IProjectRepository
     {
         _context = context;
     }
+    
     public async Task<ProjectDTO> CreateProjectAsync(CreateProjectDTO project)
     {
         var entity = new Project(project.Title, Status.Active, project.UserId)
