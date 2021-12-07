@@ -1,41 +1,41 @@
-@page "/Login"
+@page "/Welcome"
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-<PageTitle>Login</PageTitle>
+<PageTitle>Welcome</PageTitle>
 
-<h1>Login</h1>
+<h1>Welcome</h1>
 
 <EditForm Model="@user" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
+
     <div class="mb-3">
-        <label for="LoginEmail" class="form-label">Email address</label>
-        <InputText type="email" class="form-control" id="LoginEmail" @bind-Value="user.Email" aria-describedby="emailHelp" />
+        <label for="Name" class="form-label">Name</label>
+        <InputText class="form-control" @bind-Value="user.Name" id="Name" />
     </div>
-    <div class="mb-3">
-        <label for="LoginPassword" class="form-label">Password</label>
-        <InputText type="password" class="form-control" @bind-Value="user.Password" id="LoginPassword" />
-    </div>
+ 
     <button type="submit" class="btn btn-primary">Submit</button>
 </EditForm>
 
 @code {
     private CreateUserDTO user = new();
 
+    
+
     private async Task HandleValidSubmit()
     {
+        user.Role = Role.Supervisor;
 
-        var response = await Http.PostAsJsonAsync("/Login", user);
+        var response = await Http.PostAsJsonAsync("api/Users", user);
 
-        if (response.IsSuccessStatusCode)
-        {
+        
             var created = await response.Content.ReadFromJsonAsync<UserDetailsDTO>();
 
             var uri = $"{NavigationManager.BaseUri}MyProjects";
 
             NavigationManager.NavigateTo(uri);
-        }
+        
     }
 
 }

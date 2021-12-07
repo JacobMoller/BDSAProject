@@ -1,42 +1,99 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Authorization
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
 
 <PageTitle>Index</PageTitle>
 
-@if (yourProjects.Count > 0){
-    <h1>Your Projects</h1>
-    <div class="row justify-content-around">
-        @foreach (var project in yourProjects)
-        {
-            <div class="card col col-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">@project.Title</h5>
-                    <p class="card-text">@project.Description</p>
-                    <a href="project/@project.Id/" class="btn btn-primary stretched-link">View Project</a>
-                </div>
+
+<AuthorizeView>
+    <Authorized>
+        @if (yourProjects.Count > 0){
+            <h1>Your Projects </h1>
+            <div class="row justify-content-around">
+                @foreach (var project in yourProjects)
+                {
+                    <div class="card col col-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">@project.Title</h5>
+                            <p class="card-text">@project.Description</p>
+                            <a href="project/@project.Id/" class="btn btn-primary stretched-link">View Project</a>
+                        </div>
+                    </div>
+                }
             </div>
         }
-    </div>
-}
-<h1>Explore</h1>
-<div class="row justify-content-around">
-    @foreach (var project in projectsList)
-    {
-        <div class="card mt-4 col col-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">@project.Title</h5>
-                <p class="card-text">@project.Description</p>
-                <a href="project/@project.Id/" class="btn btn-primary stretched-link">View Project</a>
-            </div>
+    </Authorized>
+</AuthorizeView>
+    
+        <h1>Explore</h1>
+        <div class="row justify-content-around">
+            @foreach (var project in projectsList)
+            {
+                <div class="card mt-4 col col-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">@project.Title</h5>
+                        <p class="card-text">@project.Description</p>
+                        <a href="project/@project.Id/" class="btn btn-primary stretched-link">View Project</a>
+                    </div>
+                </div>
+            }
         </div>
-    }
-</div>
+        
+
+
 
 @code {
     List<Project> yourProjects = new List<Project>();
-    List<Project> projectsList = new List<Project>() {
-        new Project("Test Title!", Status.Active, 1) { Description = "This is a description", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
-        new Project("Another Test Title!", Status.Active, 1) { Description = "This is a description with content", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
-        new Project("This is a title!", Status.Active, 1) { Description = "This is a description with even more content", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
-        new Project("This is another Title!", Status.Active, 1) { Description = "This is a description with the most content and that is very cool", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
-    };
+    List<Project> projectsList = new List<Project>();
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationStateTask { get; set; }
+
+    private string? _authMessage;
+
+    private CreateUserDTO user = new();
+
+    protected override async void OnAfterRender(bool firstRender)
+{
+    var authState = await authenticationStateTask;
+    var userAuth = authState.User;
+    // execute conditionally for loading data, otherwise this will load
+    // every time the page refreshes
+    if(firstRender && userAuth.Identity.IsAuthenticated)
+    {
+        await RegisterUser();
+        // Do work to load page data and set properties
+    }
+}
+
+    private async Task RegisterUser()
+    {
+        var authState = await authenticationStateTask;
+        var userAuth = authState.User;
+
+        if(userAuth.IsInRole("Student")){
+            user.Role = Role.Student;
+
+        } else {
+            user.Role = Role.Supervisor;       
+        }
+
+        
+        //var codestring = code.ToString();
+        
+        user.Name = userAuth.Identity?.Name;
+        
+        
+        var response = await Http.PostAsJsonAsync("api/User", user);
+
+        if(response.IsSuccessStatusCode){
+
+            var created = await response.Content.ReadFromJsonAsync<UserDetailsDTO>();
+
+            var uri = $"{NavigationManager.BaseUri}";
+
+            NavigationManager.NavigateTo(uri);
+        }
+    }
 }

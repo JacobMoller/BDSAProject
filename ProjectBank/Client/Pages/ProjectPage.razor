@@ -16,9 +16,9 @@
             </h4>
             <p>@Project.Description</p>
         </div>
-        <AuthorizeView>
+        <AuthorizeView Roles="Student">
             <Authorized>
-                @attribute [Authorize(Roles="Student")]
+               
                 <div class="col"> 
                     <button class="btn btn-primary px-4 mt-2" type="submit" onclick="@Apply">Apply</button>
                 </div>
@@ -32,7 +32,7 @@
     public int Id { get; set; }
 
     //get project from database based on id
-    ProjectDTO Project = new ProjectDTO(1, "Project", Status.Active, 1, "Bla bla", DateTime.Now, DateTime.Now, new
+    ProjectDTO Project = new ProjectDTO(1, "Project", Status.Active, "1", "Bla bla", DateTime.Now, DateTime.Now, new
     List<string>() { "Algo", "Andet" }, new List<UserDTO>());
 
     private void Apply()

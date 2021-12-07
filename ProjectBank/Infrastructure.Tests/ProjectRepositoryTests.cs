@@ -134,7 +134,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     public async Task ReadProjectById_given_ProjectId_returns_ProjectDTO()
     {
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = 1, Description = "Very fun", Tags = new List<string> { "Sorting" } });
-        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Alice", Email = "email@email.com", Password = "Password123", Role = Role.Student });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Alice", Role = Role.Student });
 
         var actual = await _projectRepository.ReadProjectByIdAsync(1);
 
@@ -242,7 +242,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     public async Task AddUserToProject_given_ProjectId_and_UserId_adds_user()
     {
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = 1, Description = "Very fun", Tags = new List<string> { "Sorting" } });
-        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Alice", Email = "email@email.com", Password = "Password123", Role = Role.Student });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Alice", Role = Role.Student });
         await _projectRepository.AddUserToProjectAsync(1, 1);
         await _projectRepository.AddUserToProjectAsync(2, 1);
 
@@ -259,12 +259,12 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     public async Task AddUserToProject_with_5_users_changes_status_to_closed()
     {
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = 1, Description = "Very fun", Tags = new List<string> { "Sorting" } });
-        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Alice", Email = "alice@email.com", Password = "Password123", Role = Role.Student });
-        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Bob", Email = "bob@email.com", Password = "Password123", Role = Role.Student });
-        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Charlie", Email = "charlie@email.com", Password = "Password123", Role = Role.Student });
-        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Dave", Email = "dave@email.com", Password = "Password123", Role = Role.Student });
-        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Emma", Email = "emma@email.com", Password = "Password123", Role = Role.Student });
-        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Felicia", Email = "felicia@email.com", Password = "Password123", Role = Role.Student });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Alice", Role = Role.Student });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Bob", Role = Role.Student });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Charlie", Role = Role.Student });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Dave", Role = Role.Student });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Emma", Role = Role.Student });
+        await _userRepository.CreateUserAsync(new CreateUserDTO { Name = "Felicia", Role = Role.Student });
         await _projectRepository.AddUserToProjectAsync(1, 1);
         await _projectRepository.AddUserToProjectAsync(2, 1);
         await _projectRepository.AddUserToProjectAsync(3, 1);
