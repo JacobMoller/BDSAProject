@@ -7,11 +7,12 @@ public class UserRepositoryTests : ContextSetup, IDisposable
     {
         var user = new CreateUserDTO
         {
+            Id = "1",
             Name = "Alice",
             Role = Role.Student
         };
 
-        var expected = new UserDTO(1, "Alice");
+        var expected = new UserDTO("1", "Alice");
         var actual = await _userRepository.CreateUserAsync(user);
 
         Assert.Equal(expected, actual);
@@ -22,15 +23,16 @@ public class UserRepositoryTests : ContextSetup, IDisposable
     {
         await _userRepository.CreateUserAsync(new CreateUserDTO
         {
+            Id = "1",
             Name = "Alice",
             Role = Role.Supervisor
         });
 
-        var expected = new UserDTO(1, "Alice");
-        var actual = await _userRepository.ReadUserByIdAsync(1);
+        var expected = new UserDetailsDTO("1", "Alice", Role.Supervisor);
+        var actual = await _userRepository.ReadUserByIdAsync("1");
 
-        Assert.Equal(expected, actual);
-        Assert.Null(await _userRepository.ReadUserByIdAsync(100));
+        Assert.Equal(expected, actual.Value);
+        Assert.True((await _userRepository.ReadUserByIdAsync("100")).IsNone);
     }
 
     public void Dispose()

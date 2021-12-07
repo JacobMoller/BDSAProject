@@ -41,6 +41,6 @@ public class UserRepository : IUserRepository
         {
             return new UserDetailsDTO(user.Id, user.Name, user.Role);
         }
-        else return null;
+        return null;
     }
 }
