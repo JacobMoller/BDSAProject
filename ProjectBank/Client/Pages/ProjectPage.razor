@@ -1,4 +1,5 @@
 ﻿@page "/project/{Id:int}"
+@using Microsoft.AspNetCore.Authorization
 
 <PageTitle>Project</PageTitle>
 
@@ -15,9 +16,14 @@
             </h4>
             <p>@Project.Description</p>
         </div>
-        <div class="col">
-            <button class="btn btn-primary px-4 mt-2" type="submit" onclick="@Apply">Apply</button>
-        </div>
+        <AuthorizeView>
+            <Authorized>
+                @attribute [Authorize(Roles="Student")]
+                <div class="col"> 
+                    <button class="btn btn-primary px-4 mt-2" type="submit" onclick="@Apply">Apply</button>
+                </div>
+            </Authorized>
+        </AuthorizeView>
     </div>
 </div>
 

@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using ProjectBank.Shared;
 
 namespace ProjectBank.Server.Controllers;
 
+[Authorize(Roles = "Student")]
 [ApiController]
 [Route("[controller]")]
+[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
 public class WeatherForecastController : ControllerBase
 {
     private static readonly string[] Summaries = new[]
@@ -31,4 +35,3 @@ public class WeatherForecastController : ControllerBase
         .ToArray();
     }
 }
-

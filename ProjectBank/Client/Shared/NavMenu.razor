@@ -1,3 +1,6 @@
+
+
+
 <nav class="navbar topbar navbar-dark">
 
     <div class="container-fluid @NavMenuColCssClass"> 
@@ -6,7 +9,7 @@
             <span class="navbar-toggler-icon"></span>
         </button> 
     </div>
-   
+
     <div class="@NavMenuCssClass">
         <div class="@NavMenuFlexCssClass "> 
             <div class="nav-item p-3">
@@ -14,43 +17,47 @@
                     <span class="oi oi-home" aria-hidden="true"></span> Explore
                 </NavLink>
             </div>
-            <div class="nav-item p-3">
-                <NavLink class="nav-link" href="counter">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Create Project
-                </NavLink>
-            </div>
-            <div class="nav-item p-3">
-                <NavLink class="nav-link" href="project/1/">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Projects
-                </NavLink>
-            </div>
-            <div class="nav-item p-3" @onclick="SwitchLogIn">
+            <AuthorizeView Roles="Supervisor">
+                <Authorized>
+                    <div class="nav-item p-3">
+                        <NavLink class="nav-link" href="MyProjects">
+                            <span class="oi oi-plus" aria-hidden="true"></span> Create Project
+                        </NavLink>
+                    </div>               
+                    <div class="nav-item p-3">
+                        <NavLink class="nav-link" href="project/1/">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> My Projects
+                        </NavLink>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
+            @* <div class="nav-item p-3">
                 <NavLink class="nav-link" href="Login">
-                    <span class="oi oi-account-@User" aria-hidden="true"></span> @User
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Login
                 </NavLink>
-            </div>
-        </div> 
-    </div>   
+            </div> *@
+        </div>
+    </div>
 
+        <LoginDisplay />  
 </nav>
+
 
 @code {
     private bool collapseNavMenu = true;
 
     private bool loggedin = true;
 
+
     private string? NavMenuCssClass => collapseNavMenu ? "collapse col-md-auto" : null;
     private string? NavMenuFlexCssClass => collapseNavMenu ? "d-flex justify-content-end" : null;
     private string? NavMenuColCssClass => collapseNavMenu ? "col" : null;
 
-    private string? User => loggedin ? "logout" : "login";
+   
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
 
-    private void SwitchLogIn(){
-        loggedin = !loggedin;
-    }
 }

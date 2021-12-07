@@ -1,5 +1,6 @@
-﻿@page "/counter"
-
+﻿@using Microsoft.AspNetCore.Authorization
+@page "/counter"
+@attribute [Authorize("Student")]
 <PageTitle>Counter</PageTitle>
 
 <h1>Counter</h1>

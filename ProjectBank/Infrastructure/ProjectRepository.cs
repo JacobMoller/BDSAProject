@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace ProjectBank.Infrastructure;
 
 public class ProjectRepository : IProjectRepository

@@ -19,6 +19,7 @@ public static class SeedExtensions
     {
         context.Database.EnsureDeleted();
         context.Database.Migrate();
+        await context.Database.MigrateAsync();
 
         var userRepository = new UserRepository(context);
         var ProjectRepository = new ProjectRepository(context);
