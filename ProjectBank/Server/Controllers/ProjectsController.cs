@@ -2,6 +2,7 @@
 using ProjectBank.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Identity.Web.Resource;
+using ProjectBank.Server.Model;
 
 namespace ProjectBank.Server.Controllers;
 
@@ -22,5 +23,10 @@ public class ProjectsController : ControllerBase
     {
         return await _projectRepository.ReadAllAsync();
     }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProjectDTO), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProjectDTO>> Get(int id) => (await _projectRepository.ReadProjectByIdAsync(id)).ToActionResult();
 }
 

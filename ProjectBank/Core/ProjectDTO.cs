@@ -1,5 +1,7 @@
 ﻿namespace ProjectBank.Core;
-public record ProjectDTO(int Id, string Title, Status Status, int UserId, string? Description, DateTime CreationDate, DateTime UpdatedDate, IReadOnlyCollection<string> Tags, IReadOnlyCollection<UserDTO> Participants);
+//public record ProjectDTO(int Id, string Title, Status Status, int UserId, string? Description, DateTime CreationDate, DateTime UpdatedDate, IReadOnlyCollection<string> Tags, IReadOnlyCollection<UserDTO> Participants);
+
+public record ProjectDTO(int Id, string Title, string Status, int UserId, string? Description, DateTime CreationDate, DateTime UpdatedDate, IReadOnlyCollection<string> Tags, IReadOnlyCollection<UserDTO> Participants);
 
 public record CreateProjectDTO
 {

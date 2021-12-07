@@ -5,7 +5,7 @@
 
 <PageTitle>Index</PageTitle>
 
-@if (yourProjects.Count > 0){
+@if (yourProjects.Count() > 0){
     <h1>Your Projects</h1>
     <div class="row justify-content-around">
         @foreach (var project in yourProjects)
@@ -21,8 +21,14 @@
     </div>
 }
 <h1>Explore</h1>
+@if (@projects == null)
+{
+    <p>Loading...</p>
+}
+else
+{
 <div class="row justify-content-around">
-    @foreach (var project in projectsList)
+    @foreach (var project in projects)
     {
         <div class="card mt-4 col col-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
             <div class="card-body">
@@ -33,18 +39,13 @@
         </div>
     }
 </div>
-
+}
 @code {
-
+    private ProjectDTO[]? yourProjects;
     private ProjectDTO[]? projects;
 
     protected override async Task OnInitializedAsync()
     {
-        projects = await Http.GetFromJsonAsync<ProjectDTO[]>("/api/projects");
+        projects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/projects");
     }
-    List<Project> yourProjects = new List<Project>();
-
-    List<ProjectDTO> projectsList = new List<ProjectDTO>() {
-        new ProjectDTO(1,"hej",Status.Active,1,"Lorem ipsum",DateTime.Now,DateTime.Now,new List<string>(),new List<UserDTO>())
-    };
 }

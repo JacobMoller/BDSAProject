@@ -1,5 +1,7 @@
 ﻿@page "/project/{Id:int}"
 @using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] 
+@inject HttpClient Http
 
 <PageTitle>Project</PageTitle>
 
@@ -32,11 +34,23 @@
     public int Id { get; set; }
 
     //get project from database based on id
-    ProjectDTO Project = new ProjectDTO(1, "Project", Status.Active, 1, "Bla bla", DateTime.Now, DateTime.Now, new
+    ProjectDTO Project = new ProjectDTO(1, "Project", "Active", 1, "Bla bla", DateTime.Now, DateTime.Now, new
     List<string>() { "Algo", "Andet" }, new List<UserDTO>());
 
     private void Apply()
     {
         //take id from student user and make a connection with the project
+    }
+
+    private ProjectDTO? project;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id != 0)
+        {
+            project = await Http.GetFromJsonAsync<ProjectDTO>($"api/projects/{Id}");
+        }
+
+        await base.OnParametersSetAsync();
     }
 }

@@ -83,5 +83,12 @@ public static class SeedExtensions
             Description = "Fun",
             Tags = new List<string>() { "hej", "farvel" }
         });
+        await ProjectRepository.CreateProjectAsync(new CreateProjectDTO
+        {
+            Title = "Super Enjoyable Project",
+            Description = "Very cool description",
+            UserId = 2,
+            Tags = new List<string>() { "DMAT" }
+        });
     }
 }

@@ -28,7 +28,7 @@ public class ProjectRepository : IProjectRepository
         return new ProjectDTO(
             entity.Id,
             entity.Title,
-            entity.Status,
+            entity.Status.ToString(),
             entity.UserId,
             entity.Description,
             entity.CreationDate,
@@ -73,7 +73,7 @@ public class ProjectRepository : IProjectRepository
         return await (_context.Projects.Where(project => project.Status == Status.Active).Select(project => new ProjectDTO(
             project.Id,
             project.Title,
-            project.Status,
+            project.Status.ToString(),
             project.UserId,
             project.Description,
             project.CreationDate,
@@ -83,22 +83,22 @@ public class ProjectRepository : IProjectRepository
             ))).ToListAsync();
     }
 
-    public async Task<ProjectDTO> ReadProjectByIdAsync(int projectId)
+    public async Task<Option<ProjectDTO>> ReadProjectByIdAsync(int projectId)
     {
         var entity = await _context.Projects.FindAsync(projectId);
         if (entity != null)
         {
             return new ProjectDTO(
-            entity.Id,
-            entity.Title,
-            entity.Status,
-            entity.UserId,
-            entity.Description,
-            entity.CreationDate,
-            entity.UpdatedDate,
-            entity.Tags.Select(tag => new string(tag.Name)).ToList(),
-            entity.Participants.Select(user => new UserDTO(user.Id, user.Name)).ToList()
-        );
+                entity.Id,
+                entity.Title,
+                entity.Status.ToString(),
+                entity.UserId,
+                entity.Description,
+                entity.CreationDate,
+                entity.UpdatedDate,
+                entity.Tags.Select(tag => new string(tag.Name)).ToList(),
+                entity.Participants.Select(user => new UserDTO(user.Id, user.Name)).ToList()
+            );
         }
         else
         {
@@ -112,7 +112,7 @@ public class ProjectRepository : IProjectRepository
         return await (_context.Projects.Where(p => searchTag.Projects.Contains(p) && p.Status == Status.Active).Select(project => new ProjectDTO(
             project.Id,
             project.Title,
-            project.Status,
+            project.Status.ToString(),
             project.UserId,
             project.Description,
             project.CreationDate,
@@ -127,7 +127,7 @@ public class ProjectRepository : IProjectRepository
         return await (_context.Projects.Where(project => project.UserId == userId).Select(project => new ProjectDTO(
             project.Id,
             project.Title,
-            project.Status,
+            project.Status.ToString(),
             project.UserId,
             project.Description,
             project.CreationDate,
