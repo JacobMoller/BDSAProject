@@ -1,4 +1,7 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] 
+@inject HttpClient Http
 
 <PageTitle>Index</PageTitle>
 
@@ -32,11 +35,16 @@
 </div>
 
 @code {
+
+    private ProjectDTO[]? projects;
+
+    protected override async Task OnInitializedAsync()
+    {
+        projects = await Http.GetFromJsonAsync<ProjectDTO[]>("/api/projects");
+    }
     List<Project> yourProjects = new List<Project>();
-    List<Project> projectsList = new List<Project>() {
-        new Project("Test Title!", Status.Active, 1) { Description = "This is a description", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
-        new Project("Another Test Title!", Status.Active, 1) { Description = "This is a description with content", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
-        new Project("This is a title!", Status.Active, 1) { Description = "This is a description with even more content", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
-        new Project("This is another Title!", Status.Active, 1) { Description = "This is a description with the most content and that is very cool", CreationDate = DateTime.Now, Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}},
+
+    List<ProjectDTO> projectsList = new List<ProjectDTO>() {
+        new ProjectDTO(1,"hej",Status.Active,1,"Lorem ipsum",DateTime.Now,DateTime.Now,new List<string>(),new List<UserDTO>())
     };
 }
