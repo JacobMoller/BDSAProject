@@ -100,7 +100,7 @@ public class ProjectRepository : IProjectRepository
         }
         else
         {
-            return null; //throw new CouldNotFindEntityInDatabase
+            return null; //TODO: throw new CouldNotFindEntityInDatabase
         }
 
     }
