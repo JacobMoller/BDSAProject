@@ -5,7 +5,7 @@
 
 <div class="conatiner">
     <div class="row">
-        <div class="col-8"> 
+        <div class="col-8">
             <h1>@Project.Title</h1>
             <h3>By @Project.UserId</h3>
             <h4>Tags
@@ -32,9 +32,11 @@
     public int Id { get; set; }
 
     //get project from database based on id
-    ProjectDetailsDTO Project = new ProjectDetailsDTO(1, "Project", Status.Active, 1, "Bla bla", DateTime.Now, DateTime.Now, new List<string>() {"Algo","Andet"}, new List<UserDTO>());
+    ProjectDTO Project = new ProjectDTO(1, "Project", Status.Active, 1, "Bla bla", DateTime.Now, DateTime.Now, new
+    List<string>() { "Algo", "Andet" }, new List<UserDTO>());
 
-    private void Apply() {
+    private void Apply()
+    {
         //take id from student user and make a connection with the project
     }
 }
