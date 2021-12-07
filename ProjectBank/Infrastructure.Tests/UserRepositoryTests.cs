@@ -163,7 +163,7 @@ public class UserRepositoryTests : ContextSetup, IDisposable
 
 
         var expected = new List<UserDTO>() { new UserDTO(1, "Alice"), new UserDTO(2, "Bob"), new UserDTO(3, "Charlie") };
-        var actual = await _userRepository.ReadUsersAsync();
+        var actual = await _userRepository.ReadAllUsersAsync();
 
         Assert.Equal(expected, actual);
     }

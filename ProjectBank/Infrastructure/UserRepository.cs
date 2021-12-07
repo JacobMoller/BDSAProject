@@ -83,7 +83,7 @@ public class UserRepository : IUserRepository
         return listOfParticipants;
     }
 
-    public async Task<IReadOnlyCollection<UserDTO>> ReadUsersAsync()
+    public async Task<IReadOnlyCollection<UserDTO>> ReadAllUsersAsync()
     {
         return await _context.Users.Select(user => new UserDTO(
             user.Id,
