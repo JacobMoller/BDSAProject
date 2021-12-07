@@ -5,37 +5,39 @@
 
 <PageTitle>Project</PageTitle>
 
-<div class="conatiner">
-    <div class="row">
-        <div class="col-8">
-            <h1>@Project.Title</h1>
-            <h3>By @Project.UserId</h3>
-            <h4>Tags
-                @foreach (var tag in Project.Tags)
-                {
-                    <span class="badge bg-secondary me-2">@tag</span>
-                }
-            </h4>
-            <p>@Project.Description</p>
+<div class="container">
+    @if (@project == null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-8">
+                <h1>@project.Title</h1>
+                <h3>By @project.UserId</h3>
+                <h4>Tags
+                    @foreach (var tag in project.Tags)
+                    {
+                        <span class="badge bg-secondary me-2">@tag</span>
+                    }
+                </h4>
+                <p>@project.Description</p>
+            </div>
+            <AuthorizeView Roles="Student">
+                <Authorized>
+                    <div class="col"> 
+                        <button class="btn btn-primary px-4 mt-2" type="submit" onclick="@Apply">Apply</button>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
         </div>
-        <AuthorizeView Roles="Student">
-            <Authorized>
-               
-                <div class="col"> 
-                    <button class="btn btn-primary px-4 mt-2" type="submit" onclick="@Apply">Apply</button>
-                </div>
-            </Authorized>
-        </AuthorizeView>
-    </div>
+    }
 </div>
 
 @code {
     [Parameter]
     public int Id { get; set; }
-
-    //get project from database based on id
-    ProjectDTO Project = new ProjectDTO(1, "Project", "Active", "1", "Bla bla", DateTime.Now, DateTime.Now, new
-    List<string>() { "Algo", "Andet" }, new List<UserDTO>());
 
     private void Apply()
     {

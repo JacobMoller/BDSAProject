@@ -86,8 +86,14 @@ public class ProjectRepository : IProjectRepository
     public async Task<Option<ProjectDTO>> ReadProjectByIdAsync(int projectId)
     {
         var entity = await _context.Projects.FindAsync(projectId);
+        Console.WriteLine("Tags:");
+        Console.WriteLine(entity.Tags.ToString());
+        Console.WriteLine("Participants:");
+        Console.WriteLine(entity.Participants.ToString());
         if (entity != null)
         {
+            var tags = entity.Tags != null ? entity.Tags.Select(tag => new string(tag.Name)).ToList() : new List<string>();
+            var participants = entity.Participants != null ? entity.Participants.Select(user => new UserDTO(user.Id, user.Name)).ToList() : new List<UserDTO>();
             return new ProjectDTO(
                 entity.Id,
                 entity.Title,
@@ -96,15 +102,11 @@ public class ProjectRepository : IProjectRepository
                 entity.Description,
                 entity.CreationDate,
                 entity.UpdatedDate,
-                entity.Tags.Select(tag => new string(tag.Name)).ToList(),
-                entity.Participants.Select(user => new UserDTO(user.Id, user.Name)).ToList()
+                tags,
+                participants
             );
         }
-        else
-        {
-            return null; //TODO: throw new CouldNotFindEntityInDatabase
-        }
-
+        return null; //TODO: throw new CouldNotFindEntityInDatabase
     }
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByTagIdAsync(int tagId)
     {

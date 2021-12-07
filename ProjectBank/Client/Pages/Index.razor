@@ -34,18 +34,18 @@
         }
         else
         {
-        <div class="row justify-content-around">
-            @foreach (var project in projects)
-            {
-                <div class="card mt-4 col col-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">@project.Title</h5>
-                        <p class="card-text">@project.Description</p>
-                        <a href="project/@project.Id/" class="btn btn-primary stretched-link">View Project</a>
+            <div class="row justify-content-around">
+                @foreach (var project in projects)
+                {
+                    <div class="card mt-4 col col-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">@project.Title</h5>
+                            <p class="card-text">@project.Description</p>
+                            <a href="project/@project.Id/" class="btn btn-primary stretched-link">View Project</a>
+                        </div>
                     </div>
-                </div>
-            }
-        </div>
+                }
+            </div>
         }
         
 
@@ -67,18 +67,17 @@
 
     private CreateUserDTO user = new();
 
-    protected override async void OnAfterRender(bool firstRender)
-{
-    var authState = await authenticationStateTask;
-    var userAuth = authState.User;
-    // execute conditionally for loading data, otherwise this will load
-    // every time the page refreshes
-    if(firstRender && userAuth.Identity.IsAuthenticated)
-    {
-        await RegisterUser();
-        // Do work to load page data and set properties
+    protected override async void OnAfterRender(bool firstRender) {
+        var authState = await authenticationStateTask;
+        var userAuth = authState.User;
+        // execute conditionally for loading data, otherwise this will load
+        // every time the page refreshes
+        if(firstRender && userAuth.Identity.IsAuthenticated)
+        {
+            await RegisterUser();
+            // Do work to load page data and set properties
+        }
     }
-}
 
     private async Task RegisterUser()
     {

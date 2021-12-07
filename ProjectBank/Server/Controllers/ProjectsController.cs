@@ -24,9 +24,24 @@ public class ProjectsController : ControllerBase
         return await _projectRepository.ReadAllAsync();
     }
 
-    [HttpGet("{id}")]
+    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ProjectDTO), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProjectDTO>> Get(int id) => (await _projectRepository.ReadProjectByIdAsync(id)).ToActionResult();
+    [ProducesResponseType(typeof(UserDetailsDTO), StatusCodes.Status200OK)]
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ProjectDTO>> Get(int id)
+        => (await _projectRepository.ReadProjectByIdAsync(id)).ToActionResult();
+
+    [AllowAnonymous]
+    [HttpPost]
+    [ProducesResponseType(typeof(ProjectDTO), 201)]
+    public async Task<IActionResult> Post(CreateProjectDTO project)
+    {
+        project.UserId = User.GetObjectId();
+
+        var created = await _projectRepository.CreateProjectAsync(project);
+
+
+        return CreatedAtRoute(nameof(Get), new { created.Id }, created);
+    }
 }
 
