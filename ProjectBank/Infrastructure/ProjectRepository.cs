@@ -1,4 +1,5 @@
 using System.Linq;
+using ProjectBank.Core;
 
 namespace ProjectBank.Infrastructure;
 
@@ -12,6 +13,8 @@ public class ProjectRepository : IProjectRepository
     }
     public async Task<ProjectDTO> CreateProjectAsync(CreateProjectDTO project)
     {
+        Console.WriteLine("User id:");
+        Console.WriteLine(project.UserId);
         var entity = new Project(project.Title, Status.Active, project.UserId)
         {
             Description = project.Description,
@@ -41,11 +44,9 @@ public class ProjectRepository : IProjectRepository
     public async Task DeleteProjectByIdAsync(int projectId)
     {
         var entity = await _context.Projects.FindAsync(projectId);
-        if (entity != null)
-        {
-            _context.Projects.Remove(entity);
-            await _context.SaveChangesAsync();
-        }
+
+        _context.Projects.Remove(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task EditProjectAsync(UpdateProjectDTO project)
@@ -70,6 +71,7 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadAllAsync()
     {
+        //List of all projects?
         return await (_context.Projects.Where(project => project.Status == Status.Active).Select(project => new ProjectDTO(
             project.Id,
             project.Title,
@@ -86,10 +88,6 @@ public class ProjectRepository : IProjectRepository
     public async Task<Option<ProjectDTO>> ReadProjectByIdAsync(int projectId)
     {
         var entity = await _context.Projects.FindAsync(projectId);
-        Console.WriteLine("Tags:");
-        Console.WriteLine(entity.Tags.ToString());
-        Console.WriteLine("Participants:");
-        Console.WriteLine(entity.Participants.ToString());
         if (entity != null)
         {
             var tags = entity.Tags != null ? entity.Tags.Select(tag => new string(tag.Name)).ToList() : new List<string>();

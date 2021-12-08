@@ -24,24 +24,33 @@ public class ProjectsController : ControllerBase
         return await _projectRepository.ReadAllAsync();
     }
 
-    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(UserDetailsDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProjectDTO), StatusCodes.Status200OK)]
     [HttpGet("{id}")]
     public async Task<ActionResult<ProjectDTO>> Get(int id)
         => (await _projectRepository.ReadProjectByIdAsync(id)).ToActionResult();
 
-    [AllowAnonymous]
     [HttpPost]
-    [ProducesResponseType(typeof(ProjectDTO), 201)]
+    [ProducesResponseType(typeof(ProjectDTO), StatusCodes.Status201Created)]
     public async Task<IActionResult> Post(CreateProjectDTO project)
     {
         project.UserId = User.GetObjectId();
 
         var created = await _projectRepository.CreateProjectAsync(project);
 
-
         return CreatedAtRoute(nameof(Get), new { created.Id }, created);
     }
+
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task Put(UpdateProjectDTO character)
+            => await _projectRepository.EditProjectAsync(character);
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task Delete(int id)
+        => await _projectRepository.DeleteProjectByIdAsync(id);
 }
 

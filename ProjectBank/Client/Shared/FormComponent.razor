@@ -1,6 +1,6 @@
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
-<EditForm Model="@project" OnValidSubmt="@HandleValidSubmit">
+<EditForm Model="@project" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -18,11 +18,13 @@
         <label class="form-label">Tags</label>
             <InputText id="tags" class="form-control" @bind-Value="@tagListString"/>
     </div>
+    <p>@target</p>
 
-    <button type="submit" class="btn btn-success" onclick="@HandleValidSubmit">@ButtonName</button>
+    <button type="submit" class="btn btn-success">@ButtonName</button>
 </EditForm> 
 
 @code {
+    string target = "hi";
     [Parameter]
     public Project project {get; set;}
 
@@ -43,14 +45,15 @@
     }
 
     private async Task HandleValidSubmit() {
+        target = "Submit!";
         //handle submit + send/persist to db?
         tagStringToList();
         
-        var response = await Http.PostAsJsonAsync("api/Project", project);
+        var response = await Http.PostAsJsonAsync("api/Projects", project);
 
         if(response.IsSuccessStatusCode){
 
-            var created = await response.Content.ReadFromJsonAsync<UserDetailsDTO>();
+            var created = await response.Content.ReadFromJsonAsync<ProjectDTO>();
 
             var uri = $"{NavigationManager.BaseUri}";
 

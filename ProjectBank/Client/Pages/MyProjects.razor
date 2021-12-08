@@ -1,5 +1,7 @@
 @page "/MyProjects"
 @using Microsoft.AspNetCore.Authorization
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
 @attribute [Authorize(Roles="Supervisor")] 
 
 <PageTitle>My Projects</PageTitle>
@@ -11,19 +13,31 @@
         <div class="col-8"><strong>Name</strong></div>
         <div class="col-4"><strong>Tools</strong></div>
     </div>
-    @foreach (var project in user.Projects)
+    @if (@projects == null)
     {
-    <div class="row p-3">
-        <div class="col-8">@project.Title</div>
-        <div class="col-4">
-            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Edit
-            </button>
-            <button type="button" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                Delete
-            </button>
+      <p>Loading...</p>
+    }
+    else
+    {
+      @if (@projects.Count() > 0){
+        @foreach (var project in projects)
+        {
+        <div class="row p-3">
+            <div class="col-8">@project.Title</div>
+            <div class="col-4">
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Edit
+                </button>
+                <button type="button" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    Delete
+                </button>
+            </div>
         </div>
-    </div>
+        }
+      }
+      else{
+        <p>No Projects</p>
+      }
     }
 </div>
 
@@ -47,10 +61,12 @@
 </div>
 
 @code {
+    private ProjectDTO[]? projects;
 
-    User user = new User("1", "Alice", Role.Student)
+    protected override async Task OnParametersSetAsync()
     {
-        Projects = new List<Project>() { new Project("Super Duper Fun Algo Project", Status.Active, "2"), new Project("Super Fun Project", Status.Active, "1") }
-    };
+        projects = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects")).ToArray();
+        await base.OnParametersSetAsync();
+    }
 
 }
