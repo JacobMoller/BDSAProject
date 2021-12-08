@@ -87,7 +87,7 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<Option<ProjectDTO>> ReadProjectByIdAsync(int projectId)
     {
-        var entity = await _context.Projects.FindAsync(projectId);
+        var entity = await _context.Projects.Include(p => p.Tags).Include(p => p.Participants).FirstOrDefaultAsync(p => p.Id == projectId);
         if (entity != null)
         {
             var tags = entity.Tags != null ? entity.Tags.Select(tag => new string(tag.Name)).ToList() : new List<string>();

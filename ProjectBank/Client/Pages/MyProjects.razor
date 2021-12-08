@@ -23,11 +23,9 @@
         @foreach (var project in projects)
         {
         <div class="row p-3">
-            <div class="col-8">@project.Title</div>
+            <div class="col-8"><a href="project/@project.Id/">@project.Title</a></div>
             <div class="col-4">
-                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Edit
-                </button>
+                <a href="editproject/@project.Id/" class="btn btn-warning">Edit</a>
                 <button type="button" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal">
                     Delete
                 </button>
