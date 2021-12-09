@@ -44,8 +44,8 @@ public class ProjectsController : ControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task Put(UpdateProjectDTO character)
-            => await _projectRepository.EditProjectAsync(character);
+    public async Task Put(UpdateProjectDTO project)
+            => await _projectRepository.EditProjectAsync(project);
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

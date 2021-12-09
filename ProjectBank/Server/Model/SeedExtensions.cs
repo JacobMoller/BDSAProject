@@ -74,12 +74,5 @@ public static class SeedExtensions
             UserId = "2",
             Tags = new List<string>() { "DMAT" }
         });
-        await ProjectRepository.CreateProjectAsync(new CreateProjectDTO
-        {
-            Title = "Super Alice Project",
-            Description = "Alice made this",
-            UserId = "2ee14e8b-f303-4c1b-b8c7-7418fb82f820",
-            Tags = new List<string>() { "DMAT" }
-        });
     }
 }

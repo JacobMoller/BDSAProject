@@ -1,29 +1,35 @@
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
-<EditForm Model="@project" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
 
-    <div class="mb-3">
-        <label class="form-label">Title</label>
-        <InputText id="title" class="form-control" @bind-Value="project.Title" />
-    </div>
 
-    <div class="mb-3">
-        <label class="form-label">Description</label>
-            <InputTextArea id="description" class="form-control" @bind-Value="project.Description" />
-    </div>
 
-    <div class="mb-3">
-        <label class="form-label">Tags</label>
-            <InputText id="tags" class="form-control" @bind-Value="@tagListString"/>
-    </div>
-    <p>@target</p>
+        <EditForm Model="@project" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-    <button type="submit" class="btn btn-success">@ButtonName</button>
-</EditForm> 
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <InputText id="title" class="form-control" @bind-Value="project.Title" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                    <InputTextArea id="description" class="form-control" @bind-Value="project.Description" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tags</label>
+                    <InputText id="tags" class="form-control" @bind-Value="@tagListString"/>
+            </div>
+            <p>@target</p>
+
+            <button type="submit" class="btn btn-success">@ButtonName</button>
+        </EditForm> 
+  
 
 @code {
+
+    private CreateProjectDTO newProject = new();
     string target = "hi";
     [Parameter]
     public Project project {get; set;}
@@ -44,22 +50,26 @@
         }
     }
 
+   
     private async Task HandleValidSubmit() {
         target = "Submit!";
         //handle submit + send/persist to db?
-        tagStringToList();
-        
-        var response = await Http.PostAsJsonAsync("api/Projects", project);
+        //tagStringToList();
+
+        var response = await Http.PostAsJsonAsync("api/Projects", newProject);
 
         if(response.IsSuccessStatusCode){
 
             var created = await response.Content.ReadFromJsonAsync<ProjectDTO>();
 
-            var uri = $"{NavigationManager.BaseUri}";
+            var uri = $"{NavigationManager.BaseUri}/MyProjects";
 
             NavigationManager.NavigateTo(uri);
         }
     }
+
+     
+    
 
     private void tagStringToList() {
         string[] tagNames = tagListString.Replace(" ","").Split(',');

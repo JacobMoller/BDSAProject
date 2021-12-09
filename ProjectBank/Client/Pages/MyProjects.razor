@@ -26,7 +26,7 @@
             <div class="col-8"><a href="project/@project.Id/">@project.Title</a></div>
             <div class="col-4">
                 <a href="editproject/@project.Id/" class="btn btn-warning">Edit</a>
-                <button type="button" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                <button type="button" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal" @onclick="@(() => SetID(@project.Id))">
                     Delete
                 </button>
             </div>
@@ -38,7 +38,6 @@
       }
     }
 </div>
-
 
 <div class="modal" tabindex="-1" id="deleteModal">
   <div class="modal-dialog">
@@ -52,7 +51,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-danger" @onclick="DeleteProject">Delete</button>
       </div>
     </div>
   </div>
@@ -61,10 +60,36 @@
 @code {
     private ProjectDTO[]? projects;
 
+    private int specificId{get; set;}
+
+    private void SetID(int id){
+      specificId = id;
+    }
+
     protected override async Task OnParametersSetAsync()
     {
         projects = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects")).ToArray();
         await base.OnParametersSetAsync();
+    }
+
+    private async Task DeleteProject(){
+     
+        //handle submit + send/persist to db?
+        //tagStringToList();
+
+        
+
+    
+        var response = await Http.DeleteAsJsonAsync("api/Projects", specificId);
+
+        if(response.IsSuccessStatusCode){
+
+            var created = await response.Content.ReadFromJsonAsync<ProjectDTO>();
+
+            var uri = $"{NavigationManager.BaseUri}/MyProjects";
+
+            NavigationManager.NavigateTo(uri);
+        }
     }
 
 }

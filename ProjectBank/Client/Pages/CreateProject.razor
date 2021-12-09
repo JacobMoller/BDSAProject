@@ -1,15 +1,68 @@
 @page "/createproject"
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
 @using ProjectBank.Infrastructure
 @using System
+
 
 <PageTitle>Create Project</PageTitle>
 
 <h1>Create a new project</h1>
+  <EditForm Model="@project" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-<FormComponent Project="@Project" ButtonName="Create"/>
+            <div class="mb-3">
+                <label class="form-label">@project.Title</label>
+                <InputText id="title" class="form-control" @bind-Value="project.Title" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                    <InputTextArea id="description" class="form-control" @bind-Value="project.Description" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tags</label>
+                    <InputText id="tags" class="form-control" @bind-Value="@tagListString"/>
+            </div>
+            <p>@target</p>
+            
+                <button type="submit" class="btn btn-success">Create</button>   
+            
+        </EditForm> 
+
+    
+
+@* <FormComponent Project="@Project" ButtonName="Create"/> *@
 
 @code {
-    private Project Project = new("", Status.Active, "1"); //get the id from the supervisor creating
+    private CreateProjectDTO project = new();
+
+
+    string target = "hi";
+
+    private string tagListString = "";
+
+
+    private async Task HandleValidSubmit() {
+        target = "Submit!";
+        //handle submit + send/persist to db?
+        //tagStringToList();
+
+    
+        var response = await Http.PostAsJsonAsync("api/Projects", project);
+
+        if(response.IsSuccessStatusCode){
+
+            var created = await response.Content.ReadFromJsonAsync<ProjectDTO>();
+
+            var uri = $"{NavigationManager.BaseUri}/MyProjects";
+
+            NavigationManager.NavigateTo(uri);
+        }
+    }
+    @* private Project Project = new("", Status.Active, ""); //get the id from the supervisor creating *@
 }
