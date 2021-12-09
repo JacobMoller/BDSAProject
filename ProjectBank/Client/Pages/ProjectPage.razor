@@ -17,10 +17,9 @@
             <p>@Project.Description</p>
         </div>
         <AuthorizeView Roles="Student">
-            <Authorized>
-               
+            <Authorized> 
                 <div class="col"> 
-                    <button class="btn btn-primary px-4 mt-2" type="submit" onclick="@Apply">Apply</button>
+                    <button class="btn btn-primary px-4 mt-2" type="submit" @onclick="Apply">Apply</button>
                 </div>
             </Authorized>
         </AuthorizeView>
