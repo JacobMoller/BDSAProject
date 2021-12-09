@@ -60,7 +60,7 @@ public static class SeedExtensions
         await ProjectRepository.AddUserToProjectAsync("1", 2);
         await ProjectRepository.AddUserToProjectAsync("2", 2);
         await ProjectRepository.CloseProjectByIdAsync(3);
-        await ProjectRepository.EditProjectAsync(new UpdateProjectDTO()
+        await ProjectRepository.EditProjectAsync(1, new UpdateProjectDTO()
         {
             Id = 1,
             Title = "Super Fun Project",

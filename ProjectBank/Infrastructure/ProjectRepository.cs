@@ -49,9 +49,9 @@ public class ProjectRepository : IProjectRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task EditProjectAsync(UpdateProjectDTO project)
+    public async Task EditProjectAsync(int projectId, UpdateProjectDTO project) 
     {
-        var entity = await _context.Projects.FindAsync(project.Id);
+        var entity = await _context.Projects.Include(p => p.Tags).Include(p => p.Participants).FirstOrDefaultAsync(p => p.Id == projectId);
         if (entity != null)
         {
             entity.Title = project.Title;
@@ -150,8 +150,8 @@ public class ProjectRepository : IProjectRepository
 
     public async Task AddUserToProjectAsync(string userId, int projectId)
     {
-        var user = await _context.Users.FindAsync(userId);
-        var project = await _context.Projects.FindAsync(projectId);
+        var user = await _context.Users.FindAsync(userId); 
+        var project = await _context.Projects.FindAsync(projectId); //TODO: should possibly also be: await _context.Projects.Include(p => p.Tags).Include(p => p.Participants).FirstOrDefaultAsync(p => p.Id == projectId);
         if (user != null && project != null)
         {
             if (project.Participants.Count() < 5)

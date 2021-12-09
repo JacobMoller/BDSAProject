@@ -38,7 +38,8 @@
         project.Tags = tags;
 
         if (project is UpdateProjectDTO){
-            var response = await Http.PutAsJsonAsync("api/Projects", project);
+            var updateProject = (UpdateProjectDTO) project;
+            var response = await Http.PutAsJsonAsync($"api/Projects/{updateProject.Id}", updateProject);
 
             if(response.IsSuccessStatusCode){
                 var uri = $"{NavigationManager.BaseUri}/MyProjects";
