@@ -41,7 +41,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     public async Task EditProject_given_UpdateProjectDTO_updates_project_changes_existing_tags()
     {
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = "1", Description = "Very fun", Tags = new List<string> { "Sorting" } });
-        await _projectRepository.EditProjectAsync(new UpdateProjectDTO { Id = 1, Title = "Something else than Algo", Description = "Not sorting", UserId = "1", Tags = new List<string> { "Economy", "Math" } });
+        await _projectRepository.EditProjectAsync(1, new UpdateProjectDTO { Id = 1, Title = "Something else than Algo", Description = "Not sorting", UserId = "1", Tags = new List<string> { "Economy", "Math" } });
         var editedProjectWithTags = await _context.Projects.FindAsync(1);
 
         Assert.Equal(1, editedProjectWithTags.Id);
@@ -58,7 +58,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     {
         //maybe we should make the dto separately to test with it's values instead of hardcoding?
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = "1", Description = "Very fun", Tags = new List<string> { "Sorting" } });
-        await _projectRepository.EditProjectAsync(new UpdateProjectDTO { Id = 1, Title = "Algo", UserId = "1", Description = "Very fun", Tags = new List<string> { "Sorting", "Economy", "Math" } });
+        await _projectRepository.EditProjectAsync(1, new UpdateProjectDTO { Id = 1, Title = "Algo", UserId = "1", Description = "Very fun", Tags = new List<string> { "Sorting", "Economy", "Math" } });
         var editedProjectWithTags = await _context.Projects.FindAsync(1);
 
         Assert.Equal(1, editedProjectWithTags.Id);
@@ -74,7 +74,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     public async Task EditProject_given_UpdateProjectDTO_updates_project_removes_tags()
     {
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "DMAT", UserId = "2", Description = "Very very fun", Tags = new List<string> { "Math" } });
-        await _projectRepository.EditProjectAsync(new UpdateProjectDTO { Id = 1, Title = "DMAT 2", UserId = "2", Description = "Very fun" });
+        await _projectRepository.EditProjectAsync(1, new UpdateProjectDTO { Id = 1, Title = "DMAT 2", UserId = "2", Description = "Very fun" });
         var editedProjectWithoutTags = await _context.Projects.FindAsync(1);
 
         Assert.Equal(1, editedProjectWithoutTags.Id);
