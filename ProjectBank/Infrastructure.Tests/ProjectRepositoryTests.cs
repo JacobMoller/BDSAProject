@@ -18,7 +18,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
         Assert.Equal(1, created.Id);
         Assert.Equal("Algorithm", created.Title);
-        Assert.Equal(Status.Active, created.Status);
+        Assert.Equal("Active", created.Status);
         Assert.Equal("1", created.UserId);
         Assert.Equal("Sorting", created.Description);
         Assert.Equal(DateTime.UtcNow, created.CreationDate, precision: TimeSpan.FromSeconds(5));
@@ -99,7 +99,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         //Project0
         Assert.Equal(1, projects.ElementAt(0).Id);
         Assert.Equal("Algo", projects.ElementAt(0).Title);
-        Assert.Equal(Status.Active, projects.ElementAt(0).Status);
+        Assert.Equal("Active", projects.ElementAt(0).Status);
         Assert.Equal("1", projects.ElementAt(0).UserId);
         Assert.Equal("Very fun", projects.ElementAt(0).Description);
         Assert.Equal(DateTime.UtcNow, projects.ElementAt(0).CreationDate, precision: TimeSpan.FromSeconds(5));
@@ -110,7 +110,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         //Project1
         Assert.Equal(2, projects.ElementAt(1).Id);
         Assert.Equal("DMAT", projects.ElementAt(1).Title);
-        Assert.Equal(Status.Active, projects.ElementAt(1).Status);
+        Assert.Equal("Active", projects.ElementAt(1).Status);
         Assert.Equal("2", projects.ElementAt(1).UserId);
         Assert.Equal("Very very fun", projects.ElementAt(1).Description);
         Assert.Equal(DateTime.UtcNow, projects.ElementAt(1).CreationDate, precision: TimeSpan.FromSeconds(5));
@@ -121,7 +121,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         //Project2
         Assert.Equal(3, projects.ElementAt(2).Id);
         Assert.Equal("Disys", projects.ElementAt(2).Title);
-        Assert.Equal(Status.Active, projects.ElementAt(2).Status);
+        Assert.Equal("Active", projects.ElementAt(2).Status);
         Assert.Equal("3", projects.ElementAt(2).UserId);
         Assert.Equal("Very very very fun", projects.ElementAt(2).Description);
         Assert.Equal(DateTime.UtcNow, projects.ElementAt(2).CreationDate, precision: TimeSpan.FromSeconds(5));
@@ -166,7 +166,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         //Project0
         Assert.Equal(1, projects.ElementAt(0).Id);
         Assert.Equal("Algo", projects.ElementAt(0).Title);
-        Assert.Equal(Status.Active, projects.ElementAt(0).Status);
+        Assert.Equal("Active", projects.ElementAt(0).Status);
         Assert.Equal("1", projects.ElementAt(0).UserId);
         Assert.Equal("Very fun", projects.ElementAt(0).Description);
         Assert.Equal(DateTime.UtcNow, projects.ElementAt(0).CreationDate, precision: TimeSpan.FromSeconds(5));
@@ -177,7 +177,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         //Project1
         Assert.Equal(2, projects.ElementAt(1).Id);
         Assert.Equal("DMAT", projects.ElementAt(1).Title);
-        Assert.Equal(Status.Active, projects.ElementAt(1).Status);
+        Assert.Equal("Active", projects.ElementAt(1).Status);
         Assert.Equal("2", projects.ElementAt(1).UserId);
         Assert.Equal("Very very fun", projects.ElementAt(1).Description);
         Assert.Equal(DateTime.UtcNow, projects.ElementAt(1).CreationDate, precision: TimeSpan.FromSeconds(5));
@@ -202,7 +202,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         //Project0
         Assert.Equal(1, projects.ElementAt(0).Id);
         Assert.Equal("Algo", projects.ElementAt(0).Title);
-        Assert.Equal(Status.Active, projects.ElementAt(0).Status);
+        Assert.Equal("Active", projects.ElementAt(0).Status);
         Assert.Equal("1", projects.ElementAt(0).UserId);
         Assert.Equal("Very fun", projects.ElementAt(0).Description);
         Assert.Equal(DateTime.UtcNow, projects.ElementAt(0).CreationDate, precision: TimeSpan.FromSeconds(5));
@@ -213,7 +213,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         //Project1
         Assert.Equal(2, projects.ElementAt(1).Id);
         Assert.Equal("DMAT", projects.ElementAt(1).Title);
-        Assert.Equal(Status.Active, projects.ElementAt(1).Status);
+        Assert.Equal("Active", projects.ElementAt(1).Status);
         Assert.Equal("1", projects.ElementAt(1).UserId);
         Assert.Equal("Very very fun", projects.ElementAt(1).Description);
         Assert.Equal(DateTime.UtcNow, projects.ElementAt(1).CreationDate, precision: TimeSpan.FromSeconds(5));
