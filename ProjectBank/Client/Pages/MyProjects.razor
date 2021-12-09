@@ -73,22 +73,12 @@
     }
 
     private async Task DeleteProject(){
-     
-        //handle submit + send/persist to db?
-        //tagStringToList();
-
-        
-
-    
-        var response = await Http.DeleteAsJsonAsync("api/Projects", specificId);
+        var response = await Http.DeleteAsync($"api/projects/{specificId}");
 
         if(response.IsSuccessStatusCode){
-
-            var created = await response.Content.ReadFromJsonAsync<ProjectDTO>();
-
             var uri = $"{NavigationManager.BaseUri}/MyProjects";
 
-            NavigationManager.NavigateTo(uri);
+            NavigationManager.NavigateTo(uri, forceLoad: true);
         }
     }
 
