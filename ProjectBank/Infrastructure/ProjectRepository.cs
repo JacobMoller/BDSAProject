@@ -151,7 +151,7 @@ public class ProjectRepository : IProjectRepository
     public async Task AddUserToProjectAsync(string userId, int projectId)
     {
         var user = await _context.Users.FindAsync(userId); 
-        var project = await _context.Projects.FindAsync(projectId); //TODO: should possibly also be: await _context.Projects.Include(p => p.Tags).Include(p => p.Participants).FirstOrDefaultAsync(p => p.Id == projectId);
+        var project = await _context.Projects.Include(p => p.Tags).Include(p => p.Participants).FirstOrDefaultAsync(p => p.Id == projectId);
         if (user != null && project != null)
         {
             if (project.Participants.Count() < 5)

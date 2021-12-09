@@ -38,17 +38,14 @@
 @code {
     [Parameter]
     public int Id { get; set; }
+    private ProjectDTO? project;
 
-    //get project from database based on id
-    ProjectDTO Project = new ProjectDTO(1, "Project", "Active", "1", "Bla bla", DateTime.Now, DateTime.Now, new
-    List<string>() { "Algo", "Andet" }, new List<UserDTO>());
-
-    private void Apply()
+    private async void Apply()
     {
         //take id from student user and make a connection with the project
-    }
+        var response = await Http.PutAsJsonAsync($"api/Apply/{Id}", project);
 
-    private ProjectDTO? project;
+    }
 
     protected override async Task OnParametersSetAsync()
     {
