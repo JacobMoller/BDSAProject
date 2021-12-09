@@ -16,7 +16,6 @@
                 <label class="form-label">Description</label>
                     <InputTextArea id="description" class="form-control" @bind-Value="project.Description" />
             </div>
-
             <div class="mb-3">
                 <label class="form-label">Tags</label>
                     <InputText id="tags" class="form-control" @bind-Value="@tagListString"/>
@@ -38,26 +37,36 @@
         string[] tags = Regex.Split(tagListString, @"\W");  
         project.Tags = tags;
 
-        var response = await Http.PostAsJsonAsync("api/Projects", project);
+        if (project is UpdateProjectDTO){
+            var response = await Http.PutAsJsonAsync("api/Projects", project);
 
-        if(response.IsSuccessStatusCode){
+            if(response.IsSuccessStatusCode){
+                var uri = $"{NavigationManager.BaseUri}/MyProjects";
 
-            var created = await response.Content.ReadFromJsonAsync<ProjectDTO>();
+                NavigationManager.NavigateTo(uri);
+            }
+        } else if(project is CreateProjectDTO){
+            var response = await Http.PostAsJsonAsync("api/Projects", project);
 
-            var uri = $"{NavigationManager.BaseUri}/MyProjects";
+            if(response.IsSuccessStatusCode){
+                var created = await response.Content.ReadFromJsonAsync<ProjectDTO>();
 
-            NavigationManager.NavigateTo(uri);
-        }
+                var uri = $"{NavigationManager.BaseUri}/MyProjects";
+
+                NavigationManager.NavigateTo(uri);
+            }
+        } 
+    
     }
     
-    //receiving a list of tags that have to be displayed
-    /*protected override void OnInitialized() {
+    protected override async Task OnParametersSetAsync() 
+    {
         if (project.Tags != null) {
             foreach (var tag in project.Tags)
             {
-                tagListString += tag.Name + ", ";
+                tagListString += tag + ", ";
             }
             tagListString = tagListString.TrimEnd(',',' ');
         }
-    }*/
+    }
 }
