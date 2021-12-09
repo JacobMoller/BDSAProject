@@ -21,42 +21,24 @@
                 <label class="form-label">Tags</label>
                     <InputText id="tags" class="form-control" @bind-Value="@tagListString"/>
             </div>
-            <p>@target</p>
-
             <button type="submit" class="btn btn-success">@ButtonName</button>
         </EditForm> 
   
 
 @code {
-
-    private CreateProjectDTO newProject = new();
-    string target = "hi";
     [Parameter]
-    public Project project {get; set;}
+    public CreateProjectDTO project {get; set;}
 
     [Parameter]
     public string ButtonName {get; set;}
 
     private string tagListString = "";
-    
-    //receiving a list of tags that have to be displayed
-    protected override void OnInitialized() {
-        if (project.Tags != null) {
-            foreach (var tag in project.Tags)
-            {
-                tagListString += tag.Name + ", ";
-            }
-            tagListString = tagListString.TrimEnd(',',' ');
-        }
-    }
 
-   
     private async Task HandleValidSubmit() {
-        target = "Submit!";
-        //handle submit + send/persist to db?
-        //tagStringToList();
+        string[] tags = Regex.Split(tagListString, @"\W");  
+        project.Tags = tags;
 
-        var response = await Http.PostAsJsonAsync("api/Projects", newProject);
+        var response = await Http.PostAsJsonAsync("api/Projects", project);
 
         if(response.IsSuccessStatusCode){
 
@@ -67,17 +49,15 @@
             NavigationManager.NavigateTo(uri);
         }
     }
-
-     
     
-
-    private void tagStringToList() {
-        string[] tagNames = tagListString.Replace(" ","").Split(',');
-        var tagList = new List<Tag>();
-        foreach (var tagName in tagNames)
-        {
-            tagList.Add(new Tag(tagName));
+    //receiving a list of tags that have to be displayed
+    /*protected override void OnInitialized() {
+        if (project.Tags != null) {
+            foreach (var tag in project.Tags)
+            {
+                tagListString += tag.Name + ", ";
+            }
+            tagListString = tagListString.TrimEnd(',',' ');
         }
-        project.Tags = tagList;
-    }
+    }*/
 }
