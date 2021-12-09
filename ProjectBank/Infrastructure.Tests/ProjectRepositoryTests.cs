@@ -138,19 +138,20 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
         var actual = await _projectRepository.ReadProjectByIdAsync(1);
 
-        Assert.Equal(1, actual.Id);
-        Assert.Equal("Algo", actual.Title);
-        Assert.Equal(Status.Active, actual.Status);
-        Assert.Equal("1", actual.UserId);
-        Assert.Equal("Very fun", actual.Description);
-        Assert.Equal(DateTime.UtcNow, actual.CreationDate, precision: TimeSpan.FromSeconds(5));
-        Assert.Equal(DateTime.UtcNow, actual.UpdatedDate, precision: TimeSpan.FromSeconds(5));
-        Assert.Equal(new List<string>() { "Sorting" }, actual.Tags);
-        Assert.Equal(new List<UserDTO>(), actual.Participants);
+        
+        Assert.Equal(1, actual.Value.Id);
+        Assert.Equal("Algo", actual.Value.Title);
+        Assert.Equal("Active", actual.Value.Status);
+        Assert.Equal("1", actual.Value.UserId);
+        Assert.Equal("Very fun", actual.Value.Description);
+        Assert.Equal(DateTime.UtcNow, actual.Value.CreationDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(DateTime.UtcNow, actual.Value.UpdatedDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(new List<string>() { "Sorting" }, actual.Value.Tags);
+        Assert.Equal(new List<UserDTO>(), actual.Value.Participants);
         Assert.Null(await _projectRepository.ReadProjectByIdAsync(100));
 
         await _projectRepository.AddUserToProjectAsync("1", 1);
-        Assert.Equal(new UserDTO("1", "Alice"), _projectRepository.ReadProjectByIdAsync(1).Result.Participants.ElementAt(0));
+        Assert.Equal(new UserDTO("1", "Alice"), _projectRepository.ReadProjectByIdAsync(1).Result.Value.Participants.ElementAt(0));
     }
 
     [Fact]
