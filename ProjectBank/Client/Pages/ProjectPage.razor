@@ -27,7 +27,7 @@
             <AuthorizeView Roles="Student">
                 <Authorized>
                     <div class="col"> 
-                        <button class="btn btn-primary px-4 mt-2" type="submit" @onclick="Apply">Apply</button>
+                        <button class="btn btn-primary px-4 mt-2" type="submit" @onclick="Apply">@ApplyText</button>
                     </div>
                 </Authorized>
             </AuthorizeView>
@@ -39,11 +39,16 @@
     [Parameter]
     public int Id { get; set; }
     private ProjectDTO? project;
+    private string ApplyText = "Apply";
 
     private async void Apply()
     {
         //take id from student user and make a connection with the project
         var response = await Http.PutAsJsonAsync($"api/Apply/{Id}", project);
+
+        //if(response == good){
+            ApplyText = "Applied";
+        //}
 
     }
 
