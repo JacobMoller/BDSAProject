@@ -122,7 +122,7 @@ public class ProjectRepository : IProjectRepository
             ))).ToListAsync();
     }
 
-    public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByUserIdAsync(int userId)
+    public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByUserIdAsync(string userId)
     {
         return await (_context.Projects.Where(project => project.UserId == userId).Select(project => new ProjectDTO(
             project.Id,
@@ -148,7 +148,7 @@ public class ProjectRepository : IProjectRepository
         }
     }
 
-    public async Task AddUserToProjectAsync(int userId, int projectId)
+    public async Task AddUserToProjectAsync(string userId, int projectId)
     {
         var user = await _context.Users.FindAsync(userId);
         var project = await _context.Projects.FindAsync(projectId);

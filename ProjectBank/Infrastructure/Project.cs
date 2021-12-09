@@ -13,7 +13,7 @@ public class Project
 
     public Status Status { get; set; }
 
-    public int UserId { get; set; }
+    public string UserId { get; set; }
 
     [DataType(DataType.Date)]
     public DateTime CreationDate { get; set; }
@@ -26,7 +26,7 @@ public class Project
     public ICollection<User>? Participants { get; set; }
 
 
-    public Project(string Title, Status Status, int UserId)
+    public Project(string Title, Status Status, string UserId)
     {
         this.Title = Title;
         this.Status = Status;

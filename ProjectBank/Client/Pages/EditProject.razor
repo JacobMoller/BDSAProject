@@ -14,5 +14,5 @@
     public int Id { get; set; }
 
     //get the project to edit from the db using efcore from projectrepository?
-    private Project Project = new("Project Title", Status.Active, 1) {Description = "A longer description of the project", Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}}; 
+    private Project Project = new("Project Title", Status.Active, "1") {Description = "A longer description of the project", Tags=new List<Tag>() {new Tag("Algo"),new Tag("Andet")}}; 
 }
