@@ -41,11 +41,11 @@ public class ProjectsController : ControllerBase
         return CreatedAtRoute(nameof(Get), new { created.Id }, created);
     }
 
-    [HttpPut]
+    [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task Put(UpdateProjectDTO project)
-            => await _projectRepository.EditProjectAsync(project);
+    public async Task Put(int id, [FromBody] UpdateProjectDTO project) 
+        => await _projectRepository.EditProjectAsync(id, project);
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
