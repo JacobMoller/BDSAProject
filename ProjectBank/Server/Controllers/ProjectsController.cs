@@ -5,7 +5,7 @@ using Microsoft.Identity.Web.Resource;
 using ProjectBank.Server.Model;
 
 namespace ProjectBank.Server.Controllers;
-[Authorized]
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
