@@ -13,8 +13,6 @@ public class ProjectRepository : IProjectRepository
     }
     public async Task<ProjectDTO> CreateProjectAsync(CreateProjectDTO project)
     {
-        Console.WriteLine("User id:");
-        Console.WriteLine(project.UserId);
         var entity = new Project(project.Title, Status.Active, project.UserId)
         {
             Description = project.Description,
