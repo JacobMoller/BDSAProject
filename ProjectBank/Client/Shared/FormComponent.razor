@@ -33,7 +33,13 @@
 
     private string tagListString = "";
 
-    private async Task HandleValidSubmit() {
+    private void HandleValidSubmit()
+    {
+        //Logger.LogInformation("HandleValidSubmit called");
+
+        HandleValidSubmit2();
+    }
+    private async Task HandleValidSubmit2() {
         string[] tags = Regex.Split(tagListString, @"\W");  
         project.Tags = tags;
 

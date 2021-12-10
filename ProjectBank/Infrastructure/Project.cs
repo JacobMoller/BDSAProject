@@ -5,10 +5,12 @@ public class Project
     [Key]
     public int Id { get; set; }
 
-    [StringLength(50)]
+    [Required]
+    [StringLength(50, ErrorMessage = "Title is too long")]
     public string Title { get; set; }
 
-    [StringLength(500)]
+    [Required]
+    [StringLength(500, ErrorMessage = "Description is too long")]
     public string? Description { get; set; }
 
     public Status Status { get; set; }
