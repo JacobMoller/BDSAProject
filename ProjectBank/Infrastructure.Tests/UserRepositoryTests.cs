@@ -28,7 +28,7 @@ public class UserRepositoryTests : ContextSetup, IDisposable
             Role = Role.Supervisor
         });
 
-        var expected = new UserDetailsDTO("1", "Alice", Role.Supervisor);
+        var expected = new UserDetailsDTO("1", "Alice", "Supervisor");
         var actual = await _userRepository.ReadUserByIdAsync("1");
 
         Assert.Equal(expected, actual.Value);

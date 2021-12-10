@@ -15,7 +15,7 @@ public class UserRepository : IUserRepository
 
         if (existUser == null)
         {
-            var entity = new User(user.Id, user.Name, user.Role);
+            var entity = new User(user.Id, user.Name, user.Role); 
 
             _context.Users.Add(entity);
 
@@ -39,7 +39,7 @@ public class UserRepository : IUserRepository
         var user = await _context.Users.FindAsync(id);
         if (user != null)
         {
-            return new UserDetailsDTO(user.Id, user.Name, user.Role);
+            return new UserDetailsDTO(user.Id, user.Name, user.Role.ToString());
         }
         return null;
     }
