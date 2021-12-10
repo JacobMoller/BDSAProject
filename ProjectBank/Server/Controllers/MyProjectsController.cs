@@ -18,7 +18,7 @@ public class MyProjectsController : ControllerBase
     {
         _projectRepository = repo;
     }
-
+[ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(List<ProjectDTO>), StatusCodes.Status200OK)]
     [HttpGet]
     public async Task<List<ProjectDTO>> Get()
