@@ -8,7 +8,7 @@
 
 <AuthorizeView>
     <Authorized>
-        @if (yourProjects.Count > 0){
+        @if (yourProjects.Count() > 0){
             <h1>Your Projects </h1>
             <div class="row justify-content-around">
                 @foreach (var project in yourProjects)
@@ -23,29 +23,43 @@
                 }
             </div>
         }
-    </Authorized>
-</AuthorizeView>
+    
+
     
         <h1>Explore</h1>
-        <div class="row justify-content-around">
-            @foreach (var project in projectsList)
-            {
-                <div class="card mt-4 col col-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">@project.Title</h5>
-                        <p class="card-text">@project.Description</p>
-                        <a href="project/@project.Id/" class="btn btn-primary stretched-link">View Project</a>
+        @if (@projects == null)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            <div class="row justify-content-around">
+                @foreach (var project in projects)
+                {
+                    <div class="card mt-4 col col-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">@project.Title</h5>
+                            <p class="card-text">@project.Description</p>
+                            <a href="project/@project.Id/" class="btn btn-primary stretched-link">View Project</a>
+                        </div>
                     </div>
-                </div>
-            }
-        </div>
+                }
+            </div>
+        }
+    </Authorized>
+</AuthorizeView>
         
 
 
 
 @code {
-    List<Project> yourProjects = new List<Project>();
-    List<Project> projectsList = new List<Project>();
+    private ProjectDTO[]? yourProjects = new ProjectDTO[0];
+    private ProjectDTO[]? projects;
+
+    protected override async Task OnInitializedAsync()
+    {
+        projects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/projects");
+    }
 
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationStateTask { get; set; }

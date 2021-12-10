@@ -60,12 +60,19 @@ public static class SeedExtensions
         await ProjectRepository.AddUserToProjectAsync("1", 2);
         await ProjectRepository.AddUserToProjectAsync("2", 2);
         await ProjectRepository.CloseProjectByIdAsync(3);
-        await ProjectRepository.EditProjectAsync(new UpdateProjectDTO()
+        await ProjectRepository.EditProjectAsync(1, new UpdateProjectDTO()
         {
             Id = 1,
             Title = "Super Fun Project",
             Description = "Fun",
             Tags = new List<string>() { "hej", "farvel" }
+        });
+        await ProjectRepository.CreateProjectAsync(new CreateProjectDTO
+        {
+            Title = "Super Enjoyable Project",
+            Description = "Very cool description",
+            UserId = "2",
+            Tags = new List<string>() { "DMAT" }
         });
     }
 }

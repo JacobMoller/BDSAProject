@@ -1,57 +1,73 @@
-<EditForm Model="@Project" OnValidSubmt="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
 
-    <div class="mb-3">
-        <label class="form-label">Title</label>
-        <InputText id="title" class="form-control" @bind-Value="Project.Title" />
-    </div>
 
-    <div class="mb-3">
-        <label class="form-label">Description</label>
-            <InputTextArea id="description" class="form-control" @bind-Value="Project.Description" />
-    </div>
 
-    <div class="mb-3">
-        <label class="form-label">Tags</label>
-            <InputText id="tags" class="form-control" @bind-Value="@TagListString"/>
-    </div>
+        <EditForm Model="@project" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-    <button type="submit" class="btn btn-success" onclick="@HandleValidSubmit">@ButtonName</button>
-</EditForm> 
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <InputText id="title" class="form-control" @bind-Value="project.Title" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                    <InputTextArea id="description" class="form-control" @bind-Value="project.Description" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Tags</label>
+                    <InputText id="tags" class="form-control" @bind-Value="@tagListString"/>
+            </div>
+            <button type="submit" class="btn btn-success">@ButtonName</button>
+        </EditForm> 
+  
 
 @code {
     [Parameter]
-    public Project Project {get; set;}
+    public CreateProjectDTO project {get; set;}
 
     [Parameter]
     public string ButtonName {get; set;}
 
-    private string TagListString = "";
-    
-    //receiving a list of tags that have to be displayed
-    protected override void OnInitialized() {
-        if (Project.Tags != null) {
-            foreach (var tag in Project.Tags)
-            {
-                TagListString += tag.Name + ", ";
+    private string tagListString = "";
+
+    private async Task HandleValidSubmit() {
+        string[] tags = Regex.Split(tagListString, @"\W");  
+        project.Tags = tags;
+
+        if (project is UpdateProjectDTO){
+            var updateProject = (UpdateProjectDTO) project;
+            var response = await Http.PutAsJsonAsync($"api/Projects/{updateProject.Id}", updateProject);
+
+            if(response.IsSuccessStatusCode){
+                var uri = $"{NavigationManager.BaseUri}/MyProjects";
+
+                NavigationManager.NavigateTo(uri);
             }
-            TagListString = TagListString.TrimEnd(',',' ');
-        }
-    }
+        } else if(project is CreateProjectDTO){
+            var response = await Http.PostAsJsonAsync("api/Projects", project);
 
-    private void HandleValidSubmit() {
-        //handle submit + send/persist to db?
-        TagStringToList();
-    }
+            if(response.IsSuccessStatusCode){
+                var created = await response.Content.ReadFromJsonAsync<ProjectDTO>();
 
-    private void TagStringToList() {
-        string[] tagNames = TagListString.Replace(" ","").Split(',');
-        var tagList = new List<Tag>();
-        foreach (var tagName in tagNames)
-        {
-            tagList.Add(new Tag(tagName));
+                var uri = $"{NavigationManager.BaseUri}/MyProjects";
+
+                NavigationManager.NavigateTo(uri);
+            }
+        } 
+    
+    }
+    
+    protected override async Task OnParametersSetAsync() 
+    {
+        if (project.Tags != null) {
+            foreach (var tag in project.Tags)
+            {
+                tagListString += tag + ", ";
+            }
+            tagListString = tagListString.TrimEnd(',',' ');
         }
-        Project.Tags = tagList;
     }
 }
