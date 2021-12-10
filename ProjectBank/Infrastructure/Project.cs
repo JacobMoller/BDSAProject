@@ -13,24 +13,24 @@ public class Project
 
     public Status Status { get; set; }
 
-    public string UserId { get; set; }
+    public string SupervisorId { get; set; }
 
     [DataType(DataType.Date)]
     public DateTime CreationDate { get; set; }
 
     [DataType(DataType.Date)]
     public DateTime UpdatedDate { get; set; }
-    
+
     public ICollection<Tag>? Tags { get; set; }
 
     public ICollection<User>? Participants { get; set; }
 
 
-    public Project(string Title, Status Status, string UserId)
+    public Project(string Title, Status Status, string SupervisorId)
     {
         this.Title = Title;
         this.Status = Status;
-        this.UserId = UserId;
+        this.SupervisorId = SupervisorId;
     }
 }
 

@@ -1,6 +1,6 @@
 ﻿@page "/project/{Id:int}"
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize] 
+@attribute [Authorize]
 @inject HttpClient Http
 
 <PageTitle>Project</PageTitle>
@@ -26,7 +26,7 @@
             </div>
             <AuthorizeView Roles="Student">
                 <Authorized>
-                    <div class="col"> 
+                    <div class="col">
                         <button class="btn btn-primary px-4 mt-2" type="submit" @onclick="Apply">@ApplyText</button>
                     </div>
                 </Authorized>
@@ -49,7 +49,7 @@
         var response = await Http.PutAsJsonAsync($"api/Apply/{Id}", project);
 
         //if(response == good){
-            ApplyText = "Applied";
+        ApplyText = "Applied";
         //}
 
     }
