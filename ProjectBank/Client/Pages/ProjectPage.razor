@@ -61,7 +61,7 @@
             project = await Http.GetFromJsonAsync<ProjectDTO>($"api/projects/{Id}");
             if(project != null) 
             {
-                user = await Http.GetFromJsonAsync<UserDetailsDTO>($"api/User/{project.UserId}");
+                user = await Http.GetFromJsonAsync<UserDetailsDTO>($"api/User/{project.SupervisorId}");
             }
         }
 
