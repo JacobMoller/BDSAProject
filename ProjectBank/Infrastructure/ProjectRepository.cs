@@ -13,7 +13,7 @@ public class ProjectRepository : IProjectRepository
     }
     public async Task<ProjectDTO> CreateProjectAsync(CreateProjectDTO project)
     {
-        var entity = new Project(project.Title, Status.Active, project.UserId)
+        var entity = new Project(project.Title, Status.Active, project.SupervisorId)
         {
             Description = project.Description,
             CreationDate = DateTime.UtcNow,
@@ -30,7 +30,7 @@ public class ProjectRepository : IProjectRepository
             entity.Id,
             entity.Title,
             entity.Status.ToString(),
-            entity.UserId,
+            entity.SupervisorId,
             entity.Description,
             entity.CreationDate,
             entity.UpdatedDate,
@@ -74,7 +74,7 @@ public class ProjectRepository : IProjectRepository
             project.Id,
             project.Title,
             project.Status.ToString(),
-            project.UserId,
+            project.SupervisorId,
             project.Description,
             project.CreationDate,
             project.UpdatedDate,
@@ -94,7 +94,7 @@ public class ProjectRepository : IProjectRepository
                 entity.Id,
                 entity.Title,
                 entity.Status.ToString(),
-                entity.UserId,
+                entity.SupervisorId,
                 entity.Description,
                 entity.CreationDate,
                 entity.UpdatedDate,
@@ -111,7 +111,7 @@ public class ProjectRepository : IProjectRepository
             project.Id,
             project.Title,
             project.Status.ToString(),
-            project.UserId,
+            project.SupervisorId,
             project.Description,
             project.CreationDate,
             project.UpdatedDate,
@@ -122,11 +122,11 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsBySupervisorIdAsync(string supervisorId)
     {
-        return await (_context.Projects.Where(project => project.UserId == supervisorId).Select(project => new ProjectDTO(
+        return await (_context.Projects.Where(project => project.SupervisorId == supervisorId).Select(project => new ProjectDTO(
             project.Id,
             project.Title,
             project.Status.ToString(),
-            project.UserId,
+            project.SupervisorId,
             project.Description,
             project.CreationDate,
             project.UpdatedDate,
@@ -143,7 +143,7 @@ public class ProjectRepository : IProjectRepository
             project.Id,
             project.Title,
             project.Status.ToString(),
-            project.UserId,
+            project.SupervisorId,
             project.Description,
             project.CreationDate,
             project.UpdatedDate,
@@ -163,9 +163,9 @@ public class ProjectRepository : IProjectRepository
         }
     }
 
-    public async Task AddUserToProjectAsync(string userId, int projectId)
+    public async Task AddUserToProjectAsync(string studentId, int projectId)
     {
-        var user = await _context.Users.FindAsync(userId); 
+        var user = await _context.Users.FindAsync(studentId);
         var project = await _context.Projects.Include(p => p.Tags).Include(p => p.Participants).FirstOrDefaultAsync(p => p.Id == projectId);
         if (user != null && project != null)
         {

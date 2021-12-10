@@ -1,6 +1,6 @@
 ﻿@page "/project/{Id:int}"
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize] 
+@attribute [Authorize]
 @inject HttpClient Http
 
 <PageTitle>Project</PageTitle>
@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-8">
                 <h1>@project.Title</h1>
-                <h3>By @project.UserId</h3>
+                <h3>By @project.SupervisorId</h3>
                 <h4>Tags
                     @foreach (var tag in project.Tags)
                     {
@@ -54,7 +54,6 @@
         if(Id != 0 && !ProjectFullCheck() && !UserIsParticipant()) {
             var response = await Http.PutAsJsonAsync($"api/Apply/{Id}", project);
         }
-
     }
 
     protected override async Task OnParametersSetAsync()
