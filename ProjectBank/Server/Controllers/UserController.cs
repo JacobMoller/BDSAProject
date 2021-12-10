@@ -33,6 +33,6 @@ public class UserController : ControllerBase
         var created = await _repository.CreateUserAsync(user);
 
 
-        return CreatedAtRoute(nameof(Get), new { created.Id }, created);
+        return CreatedAtAction(nameof(Get), new { created.Id }, created);
     }
 }

@@ -38,13 +38,13 @@ public class ProjectsController : ControllerBase
 
         var created = await _projectRepository.CreateProjectAsync(project);
 
-        return CreatedAtRoute(nameof(Get), new { created.Id }, created);
+        return CreatedAtAction(nameof(Get), new { created.Id }, created);
     }
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task Put(int id, [FromBody] UpdateProjectDTO project) 
+    public async Task Put(int id, [FromBody] UpdateProjectDTO project)
         => await _projectRepository.EditProjectAsync(id, project);
 
     [HttpDelete("{id}")]
