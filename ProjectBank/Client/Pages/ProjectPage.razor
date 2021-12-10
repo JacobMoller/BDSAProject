@@ -79,7 +79,7 @@
     }
 
     bool UserIsParticipant(){
-        string UserId = "1"; //TODO: replace this with the actual userid
+        string UserId = User.GetObjectId(); //TODO: replace this with the actual userid
         for (int i = 0; i < project.Participants.Count; i++)
         {
             if(project.Participants.ElementAt(i).Id == UserId){
