@@ -138,7 +138,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
         var actual = await _projectRepository.ReadProjectByIdAsync(1);
 
-        
+
         Assert.Equal(1, actual.Value.Id);
         Assert.Equal("Algo", actual.Value.Title);
         Assert.Equal("Active", actual.Value.Status);
@@ -191,13 +191,13 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     }
 
     [Fact]
-    public async Task ReadProjectsByUserId_given_UserId_returns_list_of_ProjectDTO()
+    public async Task ReadProjectsBySupervisorId_given_UserId_returns_list_of_ProjectDTO()
     {
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = "1", Description = "Very fun", Tags = new List<string> { "Sorting" } });
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "DMAT", UserId = "1", Description = "Very very fun", Tags = new List<string> { "Math" } });
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Disys", UserId = "2", Description = "Very very very fun", Tags = new List<string> { "Servers" } });
 
-        var projects = await _projectRepository.ReadProjectsByUserIdAsync("1");
+        var projects = await _projectRepository.ReadProjectsBySupervisorIdAsync("1");
 
         //TODO fix this to assert collection sometime
         //Project0
@@ -221,6 +221,46 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         Assert.Equal(DateTime.UtcNow, projects.ElementAt(1).UpdatedDate, precision: TimeSpan.FromSeconds(5));
         Assert.Equal(new List<string>() { "Math" }, projects.ElementAt(1).Tags);
         Assert.Equal(new List<UserDTO>(), projects.ElementAt(1).Participants);
+
+        Assert.Throws<System.ArgumentOutOfRangeException>(() => projects.ElementAt(3));
+    }
+
+    [Fact]
+    public async Task ReadProjectsByStudentId_given_UserId_returns_list_of_ProjectDTO()
+    {
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", UserId = "1", Description = "Very fun", Tags = new List<string> { "Sorting" } });
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "DMAT", UserId = "1", Description = "Very very fun", Tags = new List<string> { "Math" } });
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Disys", UserId = "2", Description = "Very very very fun", Tags = new List<string> { "Servers" } });
+        await _userRepository.CreateUserAsync(new CreateUserDTO() { Id = "1", Name = "Alice", Role = Role.Student });
+        await _projectRepository.AddUserToProjectAsync("1", 1);
+        await _projectRepository.AddUserToProjectAsync("1", 2);
+        await _projectRepository.AddUserToProjectAsync("1", 3);
+
+
+        var projects = await _projectRepository.ReadProjectsByStudentIdAsync("1");
+
+        //TODO fix this to assert collection sometime
+        //Project0
+        Assert.Equal(1, projects.ElementAt(0).Id);
+        Assert.Equal("Algo", projects.ElementAt(0).Title);
+        Assert.Equal("Active", projects.ElementAt(0).Status);
+        Assert.Equal("1", projects.ElementAt(0).UserId);
+        Assert.Equal("Very fun", projects.ElementAt(0).Description);
+        Assert.Equal(DateTime.UtcNow, projects.ElementAt(0).CreationDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(DateTime.UtcNow, projects.ElementAt(0).UpdatedDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(new List<string>() { "Sorting" }, projects.ElementAt(0).Tags);
+        Assert.Equal(new List<UserDTO>() { new UserDTO("1", "Alice") }, projects.ElementAt(0).Participants);
+
+        //Project1
+        Assert.Equal(2, projects.ElementAt(1).Id);
+        Assert.Equal("DMAT", projects.ElementAt(1).Title);
+        Assert.Equal("Active", projects.ElementAt(1).Status);
+        Assert.Equal("1", projects.ElementAt(1).UserId);
+        Assert.Equal("Very very fun", projects.ElementAt(1).Description);
+        Assert.Equal(DateTime.UtcNow, projects.ElementAt(1).CreationDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(DateTime.UtcNow, projects.ElementAt(1).UpdatedDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(new List<string>() { "Math" }, projects.ElementAt(1).Tags);
+        Assert.Equal(new List<UserDTO>() { new UserDTO("1", "Alice") }, projects.ElementAt(1).Participants);
 
         Assert.Throws<System.ArgumentOutOfRangeException>(() => projects.ElementAt(3));
     }
