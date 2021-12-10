@@ -18,7 +18,7 @@ public class ProjectRepository : IProjectRepository
             Description = project.Description,
             CreationDate = DateTime.UtcNow,
             UpdatedDate = DateTime.UtcNow,
-            Tags = project.Tags != null ? await SetTagsAsync(project.Tags) : new List<Tag>(),
+            Tags = await SetTagsAsync(project.Tags),
             Participants = new List<User>()
 
         };
@@ -47,7 +47,7 @@ public class ProjectRepository : IProjectRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task EditProjectAsync(int projectId, UpdateProjectDTO project) 
+    public async Task EditProjectAsync(int projectId, UpdateProjectDTO project)
     {
         var entity = await _context.Projects.Include(p => p.Tags).Include(p => p.Participants).FirstOrDefaultAsync(p => p.Id == projectId);
         if (entity != null)

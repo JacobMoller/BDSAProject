@@ -5,17 +5,13 @@ public class UserRepositoryTests : ContextSetup, IDisposable
     [Fact]
     public async Task CreateUser_given_CreateUserDTO_returns_UserDTO()
     {
-        var user = new CreateUserDTO
-        {
-            Id = "1",
-            Name = "Alice",
-            Role = Role.Student
-        };
+        var user = new CreateUserDTO { Id = "1", Name = "Alice", Role = Role.Student };
 
         var expected = new UserDTO("1", "Alice");
         var actual = await _userRepository.CreateUserAsync(user);
 
         Assert.Equal(expected, actual);
+        Assert.Equal(new UserDTO("1", "Alice"), await _userRepository.CreateUserAsync(user));
     }
 
     [Fact]
