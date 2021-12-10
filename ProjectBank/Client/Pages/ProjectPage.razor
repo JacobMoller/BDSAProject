@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-8">
                 <h1>@project.Title</h1>
-                <h3>By @project.UserId</h3>
+                <h3>By @user.Name</h3>
                 <h4>Tags
                     @foreach (var tag in project.Tags)
                     {
@@ -39,6 +39,8 @@
     [Parameter]
     public int Id { get; set; }
     private ProjectDTO? project;
+    private UserDetailsDTO? user;
+
     private string ApplyText = "Apply";
 
     private async void Apply()
@@ -57,6 +59,10 @@
         if (Id != 0)
         {
             project = await Http.GetFromJsonAsync<ProjectDTO>($"api/projects/{Id}");
+            if(project != null) 
+            {
+                user = await Http.GetFromJsonAsync<UserDetailsDTO>($"api/User/{project.UserId}");
+            }
         }
 
         await base.OnParametersSetAsync();
