@@ -47,7 +47,7 @@ public class ProjectRepository : IProjectRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task EditProjectAsync(int projectId, UpdateProjectDTO project)
+    public async Task EditProjectAsync(int projectId, UpdateProjectDTO project) 
     {
         var entity = await _context.Projects.Include(p => p.Tags).Include(p => p.Participants).FirstOrDefaultAsync(p => p.Id == projectId);
         if (entity != null)
