@@ -13,12 +13,12 @@ public class ProjectRepository : IProjectRepository
     }
     public async Task<ProjectDTO> CreateProjectAsync(CreateProjectDTO project)
     {
-        var entity = new Project(project.Title, Status.Active, project.UserId)
+        var entity = new Project(project.Title, Status.Active, project.SupervisorId)
         {
             Description = project.Description,
             CreationDate = DateTime.UtcNow,
             UpdatedDate = DateTime.UtcNow,
-            Tags = project.Tags != null ? await SetTagsAsync(project.Tags) : new List<Tag>(),
+            Tags = await SetTagsAsync(project.Tags),
             Participants = new List<User>()
 
         };
@@ -30,7 +30,7 @@ public class ProjectRepository : IProjectRepository
             entity.Id,
             entity.Title,
             entity.Status.ToString(),
-            entity.UserId,
+            entity.SupervisorId,
             entity.Description,
             entity.CreationDate,
             entity.UpdatedDate,
@@ -47,7 +47,7 @@ public class ProjectRepository : IProjectRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task EditProjectAsync(int projectId, UpdateProjectDTO project) 
+    public async Task EditProjectAsync(int projectId, UpdateProjectDTO project)
     {
         var entity = await _context.Projects.Include(p => p.Tags).Include(p => p.Participants).FirstOrDefaultAsync(p => p.Id == projectId);
         if (entity != null)
@@ -74,7 +74,7 @@ public class ProjectRepository : IProjectRepository
             project.Id,
             project.Title,
             project.Status.ToString(),
-            project.UserId,
+            project.SupervisorId,
             project.Description,
             project.CreationDate,
             project.UpdatedDate,
@@ -94,7 +94,7 @@ public class ProjectRepository : IProjectRepository
                 entity.Id,
                 entity.Title,
                 entity.Status.ToString(),
-                entity.UserId,
+                entity.SupervisorId,
                 entity.Description,
                 entity.CreationDate,
                 entity.UpdatedDate,
@@ -111,7 +111,7 @@ public class ProjectRepository : IProjectRepository
             project.Id,
             project.Title,
             project.Status.ToString(),
-            project.UserId,
+            project.SupervisorId,
             project.Description,
             project.CreationDate,
             project.UpdatedDate,
@@ -120,19 +120,36 @@ public class ProjectRepository : IProjectRepository
             ))).ToListAsync();
     }
 
-    public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByUserIdAsync(string userId)
+    public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsBySupervisorIdAsync(string supervisorId)
     {
-        return await (_context.Projects.Where(project => project.UserId == userId).Select(project => new ProjectDTO(
+        return await (_context.Projects.Where(project => project.SupervisorId == supervisorId).Select(project => new ProjectDTO(
             project.Id,
             project.Title,
             project.Status.ToString(),
-            project.UserId,
+            project.SupervisorId,
             project.Description,
             project.CreationDate,
             project.UpdatedDate,
             project.Tags.Select(t => new string(t.Name)).ToList().AsReadOnly(),
             project.Participants.Select(u => new UserDTO(u.Id, u.Name)).ToList().AsReadOnly()
             ))).ToListAsync();
+    }
+
+    public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByStudentIdAsync(string studentId)
+    {
+        var student = await _context.Users.FindAsync(studentId);
+        //TODO: make async
+        return (student.Projects.Select(project => new ProjectDTO(
+            project.Id,
+            project.Title,
+            project.Status.ToString(),
+            project.SupervisorId,
+            project.Description,
+            project.CreationDate,
+            project.UpdatedDate,
+            project.Tags.Select(t => new string(t.Name)).ToList().AsReadOnly(),
+            project.Participants.Select(u => new UserDTO(u.Id, u.Name)).ToList().AsReadOnly()
+            ))).ToList();
     }
 
     public async Task CloseProjectByIdAsync(int projectId)
@@ -146,9 +163,9 @@ public class ProjectRepository : IProjectRepository
         }
     }
 
-    public async Task AddUserToProjectAsync(string userId, int projectId)
+    public async Task AddUserToProjectAsync(string studentId, int projectId)
     {
-        var user = await _context.Users.FindAsync(userId); 
+        var user = await _context.Users.FindAsync(studentId);
         var project = await _context.Projects.Include(p => p.Tags).Include(p => p.Participants).FirstOrDefaultAsync(p => p.Id == projectId);
         if (user != null && project != null)
         {
@@ -160,7 +177,7 @@ public class ProjectRepository : IProjectRepository
                 }
                 project.Participants.Add(user);
             }
-            project.UpdatedDate = DateTime.Now;
+            project.UpdatedDate = DateTime.UtcNow;
             await _context.SaveChangesAsync();
         }
     }

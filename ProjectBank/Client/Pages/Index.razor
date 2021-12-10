@@ -6,7 +6,19 @@
 <PageTitle>Index</PageTitle>
 
 
+
+
 <AuthorizeView>
+    <NotAuthorized>
+        <div class="row justify-content-around">
+            <div class="card col col-12 col-sm-6 col-md-4 col-lg-3 text-center" style="width: 18rem;">
+                <div class="card-body ">
+                    <p class="card-text">To see all projects please log in</p>
+                    <a href="authentication/login" class="btn btn-primary stretched-link">Log in</a>
+                </div>
+            </div>
+        </div>
+    </NotAuthorized>
     <Authorized>
         @if (yourProjects.Count() > 0){
             <h1>Your Projects </h1>
@@ -48,6 +60,7 @@
         }
     </Authorized>
 </AuthorizeView>
+ 
         
 
 
@@ -56,11 +69,6 @@
     private ProjectDTO[]? yourProjects = new ProjectDTO[0];
     private ProjectDTO[]? projects;
 
-    protected override async Task OnInitializedAsync()
-    {
-        projects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/projects");
-    }
-
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationStateTask { get; set; }
 
@@ -68,15 +76,27 @@
 
     private CreateUserDTO user = new();
 
+   protected override async Task OnInitializedAsync()
+   {
+        var authState = await authenticationStateTask;
+        var userAuth = authState.User;
+
+        if(userAuth.Identity.IsAuthenticated)
+        {
+            projects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/projects");
+        }
+}
+
     protected override async void OnAfterRender(bool firstRender)
 {
     var authState = await authenticationStateTask;
     var userAuth = authState.User;
     // execute conditionally for loading data, otherwise this will load
     // every time the page refreshes
+    
     if(firstRender && userAuth.Identity.IsAuthenticated)
     {
-        await RegisterUser();
+            await RegisterUser();
         // Do work to load page data and set properties
     }
 }

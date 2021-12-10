@@ -13,19 +13,11 @@
             </NavLink>
         </div>
     </Authorized>
-    <NotAuthorized>
-        <div class="nav-item p-3">
-            <NavLink class="nav-link" href="authentication/login">
-                    <span class="oi oi-account-login" aria-hidden="true"></span> Log in
-            </NavLink>
-        </div>
-    </NotAuthorized>
 </AuthorizeView>
 
 @code{
     private async Task BeginLogout(MouseEventArgs args)
-    {
-        
+    {     
         await SignOutManager.SetSignOutState();
         Navigation.NavigateTo("authentication/logout");
     }
