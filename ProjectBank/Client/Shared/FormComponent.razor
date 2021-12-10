@@ -36,7 +36,6 @@
     private async Task HandleValidSubmit()
     {
         string pattern = @"\b\w+\b";
-        //Regex.Split(tagListString, @"\W");
         ICollection<string> tags = new List<string>();
         foreach (Match match in Regex.Matches(tagListString, pattern))
         {
