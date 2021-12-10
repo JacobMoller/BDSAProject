@@ -138,7 +138,6 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
         var actual = await _projectRepository.ReadProjectByIdAsync(1);
 
-
         Assert.Equal(1, actual.Value.Id);
         Assert.Equal("Algo", actual.Value.Title);
         Assert.Equal("Active", actual.Value.Status);
