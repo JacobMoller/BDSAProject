@@ -5,7 +5,7 @@ using Microsoft.Identity.Web.Resource;
 using ProjectBank.Server.Model;
 
 namespace ProjectBank.Server.Controllers;
-
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
@@ -31,6 +31,7 @@ public class ProjectsController : ControllerBase
         => (await _projectRepository.ReadProjectByIdAsync(id)).ToActionResult();
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(typeof(ProjectDTO), StatusCodes.Status201Created)]
     public async Task<IActionResult> Post(CreateProjectDTO project)
     {

@@ -24,6 +24,5 @@ public class ApplyController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task Put(int projectId, [FromBody] ProjectDTO project) 
         => await _projectRepository.AddUserToProjectAsync(User.GetObjectId(), projectId); 
-        
 }
 
