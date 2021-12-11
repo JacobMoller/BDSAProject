@@ -5,12 +5,11 @@ public class Project
     [Key]
     public int Id { get; set; }
 
-    [Required]
-    [StringLength(50, ErrorMessage = "Title is too long")]
+    [Required(ErrorMessage = "Title is required")]
+    [StringLength(50, ErrorMessage = "Tihi migrations virker da :P")]
     public string Title { get; set; }
 
-    [Required]
-    [StringLength(500, ErrorMessage = "Description is too long")]
+    [StringLength(500, ErrorMessage = "Migrations virker :P")]
     public string? Description { get; set; }
 
     public Status Status { get; set; }

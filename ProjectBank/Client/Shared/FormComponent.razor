@@ -10,6 +10,7 @@
     <div class="mb-3">
         <label class="form-label">Title</label>
         <InputText id="title" class="form-control" @bind-Value="project.Title" />
+        <ValidationMessage For="@(()=>project.Title)" />
     </div>
 
     <div class="mb-3">
@@ -24,7 +25,8 @@
 </EditForm>
 
 
-@code {
+@code 
+{
     [Parameter]
     public CreateProjectDTO project { get; set; }
 
@@ -33,13 +35,7 @@
 
     private string tagListString = "";
 
-    private void HandleValidSubmit()
-    {
-        //Logger.LogInformation("HandleValidSubmit called");
-
-        HandleValidSubmit2();
-    }
-    private async Task HandleValidSubmit2() {
+    private async Task HandleValidSubmit() 
     {
         string pattern = @"\b\w+\b";
         ICollection<string> tags = new List<string>();
