@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 @inject HttpClient Http
+@inject IJSRuntime _jsRuntime
 
 <PageTitle>Project</PageTitle>
 
@@ -14,6 +15,7 @@
     {
         <div class="row">
             <div class="col-8">
+                <a @onclick="GoBack" class="btn btn-primary stretched-link" aria-hidden="true">Go Back</a>
                 <h1>@project.Title</h1>
                 <h3>By @user.Name</h3>
                 <h4>Tags
@@ -26,15 +28,15 @@
             </div>
             <AuthorizeView Roles="Student">
                 <Authorized>
-                    <div class="col"> 
-                    @if (!Applied)
-                    {
-                        <button class="btn btn-primary px-4 mt-2" type="submit" @onclick="Apply">@ApplyText</button>
-                    }
-                    else
-                    {
-                        <button class="btn btn-secondary px-4 mt-2" disabled>@ApplyText</button>
-                    }
+                    <div class="col">
+                        @if (!Applied)
+                        {
+                            <button class="btn btn-primary px-4 mt-2" type="submit" @onclick="Apply">@ApplyText</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary px-4 mt-2" disabled>@ApplyText</button>
+                        }
                     </div>
                 </Authorized>
             </AuthorizeView>
@@ -53,9 +55,15 @@
     private async void Apply()
     {
         //take id from student user and make a connection with the project
-        if(Id != 0 && !ProjectFullCheck() && !UserIsParticipant()) {
+        if (Id != 0 && !ProjectFullCheck() && !UserIsParticipant())
+        {
             var response = await Http.PutAsJsonAsync($"api/Apply/{Id}", project);
         }
+    }
+
+    private void GoBack()
+    {
+        _jsRuntime.InvokeVoidAsync("history.go", -1);
     }
 
     protected override async Task OnParametersSetAsync()
@@ -63,7 +71,7 @@
         if (Id != 0)
         {
             project = await Http.GetFromJsonAsync<ProjectDTO>($"api/projects/{Id}");
-            if(project != null) 
+            if (project != null)
             {
                 user = await Http.GetFromJsonAsync<UserDetailsDTO>($"api/User/{project.SupervisorId}");
             }
@@ -74,8 +82,10 @@
         await base.OnParametersSetAsync();
     }
 
-    bool ProjectFullCheck() {
-        if(project.Participants.Count == 5){
+    bool ProjectFullCheck()
+    {
+        if (project.Participants.Count == 5)
+        {
             ApplyText = "Applied";
             Applied = true;
             return true;
@@ -83,11 +93,13 @@
         return false;
     }
 
-    bool UserIsParticipant(){
+    bool UserIsParticipant()
+    {
         string UserId = "1"; //TODO: replace this with the actual userid
         for (int i = 0; i < project.Participants.Count; i++)
         {
-            if(project.Participants.ElementAt(i).Id == UserId){
+            if (project.Participants.ElementAt(i).Id == UserId)
+            {
                 ApplyText = "Applied";
                 Applied = true;
                 return true;
