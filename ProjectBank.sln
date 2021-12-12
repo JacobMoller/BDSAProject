@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1700.0
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -15,7 +15,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBank.Shared", "ProjectBank\Shared\ProjectBank.Shared.csproj", "{6B0C34A5-831D-4FF4-A4B4-4379C92EDB00}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBank.Infrastructure.Tests", "ProjectBank\Infrastructure.Tests\ProjectBank.Infrastructure.Tests.csproj", "{0871B4EA-9E51-4858-ACCE-04C53BA1C98C}"
-
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Tests", "ProjectBank\Server.Tests\Server.Tests.csproj", "{C6274278-D372-4494-A769-DCCE90AB3A6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,7 +52,10 @@ Global
 		{0871B4EA-9E51-4858-ACCE-04C53BA1C98C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0871B4EA-9E51-4858-ACCE-04C53BA1C98C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0871B4EA-9E51-4858-ACCE-04C53BA1C98C}.Release|Any CPU.Build.0 = Release|Any CPU
-
+		{C6274278-D372-4494-A769-DCCE90AB3A6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6274278-D372-4494-A769-DCCE90AB3A6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6274278-D372-4494-A769-DCCE90AB3A6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6274278-D372-4494-A769-DCCE90AB3A6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,14 +63,13 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1CD811B3-B952-4D2C-8F7A-BDA8E176D655}
 	EndGlobalSection
-
-	GlobalSection(NestedProjects) = preSolution	
+	GlobalSection(NestedProjects) = preSolution
 		{542A63C0-EB53-4D26-9398-3224432CEFCF} = {1379DA28-D63C-49FB-8771-6A282921E8FF}
 		{FE95C49E-6A90-4F17-AA28-0C8BCAD24ED7} = {1379DA28-D63C-49FB-8771-6A282921E8FF}
 		{78DB1044-BCC9-40AB-A76C-2EF7889C0CFF} = {1379DA28-D63C-49FB-8771-6A282921E8FF}
 		{FF906ED0-0666-4735-8894-6B3C2003128C} = {1379DA28-D63C-49FB-8771-6A282921E8FF}
 		{6B0C34A5-831D-4FF4-A4B4-4379C92EDB00} = {1379DA28-D63C-49FB-8771-6A282921E8FF}
 		{0871B4EA-9E51-4858-ACCE-04C53BA1C98C} = {1379DA28-D63C-49FB-8771-6A282921E8FF}
-
+		{C6274278-D372-4494-A769-DCCE90AB3A6A} = {1379DA28-D63C-49FB-8771-6A282921E8FF}
 	EndGlobalSection
 EndGlobal
