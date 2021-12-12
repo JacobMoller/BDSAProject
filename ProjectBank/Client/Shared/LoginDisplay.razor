@@ -10,9 +10,9 @@
             Hello, @context.User.Identity?.Name!
         </div>
         <div class="nav-item p-3" @onclick="BeginLogout">
-            <NavLink class="nav-link btn btn-light" href="Login">
+            <div class="nav-link btn btn-light">
                 <span class="oi oi-account-logout" aria-hidden="true"></span> Log out
-            </NavLink>
+            </div>
         </div>
     </Authorized>
 </AuthorizeView>
