@@ -36,6 +36,11 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         var expected = Response.Deleted;
 
         Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public async Task DeleteProjectById_given_not_existing_returns_NotFound()
+    {
         Assert.Equal(Response.NotFound, await _projectRepository.DeleteProjectByIdAsync(1));
     }
 
@@ -284,8 +289,15 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         var expected = await _context.Users.FindAsync("1");
 
         Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public async Task AddUserToProject_given_not_exitsting_studentID_returns_NotFound()
+    {
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", SupervisorId = "1", Description = "Very fun", Tags = new List<string> { "Sorting" } });
         Assert.Equal(Response.NotFound, await _projectRepository.AddUserToProjectAsync("2", 1));
     }
+
 
     [Fact]
     public async Task AddUserToProject_with_5_users_changes_status_to_closed()
