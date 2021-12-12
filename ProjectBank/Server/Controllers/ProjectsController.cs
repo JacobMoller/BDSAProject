@@ -11,7 +11,8 @@ public class ProjectsController : ControllerBase
     public ProjectsController(IProjectRepository repo)
     {
         _projectRepository = repo;
-        GetObjectId = () => User.GetObjectId();
+        GetObjectId = () =>
+            User.GetObjectId() == null ? "1" : User.GetObjectId();
     }
 
     [HttpGet]
