@@ -12,6 +12,8 @@
 **/.DS_Store
 **/.local
 ProjectBank/Infrastructure.Tests/Reports/*
+ProjectBank/Server.Tests/Reports/*
+ProjectBank/Server.Integration.Tests/Reports/*
 **/.vscode
 
 

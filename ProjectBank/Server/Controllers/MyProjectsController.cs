@@ -19,6 +19,6 @@ public class MyProjectsController : ControllerBase
     [ProducesResponseType(typeof(List<ProjectDTO>), StatusCodes.Status200OK)]
     [HttpGet]
     public async Task<List<ProjectDTO>> Get()
-            => (await _projectRepository.ReadProjectsBySupervisorIdAsync(User.GetObjectId())).ToList();
+            => (await _projectRepository.ReadProjectsBySupervisorIdAsync(GetObjectId())).ToList();
 }
 
