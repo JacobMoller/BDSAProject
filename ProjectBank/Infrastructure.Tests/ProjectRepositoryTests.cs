@@ -43,14 +43,15 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", SupervisorId = "1", Description = "Very fun", Tags = new List<string> { "Sorting" } });
         await _projectRepository.EditProjectAsync(1, new UpdateProjectDTO { Id = 1, Title = "Something else than Algo", Description = "Not sorting", SupervisorId = "1", Tags = new List<string> { "Economy", "Math" } });
         var editedProjectWithTags = await _context.Projects.FindAsync(1);
-
-        Assert.Equal(1, editedProjectWithTags.Id);
-        Assert.Equal("Something else than Algo", editedProjectWithTags.Title);
-        Assert.Equal(Status.Active, editedProjectWithTags.Status);
-        Assert.Equal("1", editedProjectWithTags.SupervisorId);
-        Assert.Equal("Not sorting", editedProjectWithTags.Description);
+        
+        Assert.NotNull(editedProjectWithTags);
+        Assert.Equal(1, editedProjectWithTags?.Id);
+        Assert.Equal("Something else than Algo", editedProjectWithTags?.Title);
+        Assert.Equal(Status.Active, editedProjectWithTags?.Status);
+        Assert.Equal("1", editedProjectWithTags?.SupervisorId);
+        Assert.Equal("Not sorting", editedProjectWithTags?.Description);
         Assert.Equal(DateTime.UtcNow, editedProjectWithTags.UpdatedDate, precision: TimeSpan.FromSeconds(5));
-        Assert.Equal(new List<string>() { "Economy", "Math" }, editedProjectWithTags.Tags.Select(tag => new string(tag.Name)).ToList());
+        Assert.Equal(new List<string>() { "Economy", "Math" }, editedProjectWithTags?.Tags?.Select(tag => new string(tag.Name)).ToList());
     }
 
     [Fact]
@@ -61,13 +62,14 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         await _projectRepository.EditProjectAsync(1, new UpdateProjectDTO { Id = 1, Title = "Algo", SupervisorId = "1", Description = "Very fun", Tags = new List<string> { "Sorting", "Economy", "Math" } });
         var editedProjectWithTags = await _context.Projects.FindAsync(1);
 
-        Assert.Equal(1, editedProjectWithTags.Id);
-        Assert.Equal("Algo", editedProjectWithTags.Title);
-        Assert.Equal(Status.Active, editedProjectWithTags.Status);
-        Assert.Equal("1", editedProjectWithTags.SupervisorId);
-        Assert.Equal("Very fun", editedProjectWithTags.Description);
+        Assert.NotNull(editedProjectWithTags);
+        Assert.Equal(1, editedProjectWithTags?.Id);
+        Assert.Equal("Algo", editedProjectWithTags?.Title);
+        Assert.Equal(Status.Active, editedProjectWithTags?.Status);
+        Assert.Equal("1", editedProjectWithTags?.SupervisorId);
+        Assert.Equal("Very fun", editedProjectWithTags?.Description);
         Assert.Equal(DateTime.UtcNow, editedProjectWithTags.UpdatedDate, precision: TimeSpan.FromSeconds(5));
-        Assert.Equal(new List<string>() { "Sorting", "Economy", "Math" }, editedProjectWithTags.Tags.Select(tag => new string(tag.Name)).ToList());
+        Assert.Equal(new List<string>() { "Sorting", "Economy", "Math" }, editedProjectWithTags?.Tags?.Select(tag => new string(tag.Name)).ToList());
     }
 
     [Fact]
@@ -77,13 +79,14 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         await _projectRepository.EditProjectAsync(1, new UpdateProjectDTO { Id = 1, Title = "DMAT 2", SupervisorId = "2", Description = "Very fun" });
         var editedProjectWithoutTags = await _context.Projects.FindAsync(1);
 
-        Assert.Equal(1, editedProjectWithoutTags.Id);
-        Assert.Equal("DMAT 2", editedProjectWithoutTags.Title);
-        Assert.Equal(Status.Active, editedProjectWithoutTags.Status);
-        Assert.Equal("2", editedProjectWithoutTags.SupervisorId);
-        Assert.Equal("Very fun", editedProjectWithoutTags.Description);
+        Assert.NotNull(editedProjectWithoutTags);
+        Assert.Equal(1, editedProjectWithoutTags?.Id);
+        Assert.Equal("DMAT 2", editedProjectWithoutTags?.Title);
+        Assert.Equal(Status.Active, editedProjectWithoutTags?.Status);
+        Assert.Equal("2", editedProjectWithoutTags?.SupervisorId);
+        Assert.Equal("Very fun", editedProjectWithoutTags?.Description);
         Assert.Equal(DateTime.UtcNow, editedProjectWithoutTags.UpdatedDate, precision: TimeSpan.FromSeconds(5));
-        Assert.Equal(new List<string>(), editedProjectWithoutTags.Tags.Select(tag => new string(tag.Name)).ToList());
+        Assert.Equal(new List<string>(), editedProjectWithoutTags?.Tags?.Select(tag => new string(tag.Name)).ToList());
     }
 
     [Fact]
@@ -274,7 +277,9 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         await _projectRepository.CloseProjectByIdAsync(1);
 
         var expected = Status.Closed;
-        var actual = _context.Projects.Find(1).Status;
+        var actualProject = _context.Projects.Find(1);
+        Assert.NotNull(actualProject);
+        var actual = actualProject?.Status;
 
         Assert.Equal(expected, actual);
 
@@ -289,12 +294,14 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         await _projectRepository.AddUserToProjectAsync("2", 1);
 
         var project = await _context.Projects.FindAsync(1);
+        Assert.NotNull(project);
 
-        var actual = project.Participants.ElementAt(0);
+        var actual = project?.Participants?.ElementAt(0);
         var expected = await _context.Users.FindAsync("1");
+        Assert.NotNull(actual);
 
         Assert.Equal(expected, actual);
-        Assert.Throws<System.ArgumentOutOfRangeException>(() => project.Participants.ElementAt(1));
+        Assert.Throws<System.ArgumentOutOfRangeException>(() => project?.Participants?.ElementAt(1));
     }
 
     [Fact]
@@ -316,11 +323,11 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
         var project = await _context.Projects.FindAsync(1);
 
-        var actual = project.Status;
+        var actual = project?.Status;
         var expected = Status.Closed;
 
         Assert.Equal(expected, actual);
-        Assert.Equal(5, project.Participants.Count());
+        Assert.Equal(5, project?.Participants?.Count());
     }
 
     public void Dispose()
