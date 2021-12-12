@@ -69,7 +69,7 @@
     }
 
     bool ProjectFullCheck() {
-        if(project.Participants.Count == 5){
+        if(project != null && project.Participants.Count == 5){
             ApplyText = "Applied";
             Applied = true;
             return true;
@@ -79,12 +79,14 @@
 
     bool UserIsParticipant(){
         string UserId = "1"; //TODO: replace this with the actual userid
-        for (int i = 0; i < project.Participants.Count; i++)
-        {
-            if(project.Participants.ElementAt(i).Id == UserId){
-                ApplyText = "Applied";
-                Applied = true;
-                return true;
+        if(project != null){
+            for (int i = 0; i < project.Participants.Count; i++)
+            {
+                if(project.Participants.ElementAt(i).Id == UserId){
+                    ApplyText = "Applied";
+                    Applied = true;
+                    return true;
+                }
             }
         }
         return false;

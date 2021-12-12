@@ -17,10 +17,12 @@
     protected override async Task OnInitializedAsync()
     {
         var tempProject = await Http.GetFromJsonAsync<ProjectDTO>($"api/projects/{Id}");
-        Project.Title = tempProject.Title;
-        Project.Description = tempProject.Description;
-        Project.SupervisorId = tempProject.SupervisorId;
-        Project.Tags = tempProject.Tags.ToList();
-        Project.Id = tempProject.Id;
+        if(tempProject != null){
+            Project.Title = tempProject.Title;
+            Project.Description = tempProject.Description;
+            Project.SupervisorId = tempProject.SupervisorId;
+            Project.Tags = tempProject.Tags.ToList();
+            Project.Id = tempProject.Id;
+        }
     }
 }

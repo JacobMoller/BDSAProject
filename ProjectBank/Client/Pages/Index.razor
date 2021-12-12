@@ -81,7 +81,7 @@
         var authState = await authenticationStateTask;
         var userAuth = authState.User;
 
-        if(userAuth.Identity.IsAuthenticated)
+        if(userAuth.Identity != null && userAuth.Identity.IsAuthenticated)
         {
             projects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/projects");
         }
@@ -94,7 +94,7 @@
     // execute conditionally for loading data, otherwise this will load
     // every time the page refreshes
     
-    if(firstRender && userAuth.Identity.IsAuthenticated)
+    if(firstRender && userAuth.Identity != null && userAuth.Identity.IsAuthenticated)
     {
             await RegisterUser();
         // Do work to load page data and set properties
