@@ -35,7 +35,7 @@ public class ProjectsController : ControllerBase
     [ProducesResponseType(typeof(ProjectDTO), StatusCodes.Status201Created)]
     public async Task<IActionResult> Post(CreateProjectDTO project)
     {
-        project.UserId = User.GetObjectId();
+        project.SupervisorId = User.GetObjectId();
 
         var created = await _projectRepository.CreateProjectAsync(project);
 

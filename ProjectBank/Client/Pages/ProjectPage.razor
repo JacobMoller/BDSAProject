@@ -1,7 +1,8 @@
 ﻿@page "/project/{Id:int}"
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize] 
+@attribute [Authorize]
 @inject HttpClient Http
+@inject IJSRuntime _jsRuntime
 
 <PageTitle>Project</PageTitle>
 
@@ -14,8 +15,9 @@
     {
         <div class="row">
             <div class="col-8">
+                <a @onclick="GoBack" class="btn btn-primary stretched-link" aria-hidden="true">Go Back</a>
                 <h1>@project.Title</h1>
-                <h3>By @project.UserId</h3>
+                <h3>By @user.Name</h3>
                 <h4>Tags
                     @foreach (var tag in project.Tags)
                     {
@@ -26,8 +28,15 @@
             </div>
             <AuthorizeView Roles="Student">
                 <Authorized>
-                    <div class="col"> 
-                        <button class="btn btn-primary px-4 mt-2" type="submit" @onclick="Apply">@ApplyText</button>
+                    <div class="col">
+                        @if (!Applied)
+                        {
+                            <button class="btn btn-primary px-4 mt-2" type="submit" @onclick="Apply">@ApplyText</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary px-4 mt-2" disabled>@ApplyText</button>
+                        }
                     </div>
                 </Authorized>
             </AuthorizeView>
@@ -39,17 +48,22 @@
     [Parameter]
     public int Id { get; set; }
     private ProjectDTO? project;
-    private string ApplyText = "Apply";
+    private UserDetailsDTO? user;
 
+    private string ApplyText = "Apply";
+    private bool Applied;
     private async void Apply()
     {
         //take id from student user and make a connection with the project
-        var response = await Http.PutAsJsonAsync($"api/Apply/{Id}", project);
+        if (Id != 0 && !ProjectFullCheck() && !UserIsParticipant())
+        {
+            var response = await Http.PutAsJsonAsync($"api/Apply/{Id}", project);
+        }
+    }
 
-        //if(response == good){
-            ApplyText = "Applied";
-        //}
-
+    private void GoBack()
+    {
+        _jsRuntime.InvokeVoidAsync("history.go", -1);
     }
 
     protected override async Task OnParametersSetAsync()
@@ -57,8 +71,40 @@
         if (Id != 0)
         {
             project = await Http.GetFromJsonAsync<ProjectDTO>($"api/projects/{Id}");
+            if (project != null)
+            {
+                user = await Http.GetFromJsonAsync<UserDetailsDTO>($"api/User/{project.SupervisorId}");
+            }
         }
+        ProjectFullCheck();
+        UserIsParticipant();
 
         await base.OnParametersSetAsync();
+    }
+
+    bool ProjectFullCheck()
+    {
+        if (project.Participants.Count == 5)
+        {
+            ApplyText = "Applied";
+            Applied = true;
+            return true;
+        }
+        return false;
+    }
+
+    bool UserIsParticipant()
+    {
+        string UserId = "1"; //TODO: replace this with the actual userid
+        for (int i = 0; i < project.Participants.Count; i++)
+        {
+            if (project.Participants.ElementAt(i).Id == UserId)
+            {
+                ApplyText = "Applied";
+                Applied = true;
+                return true;
+            }
+        }
+        return false;
     }
 }

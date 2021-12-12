@@ -1,7 +1,7 @@
 namespace ProjectBank.Core;
 
 public record UserDTO(string Id, string? Name);
-public record UserDetailsDTO(string Id, string? Name, Role? Role);
+public record UserDetailsDTO(string Id, string? Name, string? Role);
 public record CreateUserDTO
 {
     public string? Id{ get; set;} 

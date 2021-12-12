@@ -40,26 +40,25 @@ public static class SeedExtensions
         {
             Title = "Super Fun Project",
             Description = "Fun",
-            UserId = "1",
+            SupervisorId = "1",
             Tags = new List<string>() { "Algorithm", "Economy" }
         });
         await ProjectRepository.CreateProjectAsync(new CreateProjectDTO
         {
             Title = "Super Participants Project",
             Description = "People",
-            UserId = "2",
+            SupervisorId = "2",
             Tags = new List<string>() { "Algorithm", "Math" }
         });
         await ProjectRepository.CreateProjectAsync(new CreateProjectDTO
         {
             Title = "Super Closed Project",
             Description = "I was a fun project",
-            UserId = "2",
+            SupervisorId = "2",
             Tags = new List<string>() { "Math" }
         });
         await ProjectRepository.AddUserToProjectAsync("1", 2);
         await ProjectRepository.AddUserToProjectAsync("2", 2);
-        await ProjectRepository.CloseProjectByIdAsync(3);
         await ProjectRepository.EditProjectAsync(1, new UpdateProjectDTO()
         {
             Id = 1,
@@ -71,7 +70,7 @@ public static class SeedExtensions
         {
             Title = "Super Enjoyable Project",
             Description = "Very cool description",
-            UserId = "2",
+            SupervisorId = "2",
             Tags = new List<string>() { "DMAT" }
         });
     }

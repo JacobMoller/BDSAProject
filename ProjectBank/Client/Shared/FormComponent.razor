@@ -3,71 +3,84 @@
 
 
 
-        <EditForm Model="@project" OnValidSubmit="@HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+<EditForm Model="@project" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
 
-            <div class="mb-3">
-                <label class="form-label">Title</label>
-                <InputText id="title" class="form-control" @bind-Value="project.Title" />
-            </div>
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <InputText id="title" class="form-control" @bind-Value="project.Title" />
+    </div>
 
-            <div class="mb-3">
-                <label class="form-label">Description</label>
-                    <InputTextArea id="description" class="form-control" @bind-Value="project.Description" />
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Tags</label>
-                    <InputText id="tags" class="form-control" @bind-Value="@tagListString"/>
-            </div>
-            <button type="submit" class="btn btn-success">@ButtonName</button>
-        </EditForm> 
-  
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <InputTextArea id="description" class="form-control" @bind-Value="project.Description" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Tags</label>
+        <InputText id="tags" class="form-control" @bind-Value="@tagListString" />
+    </div>
+    <button type="submit" class="btn btn-success">@ButtonName</button>
+</EditForm>
+
 
 @code {
     [Parameter]
-    public CreateProjectDTO project {get; set;}
+    public CreateProjectDTO project { get; set; }
 
     [Parameter]
-    public string ButtonName {get; set;}
+    public string ButtonName { get; set; }
 
     private string tagListString = "";
 
-    private async Task HandleValidSubmit() {
-        string[] tags = Regex.Split(tagListString, @"\W");  
+    private async Task HandleValidSubmit()
+    {
+        string pattern = @"\b\w+\b";
+        ICollection<string> tags = new List<string>();
+        foreach (Match match in Regex.Matches(tagListString, pattern))
+        {
+            tags.Add(match.Value);
+        }
+
         project.Tags = tags;
 
-        if (project is UpdateProjectDTO){
-            var updateProject = (UpdateProjectDTO) project;
+        if (project is UpdateProjectDTO)
+        {
+            var updateProject = (UpdateProjectDTO)project;
             var response = await Http.PutAsJsonAsync($"api/Projects/{updateProject.Id}", updateProject);
 
-            if(response.IsSuccessStatusCode){
+            if (response.IsSuccessStatusCode)
+            {
                 var uri = $"{NavigationManager.BaseUri}/MyProjects";
 
                 NavigationManager.NavigateTo(uri);
             }
-        } else if(project is CreateProjectDTO){
+        }
+        else if (project is CreateProjectDTO)
+        {
             var response = await Http.PostAsJsonAsync("api/Projects", project);
 
-            if(response.IsSuccessStatusCode){
+            if (response.IsSuccessStatusCode)
+            {
                 var created = await response.Content.ReadFromJsonAsync<ProjectDTO>();
 
                 var uri = $"{NavigationManager.BaseUri}/MyProjects";
 
                 NavigationManager.NavigateTo(uri);
             }
-        } 
-    
+        }
+
     }
-    
-    protected override async Task OnParametersSetAsync() 
+
+    protected override async Task OnParametersSetAsync()
     {
-        if (project.Tags != null) {
+        if (project.Tags != null)
+        {
             foreach (var tag in project.Tags)
             {
                 tagListString += tag + ", ";
             }
-            tagListString = tagListString.TrimEnd(',',' ');
+            tagListString = tagListString.TrimEnd(',', ' ');
         }
     }
 }
