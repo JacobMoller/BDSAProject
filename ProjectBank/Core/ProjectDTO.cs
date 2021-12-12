@@ -3,6 +3,7 @@ public record ProjectDTO(int Id, string Title, string Status, string SupervisorI
 
 public record CreateProjectDTO
 {
+    [Required]
     [StringLength(50)]
     public string? Title { get; set; }
 

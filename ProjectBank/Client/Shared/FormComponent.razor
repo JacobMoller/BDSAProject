@@ -5,7 +5,6 @@
 
 <EditForm Model="@project" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
-    <ValidationSummary />
 
     <div class="mb-3">
         <label class="form-label">Title</label>
@@ -16,6 +15,7 @@
     <div class="mb-3">
         <label class="form-label">Description</label>
         <InputTextArea id="description" class="form-control" @bind-Value="project.Description" />
+        <ValidationMessage For="@(()=>project.Description)" />
     </div>
     <div class="mb-3">
         <label class="form-label">Tags</label>
