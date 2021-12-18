@@ -69,7 +69,7 @@ public class ProjectTests : IClassFixture<CustomWebApplicationFactory>
         Assert.Equal("Test", project.Title);
     }
 
-    public async Task Delete_returns_specific_project()
+    public async Task Delete_returns_Status_NoContent()
     {
         var response = await _client.DeleteAsync("api/projects/1");
         var project = await _client.GetFromJsonAsync<ProjectDTO>("/api/projects/1");

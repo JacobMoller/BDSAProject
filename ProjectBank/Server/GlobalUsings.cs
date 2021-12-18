@@ -12,12 +12,3 @@ global using ProjectBank.Shared;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.Identity.Web;
 global using static ProjectBank.Core.Response;
-
-
-
-
-
-
-
-
-
