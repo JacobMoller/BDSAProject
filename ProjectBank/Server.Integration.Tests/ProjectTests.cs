@@ -67,6 +67,8 @@ public class ProjectTests : IClassFixture<CustomWebApplicationFactory>
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         Assert.Equal("Test", project.Title);
+        Assert.Equal(2, project.Id);
+
     }
 
     public async Task Delete_returns_Status_NoContent()

@@ -2,6 +2,7 @@ namespace Server.Tests;
 
 public class ProjectsControllerTests
 {
+    Mock<IProjectRepository> repository = new Mock<IProjectRepository>();
 
     [Fact]
     public async Task Post_creates_Project()
@@ -9,7 +10,6 @@ public class ProjectsControllerTests
         // Arrange
         var toCreate = new CreateProjectDTO();
         var created = new ProjectDTO(1, "Very nice project", "Active", "1", "A created project", DateTime.UtcNow, DateTime.UtcNow, new List<string>(), new List<UserDTO>());
-        var repository = new Mock<IProjectRepository>();
         repository.Setup(m => m.CreateProjectAsync(toCreate)).ReturnsAsync(created);
         var controller = new ProjectsController(repository.Object) { GetObjectId = () => "1" };
 
@@ -26,8 +26,9 @@ public class ProjectsControllerTests
     public async Task Get_returns_Projects_from_repo()
     {
         // Arrange
-        var expected = Array.Empty<ProjectDTO>();
-        var repository = new Mock<IProjectRepository>();
+        var project0 = new ProjectDTO(1, "Very nice project", "Active", "1", "A created project", DateTime.UtcNow, DateTime.UtcNow, new List<string>(), new List<UserDTO>());
+        var project1 = new ProjectDTO(2, "Very very nice project", "Active", "1", "A created project", DateTime.UtcNow, DateTime.UtcNow, new List<string>(), new List<UserDTO>());
+        var expected = new List<ProjectDTO>() { project0, project1 };
         repository.Setup(m => m.ReadAllAsync()).ReturnsAsync(expected);
         var controller = new ProjectsController(repository.Object);
 
@@ -42,7 +43,6 @@ public class ProjectsControllerTests
     public async Task Get_given_non_existing_returns_NotFound()
     {
         // Arrange
-        var repository = new Mock<IProjectRepository>();
         repository.Setup(m => m.ReadProjectByIdAsync(42)).ReturnsAsync(default(ProjectDTO));
         var controller = new ProjectsController(repository.Object);
 
@@ -57,7 +57,6 @@ public class ProjectsControllerTests
     public async Task Get_given_existing_returns_project()
     {
         // Arrange
-        var repository = new Mock<IProjectRepository>();
         var project = new ProjectDTO(1, "Very nice project", "Active", "1", "A created project", DateTime.UtcNow, DateTime.UtcNow, new List<string>(), new List<UserDTO>());
         repository.Setup(m => m.ReadProjectByIdAsync(1)).ReturnsAsync(project);
         var controller = new ProjectsController(repository.Object);
@@ -74,7 +73,6 @@ public class ProjectsControllerTests
     {
         // Arrange
         var project = new UpdateProjectDTO();
-        var repository = new Mock<IProjectRepository>();
         repository.Setup(m => m.EditProjectAsync(1, project)).ReturnsAsync(Response.Updated);
         var controller = new ProjectsController(repository.Object);
 
@@ -90,7 +88,6 @@ public class ProjectsControllerTests
     {
         // Arrange
         var project = new UpdateProjectDTO();
-        var repository = new Mock<IProjectRepository>();
         repository.Setup(m => m.EditProjectAsync(1, project)).ReturnsAsync(Response.NotFound);
         var controller = new ProjectsController(repository.Object);
 
@@ -105,7 +102,6 @@ public class ProjectsControllerTests
     public async Task Delete_given_non_existing_returns_NotFound()
     {
         // Arrange
-        var repository = new Mock<IProjectRepository>();
         repository.Setup(m => m.DeleteProjectByIdAsync(42)).ReturnsAsync(Response.NotFound);
         var controller = new ProjectsController(repository.Object);
 
@@ -120,7 +116,6 @@ public class ProjectsControllerTests
     public async Task Delete_given_existing_returns_NoContent()
     {
         // Arrange
-        var repository = new Mock<IProjectRepository>();
         repository.Setup(m => m.DeleteProjectByIdAsync(1)).ReturnsAsync(Response.Deleted);
         var controller = new ProjectsController(repository.Object);
 

@@ -2,14 +2,14 @@ namespace Server.Tests;
 
 public class UserControllerTests
 {
+    Mock<IUserRepository> repository = new Mock<IUserRepository>();
+
     [Fact]
     public async Task Post_creates_User()
     {
         // Arrange
         var toCreate = new CreateUserDTO();
         var created = new UserDTO("1", "Alice");
-
-        var repository = new Mock<IUserRepository>();
         repository.Setup(m => m.CreateUserAsync(toCreate)).ReturnsAsync(created);
         var controller = new UserController(repository.Object) { GetObjectId = () => "1" };
 
@@ -18,14 +18,12 @@ public class UserControllerTests
 
         // Assert
         Assert.Equal(created, result?.Value);
-        Assert.Equal("Get", result?.ActionName);
     }
 
     [Fact]
     public async Task Get_given_existing_returns_project()
     {
         // Arrange
-        var repository = new Mock<IUserRepository>();
         var user = new UserDetailsDTO("1", "Alice", "Supervisor");
         repository.Setup(m => m.ReadUserByIdAsync("1")).ReturnsAsync(user);
         var controller = new UserController(repository.Object);
@@ -41,7 +39,6 @@ public class UserControllerTests
     public async Task Get_given_non_existing_returns_NotFound()
     {
         // Arrange
-        var repository = new Mock<IUserRepository>();
         repository.Setup(m => m.ReadUserByIdAsync("1")).ReturnsAsync(default(UserDetailsDTO));
         var controller = new UserController(repository.Object);
 
