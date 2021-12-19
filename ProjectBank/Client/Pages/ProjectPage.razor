@@ -31,7 +31,7 @@
                     <div class="col">
                         @if (!Applied)
                         {
-                            <button class="btn btn-primary px-4 mt-2" type="submit" @onclick="Apply">@ApplyText</button>
+                            <button class="btn btn-primary px-4 mt-2" type="submit" @onclick="Apply">hej</button>
                         }
                         else
                         {
@@ -54,6 +54,8 @@
     private bool Applied;
     private async void Apply()
     {
+        Applied = true;
+        ApplyText = "Applied";
         //take id from student user and make a connection with the project
         if (Id != 0 && !ProjectFullCheck() && !(await UserIsParticipant()))
         {
@@ -84,7 +86,7 @@
 
     bool ProjectFullCheck()
     {
-        if (project.Participants.Count == 0)
+        if (project.Participants.Count >= 5)
         {
             ApplyText = "Project Full";
             Applied = true;
