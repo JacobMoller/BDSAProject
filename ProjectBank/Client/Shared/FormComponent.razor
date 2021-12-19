@@ -2,7 +2,6 @@
 @inject HttpClient Http
 
 
-
 <EditForm Model="@project" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
 
@@ -34,6 +33,7 @@
     public string ButtonName { get; set; }
 
     private string tagListString = "";
+    private string ShowAlert;
 
     private async Task HandleValidSubmit() 
     {
@@ -63,11 +63,16 @@
 
             if (response.IsSuccessStatusCode)
             {
+                ShowAlert = "show";
+
                 var created = await response.Content.ReadFromJsonAsync<ProjectDTO>();
 
-                var uri = $"{NavigationManager.BaseUri}/MyProjects";
+                var uri = $"{NavigationManager.BaseUri}/createproject/{ShowAlert}";
 
                 NavigationManager.NavigateTo(uri);
+            } else if (!response.IsSuccessStatusCode){
+                ShowAlert = "fail";
+                var uri = $"{NavigationManager.BaseUri}/createproject/{ShowAlert}";
             }
         }
 

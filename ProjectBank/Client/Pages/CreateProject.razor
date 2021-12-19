@@ -1,4 +1,4 @@
-@page "/createproject"
+@page "/createproject/{created}"
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components
 @inject NavigationManager NavigationManager
@@ -9,9 +9,45 @@
 
 <PageTitle>Create Project</PageTitle>
 
-<h1>Create a new project</h1>
-<FormComponent Project="@Project" ButtonName="Create"/>
+
+@if(created == "show"){
+        <div class="alert alert-success alert-dismissible fade @created" role="alert" id="SuccessAlert">
+            <div class="d-flex justify-content-center m-3"> 
+            
+            <strong>Success!</strong> 
+            </div>
+            <div class="d-flex justify-content-center"> 
+                
+                   
+                Your project has been created successfully.
+            </div>
+        </div>
+} else if(created == "fail") {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" id="WarningAlert">
+            <div class="d-flex justify-content-center m-3"> 
+            
+            <strong>Unsuccessful!</strong> 
+            </div>
+            <div class="d-flex justify-content-center"> 
+                Sorry, something went wrong - please try to create the project again.
+            </div>
+        </div>
+
+}else {
+    <h1>Create a new project</h1>
+    <FormComponent Project="@Project" ButtonName="Create"/>
+}
+    
 
 @code {
+
+    [Parameter]
+    public string created{ get; set; }
+
+    protected override void OnParametersSet()
+    {
+    //the param will be set now
+        created  = created;
+    }
     private CreateProjectDTO Project = new();
 }
