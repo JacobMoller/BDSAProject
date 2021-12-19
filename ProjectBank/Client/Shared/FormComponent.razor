@@ -4,16 +4,17 @@
 
 <EditForm Model="@project" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
-    <ValidationSummary />
 
     <div class="mb-3">
         <label class="form-label">Title</label>
         <InputText id="title" class="form-control" @bind-Value="project.Title" />
+        <ValidationMessage For="@(()=>project.Title)" />
     </div>
 
     <div class="mb-3">
         <label class="form-label">Description</label>
         <InputTextArea id="description" class="form-control" @bind-Value="project.Description" />
+        <ValidationMessage For="@(()=>project.Description)" />
     </div>
     <div class="mb-3">
         <label class="form-label">Tags</label>
@@ -23,10 +24,8 @@
 </EditForm>
 
 
-
-
-
-@code {
+@code 
+{
     [Parameter]
     public CreateProjectDTO project { get; set; }
 
@@ -34,9 +33,9 @@
     public string ButtonName { get; set; }
 
     private string tagListString = "";
-
     private string ShowAlert;
-    private async Task HandleValidSubmit()
+
+    private async Task HandleValidSubmit() 
     {
         string pattern = @"\b\w+\b";
         ICollection<string> tags = new List<string>();
@@ -44,7 +43,6 @@
         {
             tags.Add(match.Value);
         }
-
         project.Tags = tags;
 
         if (project is UpdateProjectDTO)
