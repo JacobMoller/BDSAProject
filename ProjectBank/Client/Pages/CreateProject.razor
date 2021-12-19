@@ -12,19 +12,28 @@
 
 @if(created == "show"){
         <div class="alert alert-success alert-dismissible fade @created" role="alert" id="SuccessAlert">
-            <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-            <div class="nav-item p-3">
-                        <NavLink class="nav-link" href="MyProjects">
-                            <span class="oi oi-list-rich" aria-hidden="true"></span> Go To My Projects
-                        </NavLink>
-                    </div>
-                    <div class="nav-item p-3">
-                        <NavLink class="nav-link" href="/">
-                            <span class="oi oi-list-rich" aria-hidden="true"></span> Go to HomePage
-                        </NavLink>
-                 </div>
+            <div class="d-flex justify-content-center m-3"> 
+            
+            <strong>Success!</strong> 
+            </div>
+            <div class="d-flex justify-content-center"> 
+                
+                   
+                Your project has been created successfully.
+            </div>
         </div>
-} else {
+} else if(created == "fail") {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" id="WarningAlert">
+            <div class="d-flex justify-content-center m-3"> 
+            
+            <strong>Unsuccessful!</strong> 
+            </div>
+            <div class="d-flex justify-content-center"> 
+                Sorry, something went wrong - please try to create the project again.
+            </div>
+        </div>
+
+}else {
     <h1>Create a new project</h1>
     <FormComponent Project="@Project" ButtonName="Create"/>
 }
