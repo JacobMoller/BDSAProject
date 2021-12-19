@@ -8,7 +8,6 @@ global using Microsoft.Identity.Web.Resource;
 global using ProjectBank.Core;
 global using ProjectBank.Infrastructure;
 global using ProjectBank.Server.Model;
-global using ProjectBank.Shared;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.Identity.Web;
 global using static ProjectBank.Core.Response;

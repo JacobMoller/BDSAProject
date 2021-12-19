@@ -12,8 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBank.Core", "Project
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBank.Infrastructure", "ProjectBank\Infrastructure\ProjectBank.Infrastructure.csproj", "{FF906ED0-0666-4735-8894-6B3C2003128C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBank.Shared", "ProjectBank\Shared\ProjectBank.Shared.csproj", "{6B0C34A5-831D-4FF4-A4B4-4379C92EDB00}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBank.Infrastructure.Tests", "ProjectBank\Infrastructure.Tests\ProjectBank.Infrastructure.Tests.csproj", "{0871B4EA-9E51-4858-ACCE-04C53BA1C98C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Tests", "ProjectBank\Server.Tests\Server.Tests.csproj", "{C6274278-D372-4494-A769-DCCE90AB3A6A}"
