@@ -1,7 +1,18 @@
 ﻿@page "/authentication/{action}"
+@inject NavigationManager NavigationManager
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 <RemoteAuthenticatorView Action="@Action" />
 
 @code{
     [Parameter] public string? Action { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(Action == "logged-out"){
+            var uri = $"{NavigationManager.BaseUri}";
+
+            NavigationManager.NavigateTo(uri);
+        }
+       
+    }
 }
