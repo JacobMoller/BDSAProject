@@ -1,21 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ProjectBank.Shared;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Identity.Web.Resource;
-using ProjectBank.Server.Model;
-
-namespace ProjectBank.Server.Controllers;
+﻿namespace ProjectBank.Server.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
 [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
 public class ProjectsController : ControllerBase
 {
+    public Func<string> GetObjectId;
     private IProjectRepository _projectRepository;
 
     public ProjectsController(IProjectRepository repo)
     {
         _projectRepository = repo;
+        GetObjectId = () =>
+            User.GetObjectId() == null ? "1" : User.GetObjectId();
     }
 
     [HttpGet]
@@ -35,7 +32,7 @@ public class ProjectsController : ControllerBase
     [ProducesResponseType(typeof(ProjectDTO), StatusCodes.Status201Created)]
     public async Task<IActionResult> Post(CreateProjectDTO project)
     {
-        project.SupervisorId = User.GetObjectId();
+        project.SupervisorId = GetObjectId();
 
         var created = await _projectRepository.CreateProjectAsync(project);
 
@@ -45,13 +42,13 @@ public class ProjectsController : ControllerBase
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task Put(int id, [FromBody] UpdateProjectDTO project)
-        => await _projectRepository.EditProjectAsync(id, project);
+    public async Task<IActionResult> Put(int id, [FromBody] UpdateProjectDTO project)
+        => (await _projectRepository.EditProjectAsync(id, project)).ToActionResult();
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task Delete(int id)
-        => await _projectRepository.DeleteProjectByIdAsync(id);
+    public async Task<IActionResult> Delete(int id)
+        => (await _projectRepository.DeleteProjectByIdAsync(id)).ToActionResult();
 }
 
