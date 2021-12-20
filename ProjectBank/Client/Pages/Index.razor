@@ -94,7 +94,7 @@
 
         if(userAuth.Identity.IsAuthenticated)
         {
-            yourProjects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/apply");
+            yourProjects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/Student");
             projects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/projects");
         }
 }

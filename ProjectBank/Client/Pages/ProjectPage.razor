@@ -57,7 +57,7 @@
         //take id from student user and make a connection with the project
         if (Id != 0 && !ProjectFullCheck() && !UserIsParticipant())
         {
-            var response = await Http.PutAsJsonAsync($"api/Apply/{Id}", project);
+            var response = await Http.PutAsJsonAsync($"api/Student/{Id}");
         }
     }
 

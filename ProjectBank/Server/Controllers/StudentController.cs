@@ -4,12 +4,12 @@ namespace ProjectBank.Server.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-public class ApplyController : ControllerBase
+public class StudentController : ControllerBase
 {
     public Func<string> GetObjectId;
     private IProjectRepository _projectRepository;
 
-    public ApplyController(IProjectRepository repo)
+    public StudentController(IProjectRepository repo)
     {
         _projectRepository = repo;
         GetObjectId = () =>
@@ -19,7 +19,7 @@ public class ApplyController : ControllerBase
     [HttpPut("{projectId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Put(int projectId, [FromBody] ProjectDTO project)
+    public async Task<IActionResult> Put(int projectId)
         => (await _projectRepository.AddUserToProjectAsync(GetObjectId(), projectId)).ToActionResult();
 
     [HttpGet]
