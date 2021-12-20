@@ -4,12 +4,12 @@ namespace ProjectBank.Server.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-public class ApplyController : ControllerBase
+public class StudentController : ControllerBase
 {
     public Func<string> GetObjectId;
     private IProjectRepository _projectRepository;
 
-    public ApplyController(IProjectRepository repo)
+    public StudentController(IProjectRepository repo)
     {
         _projectRepository = repo;
         GetObjectId = () =>

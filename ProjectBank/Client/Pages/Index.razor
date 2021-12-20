@@ -92,7 +92,7 @@
 
         if(userAuth.Identity.IsAuthenticated)
         {
-            yourProjects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/apply");
+            yourProjects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/Student");
             projects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/projects");
         }
 }
@@ -122,9 +122,6 @@
         } else {
             user.Role = Role.Supervisor;       
         }
-
-        
-        //var codestring = code.ToString();
         
         user.Name = userAuth.Identity?.Name;
         
