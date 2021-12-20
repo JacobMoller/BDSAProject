@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Identity.Web.Resource;
-
 namespace ProjectBank.Server.Controllers;
 
 [ApiController]
@@ -9,11 +6,12 @@ namespace ProjectBank.Server.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserRepository _repository;
+    public Func<string> GetObjectId;
 
     public UserController(IUserRepository repository)
     {
-
         _repository = repository;
+        GetObjectId = () => User.GetObjectId();
     }
 
     [AllowAnonymous]
@@ -28,7 +26,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(UserDetailsDTO), 201)]
     public async Task<IActionResult> Post(CreateUserDTO user)
     {
-        user.Id = User.GetObjectId();
+        user.Id = GetObjectId();
 
         var created = await _repository.CreateUserAsync(user);
 

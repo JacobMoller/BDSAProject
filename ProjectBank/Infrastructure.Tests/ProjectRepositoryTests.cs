@@ -32,9 +32,16 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     {
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", SupervisorId = "1", Description = "Very fun", Tags = new List<string> { "Sorting" } });
 
-        await _projectRepository.DeleteProjectByIdAsync(1);
+        var actual = await _projectRepository.DeleteProjectByIdAsync(1);
+        var expected = Response.Deleted;
 
-        Assert.Null(_context.Projects.Find(1));
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public async Task DeleteProjectById_given_not_existing_returns_NotFound()
+    {
+        Assert.Equal(Response.NotFound, await _projectRepository.DeleteProjectByIdAsync(1));
     }
 
     [Fact]
@@ -42,6 +49,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     {
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", SupervisorId = "1", Description = "Very fun", Tags = new List<string> { "Sorting" } });
         await _projectRepository.EditProjectAsync(1, new UpdateProjectDTO { Id = 1, Title = "Something else than Algo", Description = "Not sorting", SupervisorId = "1", Tags = new List<string> { "Economy", "Math" } });
+<<<<<<< HEAD
         var editedProjectWithTags = await _context.Projects.FindAsync(1);
         
         Assert.NotNull(editedProjectWithTags);
@@ -52,6 +60,20 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         Assert.Equal("Not sorting", editedProjectWithTags?.Description);
         Assert.Equal(DateTime.UtcNow, editedProjectWithTags.UpdatedDate, precision: TimeSpan.FromSeconds(5));
         Assert.Equal(new List<string>() { "Economy", "Math" }, editedProjectWithTags?.Tags?.Select(tag => new string(tag.Name)).ToList());
+=======
+        var editedProject = await _context.Projects.FindAsync(1);
+
+
+        Assert.Equal(1, editedProject.Id);
+        Assert.Equal("Something else than Algo", editedProject.Title);
+        Assert.Equal(Status.Active, editedProject.Status);
+        Assert.Equal("1", editedProject.SupervisorId);
+        Assert.Equal("Not sorting", editedProject.Description);
+        Assert.Equal(DateTime.UtcNow, editedProject.UpdatedDate, precision: TimeSpan.FromSeconds(5));
+        Assert.Equal(new List<string>() { "Economy", "Math" }, editedProject.Tags.Select(tag => new string(tag.Name)).ToList());
+
+        Assert.Equal(Response.NotFound, await _projectRepository.EditProjectAsync(2, new UpdateProjectDTO() { Id = 2, Title = "Does not exist" }));
+>>>>>>> main
     }
 
     [Fact]
@@ -270,6 +292,7 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     }
 
     [Fact]
+<<<<<<< HEAD
     public async Task UpdateProjectStatusById_given_ProjectId_changes_status()
     {
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", SupervisorId = "1", Description = "Very fun", Tags = new List<string> { "Sorting" } });
@@ -286,12 +309,13 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     }
 
     [Fact]
+=======
+>>>>>>> main
     public async Task AddUserToProject_given_ProjectId_and_StudentId_adds_user()
     {
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", SupervisorId = "1", Description = "Very fun", Tags = new List<string> { "Sorting" } });
         await _userRepository.CreateUserAsync(new CreateUserDTO { Id = "1", Name = "Alice", Role = Role.Student });
         await _projectRepository.AddUserToProjectAsync("1", 1);
-        await _projectRepository.AddUserToProjectAsync("2", 1);
 
         var project = await _context.Projects.FindAsync(1);
         Assert.NotNull(project);
@@ -301,8 +325,19 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         Assert.NotNull(actual);
 
         Assert.Equal(expected, actual);
+<<<<<<< HEAD
         Assert.Throws<System.ArgumentOutOfRangeException>(() => project?.Participants?.ElementAt(1));
+=======
+>>>>>>> main
     }
+
+    [Fact]
+    public async Task AddUserToProject_given_not_exitsting_studentID_returns_NotFound()
+    {
+        await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", SupervisorId = "1", Description = "Very fun", Tags = new List<string> { "Sorting" } });
+        Assert.Equal(Response.NotFound, await _projectRepository.AddUserToProjectAsync("2", 1));
+    }
+
 
     [Fact]
     public async Task AddUserToProject_with_5_users_changes_status_to_closed()
@@ -319,7 +354,6 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
         await _projectRepository.AddUserToProjectAsync("3", 1);
         await _projectRepository.AddUserToProjectAsync("4", 1);
         await _projectRepository.AddUserToProjectAsync("5", 1);
-        await _projectRepository.AddUserToProjectAsync("6", 1);
 
         var project = await _context.Projects.FindAsync(1);
 

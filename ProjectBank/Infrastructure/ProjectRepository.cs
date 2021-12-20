@@ -18,7 +18,7 @@ public class ProjectRepository : IProjectRepository
             Description = project.Description,
             CreationDate = DateTime.UtcNow,
             UpdatedDate = DateTime.UtcNow,
-            Tags = project.Tags != null ? await SetTagsAsync(project.Tags) : new List<Tag>(),
+            Tags = await SetTagsAsync(project.Tags),
             Participants = new List<User>()
 
         };
@@ -39,15 +39,23 @@ public class ProjectRepository : IProjectRepository
         );
     }
 
-    public async Task DeleteProjectByIdAsync(int projectId)
+    public async Task<Response> DeleteProjectByIdAsync(int projectId)
     {
         var entity = await _context.Projects.FindAsync(projectId);
-
-        _context.Projects.Remove(entity);
-        await _context.SaveChangesAsync();
+        if (entity != null)
+        {
+            _context.Projects.Remove(entity);
+            await _context.SaveChangesAsync();
+            return Response.Deleted;
+        }
+        return Response.NotFound;
     }
 
+<<<<<<< HEAD
     public async Task EditProjectAsync(int projectId, UpdateProjectDTO project) 
+=======
+    public async Task<Response> EditProjectAsync(int projectId, UpdateProjectDTO project)
+>>>>>>> main
     {
         var entity = await _context.Projects.Include(p => p.Tags).Include(p => p.Participants).FirstOrDefaultAsync(p => p.Id == projectId);
         if (entity != null)
@@ -64,7 +72,9 @@ public class ProjectRepository : IProjectRepository
                 entity.Tags = new List<Tag>();
             }
             await _context.SaveChangesAsync();
+            return Response.Updated;
         }
+        return Response.NotFound;
     }
 
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadAllAsync()
@@ -152,18 +162,7 @@ public class ProjectRepository : IProjectRepository
             ))).ToList();
     }
 
-    public async Task CloseProjectByIdAsync(int projectId)
-    {
-        var entity = await _context.Projects.FindAsync(projectId);
-        if (entity != null)
-        {
-            entity.Status = Status.Closed;
-            entity.UpdatedDate = DateTime.Now;
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    public async Task AddUserToProjectAsync(string studentId, int projectId)
+    public async Task<Response> AddUserToProjectAsync(string studentId, int projectId)
     {
         var user = await _context.Users.FindAsync(studentId);
         var project = await _context.Projects.Include(p => p.Tags).Include(p => p.Participants).FirstOrDefaultAsync(p => p.Id == projectId);
@@ -179,7 +178,9 @@ public class ProjectRepository : IProjectRepository
             }
             project.UpdatedDate = DateTime.UtcNow;
             await _context.SaveChangesAsync();
+            return Response.Updated;
         }
+        return Response.NotFound;
     }
 
     private async Task<ICollection<Tag>> SetTagsAsync(ICollection<string> tags)

@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 @inject HttpClient Http
+@inject IJSRuntime _jsRuntime
 
 <PageTitle>Project</PageTitle>
 
@@ -14,8 +15,9 @@
     {
         <div class="row">
             <div class="col-8">
+                <button @onclick="GoBack" class="btn btn-primary px-4 mt-2">Go Back</button>
                 <h1>@project.Title</h1>
-                <h3>By @project.SupervisorId</h3>
+                <h3>By @user.Name</h3>
                 <h4>Tags
                     @foreach (var tag in project.Tags)
                     {
@@ -26,6 +28,7 @@
             </div>
             <AuthorizeView Roles="Student">
                 <Authorized>
+<<<<<<< HEAD
                     <div class="col"> 
                     @if (!Applied)
                     {
@@ -35,6 +38,17 @@
                     {
                         <button class="btn btn-secondary px-4 mt-2" disabled>@ApplyText</button>
                     }
+=======
+                    <div class="col">
+                        @if (!Applied)
+                        {
+                            <button class="btn btn-primary px-4 mt-2" type="submit" @onclick="Apply">@ApplyText</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary px-4 mt-2" disabled>@ApplyText</button>
+                        }
+>>>>>>> main
                     </div>
                 </Authorized>
             </AuthorizeView>
@@ -46,14 +60,31 @@
     [Parameter]
     public int Id { get; set; }
     private ProjectDTO? project;
+<<<<<<< HEAD
+=======
+    private UserDetailsDTO? user;
+
+>>>>>>> main
     private string ApplyText = "Apply";
     private bool Applied;
     private async void Apply()
     {
         //take id from student user and make a connection with the project
+<<<<<<< HEAD
         if(Id != 0 && !ProjectFullCheck() && !UserIsParticipant()) {
             var response = await Http.PutAsJsonAsync($"api/Apply/{Id}", project);
         }
+=======
+        if (Id != 0 && !ProjectFullCheck() && !UserIsParticipant())
+        {
+            var response = await Http.PutAsJsonAsync($"api/Apply/{Id}", project);
+        }
+    }
+
+    private async void GoBack()
+    {
+        await _jsRuntime.InvokeVoidAsync("history.go", -1);
+>>>>>>> main
     }
 
     protected override async Task OnParametersSetAsync()
@@ -61,6 +92,10 @@
         if (Id != 0)
         {
             project = await Http.GetFromJsonAsync<ProjectDTO>($"api/projects/{Id}");
+            if (project != null)
+            {
+                user = await Http.GetFromJsonAsync<UserDetailsDTO>($"api/User/{project.SupervisorId}");
+            }
         }
         ProjectFullCheck();
         UserIsParticipant();
@@ -68,8 +103,15 @@
         await base.OnParametersSetAsync();
     }
 
+<<<<<<< HEAD
     bool ProjectFullCheck() {
         if(project != null && project.Participants.Count == 5){
+=======
+    bool ProjectFullCheck()
+    {
+        if (project.Participants.Count == 5)
+        {
+>>>>>>> main
             ApplyText = "Applied";
             Applied = true;
             return true;
@@ -77,6 +119,7 @@
         return false;
     }
 
+<<<<<<< HEAD
     bool UserIsParticipant(){
         string UserId = "1"; //TODO: replace this with the actual userid
         if(project != null){
@@ -87,6 +130,18 @@
                     Applied = true;
                     return true;
                 }
+=======
+    bool UserIsParticipant()
+    {
+        string UserId = "1"; //TODO: replace this with the actual userid
+        for (int i = 0; i < project.Participants.Count; i++)
+        {
+            if (project.Participants.ElementAt(i).Id == UserId)
+            {
+                ApplyText = "Applied";
+                Applied = true;
+                return true;
+>>>>>>> main
             }
         }
         return false;
