@@ -19,7 +19,7 @@ public class StudentController : ControllerBase
     [HttpPut("{projectId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Put(int projectId)
+    public async Task<IActionResult> Put(int projectId, [FromBody] ProjectDTO project)
         => (await _projectRepository.AddUserToProjectAsync(GetObjectId(), projectId)).ToActionResult();
 
     [HttpGet]
