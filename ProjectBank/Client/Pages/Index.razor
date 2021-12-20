@@ -51,7 +51,11 @@
                     <div class="card mt-4 col col-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
                         <div class="card-body">
                             <h5 class="card-title">@project.Title</h5>
-                            <p class="card-text">@project.Description</p>
+                            @if(@project.Description.Length > 150) {
+                                <p class="card-text">@project.Description.Substring(0,150)...</p>
+                            } else {
+                                <p class="card-text">@project.Description</p>
+                            }
                             <a href="project/@project.Id/" class="btn btn-primary stretched-link">View Project</a>
                         </div>
                     </div>
