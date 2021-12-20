@@ -45,12 +45,9 @@ public class StudentControllerTests
     {
         // Arrange
         var project0 = new ProjectDTO(1, "Very nice project", "Active", "1", "A created project", DateTime.UtcNow, DateTime.UtcNow, new List<string>(), new List<UserDTO>(){new UserDTO("1", "Charlie")});
-        //var project1 = new ProjectDTO(2, "Very very nice project", "Active", "1", "A created project", DateTime.UtcNow, DateTime.UtcNow, new List<string>(), new List<UserDTO>(){new UserDTO(){"2", "Dave"}});
         var expected = new List<ProjectDTO>() {project0};
-        repository.Setup(m => m.ReadAllAsync()).ReturnsAsync(expected);//.Setup(m => m.AddUserToProjectAsync("1", 1)).ReturnsAsync(Response.Updated);
+        repository.Setup(m => m.ReadProjectsByStudentIdAsync("1")).ReturnsAsync(expected);
         var controller = new StudentController(repository.Object){ GetObjectId = () => "1" };
-        //repository.Setup(m => m.AddUserToProjectAsync("1", 1)).ReturnsAsync(Response.Updated);
-        var response = await controller.Put(1, project0);
 
         // Act
         var actual = await controller.Get();
@@ -63,9 +60,8 @@ public class StudentControllerTests
     public async Task Get_given_not_applied_returns_zero_projects()
     {
         // Arrange
-        //var project0 = new ProjectDTO(1, "Very nice project", "Active", "1", "A created project", DateTime.UtcNow, DateTime.UtcNow, new List<string>(), new List<UserDTO>());
         var expected = new List<ProjectDTO>();
-        repository.Setup(m => m.ReadAllAsync()).ReturnsAsync(expected);
+        repository.Setup(m => m.ReadProjectsByStudentIdAsync("1")).ReturnsAsync(expected);
         var controller = new StudentController(repository.Object){ GetObjectId = () => "1" };
 
         // Act
