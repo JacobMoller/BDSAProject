@@ -31,7 +31,7 @@
                     <div class="col">
                         @if (!Applied)
                         {
-                            <button class="btn btn-primary px-4 mt-2" type="submit" @onclick="Apply">@ApplyText</button>
+                            <button class="btn btn-primary px-4 mt-2" type="submit" @onclick="Apply">hej</button>
                         }
                         else
                         {
@@ -54,8 +54,10 @@
     private bool Applied;
     private async void Apply()
     {
+        Applied = true;
+        ApplyText = "Applied";
         //take id from student user and make a connection with the project
-        if (Id != 0 && !ProjectFullCheck() && !UserIsParticipant())
+        if (Id != 0 && !ProjectFullCheck() && !(await UserIsParticipant()))
         {
             var response = await Http.PutAsJsonAsync($"api/Student/{Id}", project);
         }
@@ -77,33 +79,29 @@
             }
         }
         ProjectFullCheck();
-        UserIsParticipant();
+        await UserIsParticipant();
 
         await base.OnParametersSetAsync();
     }
 
     bool ProjectFullCheck()
     {
-        if (project.Participants.Count == 5)
+        if (project.Participants.Count >= 5)
         {
-            ApplyText = "Applied";
+            ApplyText = "Project Full";
             Applied = true;
             return true;
         }
         return false;
     }
 
-    bool UserIsParticipant()
+    async Task<bool> UserIsParticipant()
     {
-        string UserId = "1"; //TODO: replace this with the actual userid
-        for (int i = 0; i < project.Participants.Count; i++)
-        {
-            if (project.Participants.ElementAt(i).Id == UserId)
-            {
-                ApplyText = "Applied";
-                Applied = true;
-                return true;
-            }
+        ProjectDTO[] yourProjects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/apply");
+        if(yourProjects.FirstOrDefault(p => p.Id == Id) != null){
+            ApplyText = "Applied";
+            Applied = true;
+            return true;
         }
         return false;
     }

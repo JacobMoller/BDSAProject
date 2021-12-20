@@ -143,12 +143,11 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByStudentIdAsync(string studentId)
     {
-        var student = await _context.Users.FindAsync(studentId);
-        var user = new User("4","Jacob",Role.Student) {Projects = new List<Project>(){new Project("Test",Status.Active,"1")}};
+        var student = _context.Users.Include(u => u.Projects).SingleOrDefault(u => u.Id == studentId);
 
-        if(user != null && user.Projects != null){
+        if(student != null && student.Projects != null){
             return await Task.FromResult(
-            (user.Projects.Select(project => new ProjectDTO(
+            (student.Projects.Select(project => new ProjectDTO(
             project.Id,
             project.Title,
             project.Status.ToString(),
@@ -156,10 +155,8 @@ public class ProjectRepository : IProjectRepository
             project.Description,
             project.CreationDate,
             project.UpdatedDate,
-            new List<string>(),
-            new List<UserDTO>()
-            //project.Tags.Select(t => new string(t.Name)).ToList().AsReadOnly(),
-            //project.Participants.Select(u => new UserDTO(u.Id, u.Name)).ToList().AsReadOnly()
+            project.Tags != null ? project.Tags.Select(t => new string(t.Name)).ToList().AsReadOnly() : new List<string>(),
+            project.Participants.Select(u => new UserDTO(u.Id, u.Name)).ToList().AsReadOnly()
             ))).ToList()
         );
         }
