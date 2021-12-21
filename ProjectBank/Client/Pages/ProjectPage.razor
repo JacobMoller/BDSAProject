@@ -1,10 +1,23 @@
 ﻿@page "/project/{Id:int}"
 @using Microsoft.AspNetCore.Authorization
+@using System.Timers;
 @attribute [Authorize]
 @inject HttpClient Http
 @inject IJSRuntime _jsRuntime
 
 <PageTitle>Project</PageTitle>
+
+@if(show == "show") {
+<div class="alert alert-success alert-dismissible fade show" role="alert" id="SuccessAlert">
+            <div class="d-flex justify-content-center m-3"> 
+            
+            <strong>Success!</strong> 
+            </div>
+            <div class="d-flex justify-content-center"> 
+                You have applied to the project.
+            </div>
+        </div>
+}
 
 <div class="container">
     @if (@project == null)
@@ -50,17 +63,41 @@
     private ProjectDTO? project;
     private UserDetailsDTO? user;
 
+    public int Time { get; set; }
+    private string? show {get; set;}
     private string ApplyText = "Apply";
     private bool Applied;
     private async void Apply()
     {
         Applied = true;
         ApplyText = "Applied";
+        
         //take id from student user and make a connection with the project
         if (Id != 0 && !ProjectFullCheck() && !(await UserIsParticipant()))
         {
             var response = await Http.PutAsJsonAsync($"api/Student/{Id}", project);
+            if (response.IsSuccessStatusCode) {
+                show = "show";
+                StartTimerAsync();
+                await base.OnParametersSetAsync();
+            }
         }
+        
+    }
+
+    public async void StartTimerAsync()
+    {
+      Time = 5;
+        while (Time > 0)
+        {
+            Time--;
+            if(Time == 0){
+              show = "";
+              StateHasChanged();
+            }
+            await Task.Delay(1000);
+        }
+        
     }
 
     private async void GoBack()
