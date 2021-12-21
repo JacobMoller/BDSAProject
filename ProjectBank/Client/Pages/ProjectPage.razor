@@ -97,7 +97,7 @@
 
     async Task<bool> UserIsParticipant()
     {
-        ProjectDTO[] yourProjects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/apply");
+        ProjectDTO[] yourProjects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/Student");
         if(yourProjects.FirstOrDefault(p => p.Id == Id) != null){
             ApplyText = "Applied";
             Applied = true;
