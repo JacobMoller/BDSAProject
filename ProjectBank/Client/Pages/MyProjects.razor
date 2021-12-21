@@ -8,27 +8,10 @@
 <PageTitle>My Projects</PageTitle>
 
 @if(show == "show"){
-@* @if(responseAction == "delete") {
-<div class="alert alert-success alert-dismissible fade show" role="alert" id="SuccessAlert">
-            <div class="d-flex justify-content-center m-3"> 
-            
-            <strong>Success!</strong> 
-            </div>
-            <div class="d-flex justify-content-center"> 
-                Your project has been deleted successfully.
-            </div>
-        </div>
-} *@
 @if(responseAction == "success" ){
         <div class="alert alert-success alert-dismissible fade show" role="alert" id="SuccessAlert">
             <div class="d-flex justify-content-center m-3"> 
-            
-            <strong>Success!</strong> 
-            </div>
-            <div class="d-flex justify-content-center"> 
-                
-                   
-                Your project has been @typeOfResponse successfully.
+            <strong>Project @typeOfResponse Successfully!</strong> 
             </div>
         </div>
 }
@@ -88,7 +71,7 @@
     private ProjectDTO[]? projects;
 
     private int specificId{get; set;}
-    
+
     private void SetID(int id){
       specificId = id;
     }
@@ -108,9 +91,9 @@
         
         if(responseAction != null){
         if(responseAction.Contains("create")){
-          typeOfResponse = "created";
+          typeOfResponse = "Created";
         } else {
-          typeOfResponse = "updated";
+          typeOfResponse = "Updated";
         } 
 
         if(responseAction.Contains("Success")){
@@ -145,7 +128,7 @@
 
         if(response.IsSuccessStatusCode){
 
-            typeOfResponse = "deleted";
+            typeOfResponse = "Deleted";
             responseAction = "success";
             show = "show";
             StartTimerAsync();
