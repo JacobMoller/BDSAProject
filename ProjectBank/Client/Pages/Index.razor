@@ -42,7 +42,6 @@
                 </div>
             }
         }
-    
         <h1>Explore</h1>
         @if (@projects == null)
         {
@@ -92,7 +91,7 @@
 
         if(userAuth.Identity.IsAuthenticated)
         {
-            yourProjects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/Student");
+            yourProjects = userAuth.IsInRole("Student") ? await Http.GetFromJsonAsync<ProjectDTO[]>("api/Student") : new ProjectDTO[0];
             projects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/projects");
         }
 }
