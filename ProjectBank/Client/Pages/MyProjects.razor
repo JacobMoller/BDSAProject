@@ -1,3 +1,4 @@
+@page "/MyProjects/{responseAction}"
 @page "/MyProjects"
 @using Microsoft.AspNetCore.Authorization
 @inject HttpClient Http
@@ -6,18 +7,15 @@
 
 <PageTitle>My Projects</PageTitle>
 
-@if(deleted == "show") {
-<div class="alert alert-success alert-dismissible fade show" role="alert" id="SuccessAlert">
+@if(show == "show"){
+@if(responseAction == "success" ){
+        <div class="alert alert-success alert-dismissible fade show" role="alert" id="SuccessAlert">
             <div class="d-flex justify-content-center m-3"> 
-            
-            <strong>Success!</strong> 
-            </div>
-            <div class="d-flex justify-content-center"> 
-                Your project has been deleted successfully.
+            <strong>Project @typeOfResponse Successfully!</strong> 
             </div>
         </div>
 }
-
+}
 <h1>My Projects</h1>
 
 <div class="container MyProjectsContainer">
@@ -74,19 +72,59 @@
 
     private int specificId{get; set;}
 
-    private string? deleted{ get; set; }
-
     private void SetID(int id){
       specificId = id;
     }
 
+    [Parameter]
+    public string? responseAction { get; set; }
+
+    private string? typeOfResponse{get; set;}
+
+    private string? show {get; set;}
+
+
     protected override async Task OnParametersSetAsync()
     {
+
         var response = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects"));
         var projects = response != null ? response.ToArray() : new ProjectDTO[0];
         await base.OnParametersSetAsync();
 
-        deleted = deleted;
+
+        
+        if(responseAction != null){
+        if(responseAction.Contains("create")){
+          typeOfResponse = "Created";
+        } else {
+          typeOfResponse = "Updated";
+        } 
+
+        if(responseAction.Contains("Success")){
+            responseAction = "success";
+            show = "show";
+          } 
+        }
+         await base.OnParametersSetAsync();
+        
+        StartTimerAsync();
+    }
+
+    [Parameter] public int Time { get; set; }
+
+    public async void StartTimerAsync()
+    {
+      Time = 5;
+        while (Time > 0)
+        {
+            Time--;
+            if(Time == 0){
+              show = "";
+              StateHasChanged();
+            }
+            await Task.Delay(1000);
+        }
+        
     }
 
     private async Task DeleteProject(){
@@ -94,15 +132,23 @@
 
         if(deletedProject.IsSuccessStatusCode){
 
-            deleted = "show";
+            typeOfResponse = "Deleted";
+            responseAction = "success";
+            show = "show";
+            StartTimerAsync();
+            
+
+
             @* var uri = $"{NavigationManager.BaseUri}/MyProjects";
 
             NavigationManager.NavigateTo(uri, forceLoad: true); *@
+
             var response = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects"));
             var projects = response != null ? response.ToArray() : new ProjectDTO[0];
             await base.OnParametersSetAsync();
 
             
+
         }
       
     }

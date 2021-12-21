@@ -1,7 +1,6 @@
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 
-
 <EditForm Model="@project" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
 
@@ -55,7 +54,9 @@
 
             if (response.IsSuccessStatusCode)
             {
-                var uri = $"{NavigationManager.BaseUri}/MyProjects";
+                ShowAlert = "updateSuccess";
+
+                var uri = $"{NavigationManager.BaseUri}/MyProjects/{ShowAlert}";
 
                 NavigationManager.NavigateTo(uri);
             }
@@ -63,22 +64,17 @@
         else if (project is CreateProjectDTO)
         {
             var response = await Http.PostAsJsonAsync("api/Projects", project);
-
             if (response.IsSuccessStatusCode)
             {
-                ShowAlert = "show";
+                ShowAlert = "createSuccess";
 
                 var created = await response.Content.ReadFromJsonAsync<ProjectDTO>();
 
-                var uri = $"{NavigationManager.BaseUri}/createproject/{ShowAlert}";
+                var uri = $"{NavigationManager.BaseUri}/MyProjects/{ShowAlert}";
 
                 NavigationManager.NavigateTo(uri);
-            }
-            else if (!response.IsSuccessStatusCode)
-            {
-                ShowAlert = "fail";
-                var uri = $"{NavigationManager.BaseUri}/createproject/{ShowAlert}";
-            }
+
+          }
         }
 
     }
