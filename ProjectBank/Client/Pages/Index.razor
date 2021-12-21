@@ -100,14 +100,11 @@
     protected override async void OnAfterRender(bool firstRender)
 {
     var authState = await authenticationStateTask;
-    var userAuth = authState.User != null ? authState.User : null;
-    // execute conditionally for loading data, otherwise this will load
-    // every time the page refreshes
+    var userAuth = authState.User;
     
     if(firstRender && userAuth != null && userAuth.Identity != null && userAuth.Identity.IsAuthenticated)
     {
             await RegisterUser();
-        // Do work to load page data and set properties
     }
 }
 

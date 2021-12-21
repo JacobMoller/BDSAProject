@@ -8,13 +8,13 @@
 <PageTitle>My Projects</PageTitle>
 
 @if(show == "show"){
-@if(responseAction == "success" ){
+  @if(responseAction == "success" ){
         <div class="alert alert-success alert-dismissible fade show" role="alert" id="SuccessAlert">
             <div class="d-flex justify-content-center m-3"> 
             <strong>Project @typeOfResponse Successfully!</strong> 
             </div>
         </div>
-}
+  }
 }
 <h1>My Projects</h1>
 
@@ -110,15 +110,15 @@
         StartTimerAsync();
     }
 
-    [Parameter] public int Time { get; set; }
+    [Parameter] public int Seconds { get; set; }
 
     public async void StartTimerAsync()
     {
-      Time = 5;
-        while (Time > 0)
+      Seconds = 5;
+        while (Seconds > 0)
         {
-            Time--;
-            if(Time == 0){
+            Seconds--;
+            if(Seconds == 0){
               show = "";
               StateHasChanged();
             }
@@ -136,19 +136,8 @@
             responseAction = "success";
             show = "show";
             StartTimerAsync();
-            
-
-
-            @* var uri = $"{NavigationManager.BaseUri}/MyProjects";
-
-            NavigationManager.NavigateTo(uri, forceLoad: true); *@
-
-            var response = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects"));
-            var projects = response != null ? response.ToArray() : new ProjectDTO[0];
-            await base.OnParametersSetAsync();
-
-            
-
+            projects = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects")).ToArray();
+            await base.OnParametersSetAsync(); 
         }
       
     }

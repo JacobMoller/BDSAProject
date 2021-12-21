@@ -6,6 +6,14 @@
 
 <PageTitle>Project</PageTitle>
 
+@if(show == "show") {
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="SuccessAlert">
+        <div class="d-flex justify-content-center m-3"> 
+            <strong>You have applied for the project!</strong> 
+        </div>
+    </div>
+}
+
 <div class="container">
     @if (@project == null)
     {
@@ -50,17 +58,40 @@
     private ProjectDTO? project;
     private UserDetailsDTO? user;
 
+    public int Seconds { get; set; }
+    private string? show {get; set;}
     private string ApplyText = "Apply";
     private bool Applied;
     private async void Apply()
     {
         Applied = true;
         ApplyText = "Applied";
-        //take id from student user and make a connection with the project
+        
         if (Id != 0 && !ProjectFullCheck() && !(await UserIsParticipant()))
         {
             var response = await Http.PutAsJsonAsync($"api/Student/{Id}", project);
+
+            if(response.IsSuccessStatusCode){
+                show = "show";
+                StateHasChanged();
+                StartTimerAsync();
+            } 
+        }   
+    }
+
+    public async void StartTimerAsync()
+    {
+      Seconds = 5;
+        while (Seconds > 0)
+        {
+            Seconds--;
+            if(Seconds == 0){
+              show = "";
+              StateHasChanged();
+            }
+            await Task.Delay(1000);
         }
+        
     }
 
     private async void GoBack()
