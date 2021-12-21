@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Components
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
+@using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Roles="Supervisor")] 
 
 <AuthorizeView Roles="Supervisor">
