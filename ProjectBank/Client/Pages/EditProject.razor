@@ -15,6 +15,10 @@
     </Authorized>
 </AuthorizeView>
 
+<AuthorizeView Roles="Student">
+    <p>You are not authorized to view this page</p>
+</AuthorizeView>
+
 @code {
     [Parameter]
     public int Id { get; set; }

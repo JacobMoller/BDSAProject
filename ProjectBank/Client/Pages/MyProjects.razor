@@ -71,6 +71,10 @@
     </Authorized>
 </AuthorizeView>
 
+<AuthorizeView Roles="Student">
+    <p>You are not authorized to view this page</p>
+</AuthorizeView>
+
 @code {
     private ProjectDTO[]? projects;
 
@@ -79,6 +83,9 @@
     private void SetID(int id){
       specificId = id;
     }
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationStateTask { get; set; }
 
     [Parameter]
     public string? responseAction { get; set; }
@@ -91,11 +98,16 @@
     protected override async Task OnParametersSetAsync()
     {
 
-        var response = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects"));
-        projects = response != null ? response.ToArray() : new ProjectDTO[0];
-        await base.OnParametersSetAsync();
+        var authState = await authenticationStateTask;
+        
+        var userAuth = authState.User != null ? authState.User : null;
 
+        if (userAuth.IsInRole("Supervisor")) {
+          var response = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects"));
+          projects = response != null ? response.ToArray() : new ProjectDTO[0];
+          await base.OnParametersSetAsync();
 
+        }
         
         if(responseAction != null){
         if(responseAction.Contains("create")){

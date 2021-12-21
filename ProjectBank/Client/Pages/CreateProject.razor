@@ -17,6 +17,10 @@
     </Authorized>
 </AuthorizeView>
 
+<AuthorizeView Roles="Student">
+    <p>You are not authorized to view this page</p>
+</AuthorizeView>
+
 @code {
     private CreateProjectDTO Project = new();
 }
