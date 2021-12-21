@@ -5,12 +5,16 @@
 @inject HttpClient Http
 @using ProjectBank.Infrastructure
 @using System
+@attribute [Authorize(Roles="Supervisor")] 
 
 
-<PageTitle>Create Project</PageTitle>
-    <h1>Create a new project</h1>
-    <FormComponent Project="@Project" ButtonName="Create"/>
-    
+<AuthorizeView Roles="Supervisor">
+    <Authorized>
+        <PageTitle>Create Project</PageTitle>
+        <h1>Create a new project</h1>
+        <FormComponent Project="@Project" ButtonName="Create"/>
+    </Authorized>
+</AuthorizeView>
 
 @code {
     private CreateProjectDTO Project = new();

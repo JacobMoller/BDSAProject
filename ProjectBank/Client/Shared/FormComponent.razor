@@ -57,7 +57,7 @@
             {
                 ShowAlert = "updateSuccess";
 
-                var uri = $"{NavigationManager.BaseUri}/MyProjects/{ShowAlert}";
+                var uri = $"{NavigationManager.BaseUri}MyProjects/{ShowAlert}";
 
                 NavigationManager.NavigateTo(uri);
             }
@@ -71,7 +71,7 @@
 
                 var created = await response.Content.ReadFromJsonAsync<ProjectDTO>();
 
-                var uri = $"{NavigationManager.BaseUri}/MyProjects/{ShowAlert}";
+                var uri = $"{NavigationManager.BaseUri}MyProjects/{ShowAlert}";
 
                 NavigationManager.NavigateTo(uri);
 

@@ -2,12 +2,17 @@
 @using Microsoft.AspNetCore.Components
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
+@attribute [Authorize(Roles="Supervisor")] 
 
-<PageTitle>Edit Project</PageTitle>
+<AuthorizeView Roles="Supervisor">
+    <Authorized>
+        <PageTitle>Edit Project</PageTitle>
 
-<h1>Edit project</h1>
+        <h1>Edit project</h1>
 
-<FormComponent Project="@Project" ButtonName="Save" />
+        <FormComponent Project="@Project" ButtonName="Save" />
+    </Authorized>
+</AuthorizeView>
 
 @code {
     [Parameter]

@@ -5,67 +5,71 @@
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles="Supervisor")] 
 
-<PageTitle>My Projects</PageTitle>
+<AuthorizeView Roles="Supervisor">
+    <Authorized>
+        <PageTitle>My Projects</PageTitle>
 
-@if(show == "show"){
-  @if(responseAction == "success" ){
-        <div class="alert alert-success alert-dismissible fade show" role="alert" id="SuccessAlert">
-            <div class="d-flex justify-content-center m-3"> 
-            <strong>Project @typeOfResponse Successfully!</strong> 
-            </div>
-        </div>
-  }
-}
-<h1>My Projects</h1>
-
-<div class="container MyProjectsContainer">
-    <div class="row p-3">
-        <div class="col-8"><strong>Name</strong></div>
-        <div class="col-4"><strong>Tools</strong></div>
-    </div>
-    @if (@projects == null)
-    {
-      <p>Loading...</p>
-    }
-    else
-    {
-      @if (@projects.Count() > 0){
-        @foreach (var project in projects)
-        {
-        <div class="row p-3">
-            <div class="col-8"><a href="project/@project.Id/">@project.Title</a></div>
-            <div class="col-4">
-                <a href="editproject/@project.Id/" class="btn btn-warning">Edit</a>
-                <button type="button" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal" @onclick="@(() => SetID(@project.Id))">
-                    Delete
-                </button>
-            </div>
-        </div>
+        @if(show == "show"){
+          @if(responseAction == "success" ){
+                <div class="alert alert-success alert-dismissible fade show" role="alert" id="SuccessAlert">
+                    <div class="d-flex justify-content-center m-3"> 
+                    <strong>Project @typeOfResponse Successfully!</strong> 
+                    </div>
+                </div>
+          }
         }
-      }
-      else{
-        <p>No Projects</p>
-      }
-    }
-</div>
+        <h1>My Projects</h1>
 
-<div class="modal" tabindex="-1" id="deleteModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Delete</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure that you want to delete?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="DeleteProject">Delete</button>
-      </div>
-    </div>
-  </div>
-</div>
+        <div class="container MyProjectsContainer">
+            <div class="row p-3">
+                <div class="col-8"><strong>Name</strong></div>
+                <div class="col-4"><strong>Tools</strong></div>
+            </div>
+            @if (@projects == null)
+            {
+              <p>Loading...</p>
+            }
+            else
+            {
+              @if (@projects.Count() > 0){
+                @foreach (var project in projects)
+                {
+                <div class="row p-3">
+                    <div class="col-8"><a href="project/@project.Id/">@project.Title</a></div>
+                    <div class="col-4">
+                        <a href="editproject/@project.Id/" class="btn btn-warning">Edit</a>
+                        <button type="button" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal" @onclick="@(() => SetID(@project.Id))">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+                }
+              }
+              else{
+                <p>No Projects</p>
+              }
+            }
+        </div>
+
+        <div class="modal" tabindex="-1" id="deleteModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure that you want to delete?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="DeleteProject">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </Authorized>
+</AuthorizeView>
 
 @code {
     private ProjectDTO[]? projects;
