@@ -133,11 +133,6 @@
             show = "show";
             StartTimerAsync();
             
-
-
-            @* var uri = $"{NavigationManager.BaseUri}/MyProjects";
-
-            NavigationManager.NavigateTo(uri, forceLoad: true); *@
             projects = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects")).ToArray();
             await base.OnParametersSetAsync(); 
         }

@@ -67,7 +67,6 @@
         Applied = true;
         ApplyText = "Applied";
         
-        //take id from student user and make a connection with the project
         if (Id != 0 && !ProjectFullCheck() && !(await UserIsParticipant()))
         {
             var response = await Http.PutAsJsonAsync($"api/Student/{Id}", project);

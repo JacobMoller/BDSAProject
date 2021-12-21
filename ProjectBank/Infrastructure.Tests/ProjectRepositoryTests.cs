@@ -66,7 +66,6 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
     [Fact]
     public async Task EditProject_given_UpdateProjectDTO_updates_project_adds_to_existing_tags()
     {
-        //maybe we should make the dto separately to test with it's values instead of hardcoding?
         await _projectRepository.CreateProjectAsync(new CreateProjectDTO { Title = "Algo", SupervisorId = "1", Description = "Very fun", Tags = new List<string> { "Sorting" } });
         await _projectRepository.EditProjectAsync(1, new UpdateProjectDTO { Id = 1, Title = "Algo", SupervisorId = "1", Description = "Very fun", Tags = new List<string> { "Sorting", "Economy", "Math" } });
         var editedProjectWithTags = await _context.Projects.FindAsync(1);
@@ -105,7 +104,6 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
         var projects = await _projectRepository.ReadAllAsync();
 
-        //TODO fix this to assert collection sometime
         //Project0
         Assert.Equal(1, projects.ElementAt(0).Id);
         Assert.Equal("Algo", projects.ElementAt(0).Title);
@@ -174,7 +172,6 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
         var projects = await _projectRepository.ReadProjectsByTagIdAsync(1);
 
-        //TODO fix this to assert collection sometime
         //Project0
         Assert.Equal(1, projects.ElementAt(0).Id);
         Assert.Equal("Algo", projects.ElementAt(0).Title);
@@ -210,7 +207,6 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
         var projects = await _projectRepository.ReadProjectsBySupervisorIdAsync("1");
 
-        //TODO fix this to assert collection sometime
         //Project0
         Assert.Equal(1, projects.ElementAt(0).Id);
         Assert.Equal("Algo", projects.ElementAt(0).Title);
@@ -250,7 +246,6 @@ public class ProjectRepositoryTests : ContextSetup, IDisposable
 
         var projects = await _projectRepository.ReadProjectsByStudentIdAsync("1");
 
-        //TODO fix this to assert collection sometime
         //Project0
         Assert.Equal(1, projects.ElementAt(0).Id);
         Assert.Equal("Algo", projects.ElementAt(0).Title);

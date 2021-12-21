@@ -75,7 +75,6 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadAllAsync()
     {
-        //List of all projects?
         return await (_context.Projects.Where(project => project.Status == Status.Active).Select(project => new ProjectDTO(
             project.Id,
             project.Title,
@@ -108,7 +107,7 @@ public class ProjectRepository : IProjectRepository
                 participants
             );
         }
-        return null; //TODO: throw new CouldNotFindEntityInDatabase
+        return null; 
     }
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByTagIdAsync(int tagId)
     {
