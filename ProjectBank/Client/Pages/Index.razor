@@ -55,7 +55,7 @@
                     <div class="card mt-4 col col-12 col-sm-6 col-md-4 col-lg-3" style="width: 18rem;">
                         <div class="card-body">
                             <h5 class="card-title">@project.Title</h5>
-                            @if(@project.Description.Length > 150) {
+                            @if(@project.Description != null && @project.Description.Length > 150) {
                                 <p class="card-text">@project.Description.Substring(0,150)...</p>
                             } else {
                                 <p class="card-text">@project.Description</p>
@@ -87,9 +87,10 @@
    protected override async Task OnInitializedAsync()
    {
         var authState = await authenticationStateTask;
-        var userAuth = authState.User;
+        
+        var userAuth = authState.User != null ? authState.User : null;
 
-        if(userAuth.Identity.IsAuthenticated)
+        if(userAuth != null && userAuth.Identity != null && userAuth.Identity.IsAuthenticated)
         {
             yourProjects = userAuth.IsInRole("Student") ? await Http.GetFromJsonAsync<ProjectDTO[]>("api/Student") : new ProjectDTO[0];
             projects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/projects");
@@ -101,7 +102,7 @@
     var authState = await authenticationStateTask;
     var userAuth = authState.User;
     
-    if(firstRender && userAuth.Identity.IsAuthenticated)
+    if(firstRender && userAuth != null && userAuth.Identity != null && userAuth.Identity.IsAuthenticated)
     {
             await RegisterUser();
     }

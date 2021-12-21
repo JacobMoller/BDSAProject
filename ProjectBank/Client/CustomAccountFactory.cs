@@ -4,16 +4,16 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 
 public class CustomAccountFactory : AccountClaimsPrincipalFactory<CustomUserAccount>
 {
-    public CustomAccountFactory(IAccessTokenProviderAccessor accessor) 
+    public CustomAccountFactory(IAccessTokenProviderAccessor accessor)
         : base(accessor)
     {
     }
 
-    public async override ValueTask<ClaimsPrincipal> CreateUserAsync(CustomUserAccount account, 
+    public async override ValueTask<ClaimsPrincipal> CreateUserAsync(CustomUserAccount account,
         RemoteAuthenticationUserOptions options)
     {
         var initialUser = await base.CreateUserAsync(account, options);
-        if (initialUser.Identity.IsAuthenticated)
+        if (initialUser.Identity != null && initialUser.Identity.IsAuthenticated)
         {
             var userIdentity = (ClaimsIdentity)initialUser.Identity;
 

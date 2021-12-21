@@ -10,12 +10,11 @@ public class UserRepository : IUserRepository
     }
     public async Task<UserDTO> CreateUserAsync(CreateUserDTO user)
     {
-
         var existUser = await _context.Users.FindAsync(user.Id);
 
         if (existUser == null)
         {
-            var entity = new User(user.Id, user.Name, user.Role); 
+            var entity = new User(user.Id, user.Name, user.Role);
 
             _context.Users.Add(entity);
 

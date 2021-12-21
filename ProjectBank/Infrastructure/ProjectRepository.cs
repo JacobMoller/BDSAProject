@@ -123,6 +123,7 @@ public class ProjectRepository : IProjectRepository
             project.Tags.Select(t => new string(t.Name)).ToList(),
             project.Participants.Select(u => new UserDTO(u.Id, u.Name)).ToList()
             ))).ToListAsync();
+
     }
 
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsBySupervisorIdAsync(string supervisorId)
@@ -143,25 +144,20 @@ public class ProjectRepository : IProjectRepository
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByStudentIdAsync(string studentId)
     {
         var student = _context.Users.Include(u => u.Projects).SingleOrDefault(u => u.Id == studentId);
+        return await Task.FromResult(
+        (student.Projects.Select(project => new ProjectDTO(
+        project.Id,
+        project.Title,
+        project.Status.ToString(),
+        project.SupervisorId,
+        project.Description,
+        project.CreationDate,
+        project.UpdatedDate,
+        project.Tags != null ? project.Tags.Select(t => new string(t.Name)).ToList().AsReadOnly() : new List<string>(),
+        project.Participants.Select(u => new UserDTO(u.Id, u.Name)).ToList().AsReadOnly()
+        ))).ToList()
+    );
 
-        if(student != null && student.Projects != null){
-            return await Task.FromResult(
-            (student.Projects.Select(project => new ProjectDTO(
-            project.Id,
-            project.Title,
-            project.Status.ToString(),
-            project.SupervisorId,
-            project.Description,
-            project.CreationDate,
-            project.UpdatedDate,
-            project.Tags != null ? project.Tags.Select(t => new string(t.Name)).ToList().AsReadOnly() : new List<string>(),
-            project.Participants.Select(u => new UserDTO(u.Id, u.Name)).ToList().AsReadOnly()
-            ))).ToList()
-        );
-        }
-        else {
-            return new List<ProjectDTO>() {};
-        }
     }
 
     public async Task<Response> AddUserToProjectAsync(string studentId, int projectId)

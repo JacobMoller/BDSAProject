@@ -66,6 +66,7 @@ public class ProjectTests : IClassFixture<CustomWebApplicationFactory>
         var project = await _client.GetFromJsonAsync<ProjectDTO>("/api/projects/2");
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        Assert.NotNull(project);
         Assert.Equal("Test", project.Title);
         Assert.Equal(2, project.Id);
 

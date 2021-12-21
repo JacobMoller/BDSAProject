@@ -24,18 +24,18 @@
 </EditForm>
 
 
-@code 
+@code
 {
     [Parameter]
-    public CreateProjectDTO project { get; set; }
+    public CreateProjectDTO? project { get; set; }
 
     [Parameter]
-    public string ButtonName { get; set; }
+    public string? ButtonName { get; set; }
 
     private string tagListString = "";
-    private string ShowAlert;
+    private string? ShowAlert;
 
-    private async Task HandleValidSubmit() 
+    private async Task HandleValidSubmit()
     {
         string pattern = @"\b\w+\b";
         ICollection<string> tags = new List<string>();
@@ -43,7 +43,10 @@
         {
             tags.Add(match.Value);
         }
-        project.Tags = tags;
+        if (project != null)
+        {
+            project.Tags = tags;
+        }
 
         if (project is UpdateProjectDTO)
         {
@@ -71,14 +74,15 @@
                 var uri = $"{NavigationManager.BaseUri}/MyProjects/{ShowAlert}";
 
                 NavigationManager.NavigateTo(uri);
-            } 
+
+          }
         }
 
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
-        if (project.Tags != null)
+        if (project != null && project.Tags != null)
         {
             foreach (var tag in project.Tags)
             {
