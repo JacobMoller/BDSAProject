@@ -88,7 +88,7 @@
     {
 
         var response = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects"));
-        var projects = response != null ? response.ToArray() : new ProjectDTO[0];
+        projects = response != null ? response.ToArray() : new ProjectDTO[0];
         await base.OnParametersSetAsync();
 
 
