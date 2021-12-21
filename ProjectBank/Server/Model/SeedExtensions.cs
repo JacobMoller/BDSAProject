@@ -36,6 +36,24 @@ public static class SeedExtensions
             Name = "Dave",
             Role = Role.Student
         });
+        await userRepository.CreateUserAsync(new CreateUserDTO
+        {
+            Id = "3",
+            Name = "Eva",
+            Role = Role.Student
+        });
+        await userRepository.CreateUserAsync(new CreateUserDTO
+        {
+            Id = "4",
+            Name = "Isaac",
+            Role = Role.Student
+        });
+        await userRepository.CreateUserAsync(new CreateUserDTO
+        {
+            Id = "5",
+            Name = "Justin",
+            Role = Role.Student
+        });
         await ProjectRepository.CreateProjectAsync(new CreateProjectDTO
         {
             Title = "Super Fun Project",
@@ -50,6 +68,8 @@ public static class SeedExtensions
             SupervisorId = "2",
             Tags = new List<string>() { "Algorithm", "Math" }
         });
+        await ProjectRepository.AddUserToProjectAsync("1", 2);
+        await ProjectRepository.AddUserToProjectAsync("2", 2);
         await ProjectRepository.CreateProjectAsync(new CreateProjectDTO
         {
             Title = "Super Closed Project",
@@ -57,8 +77,11 @@ public static class SeedExtensions
             SupervisorId = "2",
             Tags = new List<string>() { "Math" }
         });
-        await ProjectRepository.AddUserToProjectAsync("1", 2);
-        await ProjectRepository.AddUserToProjectAsync("2", 2);
+        await ProjectRepository.AddUserToProjectAsync("1", 3);
+        await ProjectRepository.AddUserToProjectAsync("2", 3);
+        await ProjectRepository.AddUserToProjectAsync("3", 3);
+        await ProjectRepository.AddUserToProjectAsync("4", 3);
+        await ProjectRepository.AddUserToProjectAsync("5", 3);
         await ProjectRepository.EditProjectAsync(1, new UpdateProjectDTO()
         {
             Id = 1,
