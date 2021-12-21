@@ -53,6 +53,9 @@
 </div>
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationStateTask { get; set; }
+
     [Parameter]
     public int Id { get; set; }
     private ProjectDTO? project;
@@ -128,7 +131,9 @@
 
     async Task<bool> UserIsParticipant()
     {
-        ProjectDTO[]? yourProjects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/Student");
+        var authState = await authenticationStateTask;
+        var userAuth = authState.User;
+        ProjectDTO[]? yourProjects = userAuth.IsInRole("Student") ? await Http.GetFromJsonAsync<ProjectDTO[]>("api/Student") : new ProjectDTO[0];
         if (yourProjects != null && yourProjects.FirstOrDefault(p => p.Id == Id) != null)
         {
             ApplyText = "Applied";
