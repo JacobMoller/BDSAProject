@@ -13,6 +13,9 @@ public class ProjectRepository : IProjectRepository
     }
     public async Task<ProjectDTO> CreateProjectAsync(CreateProjectDTO project)
     {
+        project.Title = project.Title != null ? project.Title : "";
+        project.SupervisorId = project.SupervisorId != null ? project.SupervisorId : "";
+        project.Tags = project.Tags != null ? project.Tags : new List<string>();
         var entity = new Project(project.Title, Status.Active, project.SupervisorId)
         {
             Description = project.Description,
@@ -113,17 +116,22 @@ public class ProjectRepository : IProjectRepository
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsByTagIdAsync(int tagId)
     {
         var searchTag = await _context.Tags.FindAsync(tagId);
-        return await (_context.Projects.Where(p => searchTag.Projects.Contains(p) && p.Status == Status.Active).Select(project => new ProjectDTO(
-            project.Id,
-            project.Title,
-            project.Status.ToString(),
-            project.SupervisorId,
-            project.Description,
-            project.CreationDate,
-            project.UpdatedDate,
-            project.Tags.Select(t => new string(t.Name)).ToList(),
-            project.Participants.Select(u => new UserDTO(u.Id, u.Name)).ToList()
-            ))).ToListAsync();
+        if(searchTag != null && searchTag.Projects != null){
+            return await (_context.Projects.Where(p => searchTag.Projects.Contains(p) && p.Status == Status.Active).Select(project => new ProjectDTO(
+                project.Id,
+                project.Title,
+                project.Status.ToString(),
+                project.SupervisorId,
+                project.Description,
+                project.CreationDate,
+                project.UpdatedDate,
+                project.Tags.Select(t => new string(t.Name)).ToList(),
+                project.Participants.Select(u => new UserDTO(u.Id, u.Name)).ToList()
+                ))).ToListAsync();
+        }
+        else {
+            return new List<ProjectDTO>();
+        }
     }
 
     public async Task<IReadOnlyCollection<ProjectDTO>> ReadProjectsBySupervisorIdAsync(string supervisorId)
@@ -171,7 +179,7 @@ public class ProjectRepository : IProjectRepository
         var project = await _context.Projects.Include(p => p.Tags).Include(p => p.Participants).FirstOrDefaultAsync(p => p.Id == projectId);
         if (user != null && project != null)
         {
-            if (project.Participants.Count() < 5)
+            if (project.Participants != null && project.Participants.Count() < 5)
             {
                 if (project.Participants.Count() == 4)
                 {
