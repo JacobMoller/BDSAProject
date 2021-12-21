@@ -10,11 +10,7 @@
 @if(show == "show") {
 <div class="alert alert-success alert-dismissible fade show" role="alert" id="SuccessAlert">
             <div class="d-flex justify-content-center m-3"> 
-            
-            <strong>Success!</strong> 
-            </div>
-            <div class="d-flex justify-content-center"> 
-                You have applied to the project.
+            <strong>You have applied for the project!</strong> 
             </div>
         </div>
 }
@@ -76,13 +72,13 @@
         if (Id != 0 && !ProjectFullCheck() && !(await UserIsParticipant()))
         {
             var response = await Http.PutAsJsonAsync($"api/Student/{Id}", project);
-            if (response.IsSuccessStatusCode) {
+
+            if(response.IsSuccessStatusCode){
                 show = "show";
+                StateHasChanged();
                 StartTimerAsync();
-                await base.OnParametersSetAsync();
-            }
-        }
-        
+            } 
+        }   
     }
 
     public async void StartTimerAsync()
