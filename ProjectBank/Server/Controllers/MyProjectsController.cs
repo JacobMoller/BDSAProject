@@ -15,6 +15,7 @@ public class MyProjectsController : ControllerBase
         GetObjectId = () => User.GetObjectId();
     }
     
+    [Authorize(Roles = "Supervisor")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(List<ProjectDTO>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

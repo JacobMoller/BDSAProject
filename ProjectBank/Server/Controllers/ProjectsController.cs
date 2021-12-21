@@ -29,6 +29,7 @@ public class ProjectsController : ControllerBase
         => (await _projectRepository.ReadProjectByIdAsync(id)).ToActionResult();
 
     [HttpPost]
+    [Authorize(Roles = "Supervisor")]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(typeof(ProjectDTO), StatusCodes.Status201Created)]
     public async Task<IActionResult> Post(CreateProjectDTO project)
@@ -41,12 +42,14 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Supervisor")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Put(int id, [FromBody] UpdateProjectDTO project)
         => (await _projectRepository.EditProjectAsync(id, project)).ToActionResult();
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Supervisor")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
