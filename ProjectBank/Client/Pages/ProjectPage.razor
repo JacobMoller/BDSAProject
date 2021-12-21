@@ -1,6 +1,5 @@
 ﻿@page "/project/{Id:int}"
 @using Microsoft.AspNetCore.Authorization
-@using System.Timers;
 @attribute [Authorize]
 @inject HttpClient Http
 @inject IJSRuntime _jsRuntime
@@ -8,11 +7,11 @@
 <PageTitle>Project</PageTitle>
 
 @if(show == "show") {
-<div class="alert alert-success alert-dismissible fade show" role="alert" id="SuccessAlert">
-            <div class="d-flex justify-content-center m-3"> 
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="SuccessAlert">
+        <div class="d-flex justify-content-center m-3"> 
             <strong>You have applied for the project!</strong> 
-            </div>
         </div>
+    </div>
 }
 
 <div class="container">
@@ -59,7 +58,7 @@
     private ProjectDTO? project;
     private UserDetailsDTO? user;
 
-    public int Time { get; set; }
+    public int Seconds { get; set; }
     private string? show {get; set;}
     private string ApplyText = "Apply";
     private bool Applied;
@@ -83,11 +82,11 @@
 
     public async void StartTimerAsync()
     {
-      Time = 5;
-        while (Time > 0)
+      Seconds = 5;
+        while (Seconds > 0)
         {
-            Time--;
-            if(Time == 0){
+            Seconds--;
+            if(Seconds == 0){
               show = "";
               StateHasChanged();
             }
