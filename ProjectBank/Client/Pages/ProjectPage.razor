@@ -17,7 +17,7 @@
             <div class="col-8">
                 <button @onclick="GoBack" class="btn btn-primary px-4 mt-2">Go Back</button>
                 <h1>@project.Title</h1>
-                <h3>By @user.Name</h3>
+                <h3>By @(user != null ? user.Name : "unknown")</h3>
                 <h4>Tags
                     @foreach (var tag in project.Tags)
                     {
@@ -86,7 +86,7 @@
 
     bool ProjectFullCheck()
     {
-        if (project.Participants.Count >= 5)
+        if (project != null && project.Participants.Count >= 5)
         {
             ApplyText = "Project Full";
             Applied = true;
@@ -97,8 +97,9 @@
 
     async Task<bool> UserIsParticipant()
     {
-        ProjectDTO[] yourProjects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/Student");
-        if(yourProjects.FirstOrDefault(p => p.Id == Id) != null){
+        ProjectDTO[]? yourProjects = await Http.GetFromJsonAsync<ProjectDTO[]>("api/Student");
+        if (yourProjects != null && yourProjects.FirstOrDefault(p => p.Id == Id) != null)
+        {
             ApplyText = "Applied";
             Applied = true;
             return true;

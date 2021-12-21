@@ -74,7 +74,7 @@
 
     private int specificId{get; set;}
 
-    private string deleted{ get; set; }
+    private string? deleted{ get; set; }
 
     private void SetID(int id){
       specificId = id;
@@ -82,22 +82,24 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        projects = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects")).ToArray();
+        var response = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects"));
+        var projects = response != null ? response.ToArray() : new ProjectDTO[0];
         await base.OnParametersSetAsync();
 
         deleted = deleted;
     }
 
     private async Task DeleteProject(){
-        var response = await Http.DeleteAsync($"api/projects/{specificId}");
+        var deletedProject = await Http.DeleteAsync($"api/projects/{specificId}");
 
-        if(response.IsSuccessStatusCode){
+        if(deletedProject.IsSuccessStatusCode){
 
             deleted = "show";
             @* var uri = $"{NavigationManager.BaseUri}/MyProjects";
 
             NavigationManager.NavigateTo(uri, forceLoad: true); *@
-            projects = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects")).ToArray();
+            var response = (await Http.GetFromJsonAsync<List<ProjectDTO>>($"api/MyProjects"));
+            var projects = response != null ? response.ToArray() : new ProjectDTO[0];
             await base.OnParametersSetAsync();
 
             

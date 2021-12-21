@@ -1,14 +1,14 @@
 <nav class="navbar topbar navbar-dark">
-    <div class="container-fluid @NavMenuColCssClass"> 
+    <div class="container-fluid @NavMenuColCssClass">
         <a class="navbar-brand" href="">ProjectBank</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
-        </button> 
+        </button>
     </div>
     <div class="@NavMenuCssClass">
-        <div class="@NavMenuFlexCssClass "> 
+        <div class="@NavMenuFlexCssClass ">
             <div class="nav-item p-3">
-                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
                     <span class="oi oi-home" aria-hidden="true"></span> Explore
                 </NavLink>
             </div>
@@ -18,7 +18,7 @@
                         <NavLink class="nav-link" href="createproject/''">
                             <span class="oi oi-plus" aria-hidden="true"></span> Create Project
                         </NavLink>
-                    </div>               
+                    </div>
                     <div class="nav-item p-3">
                         <NavLink class="nav-link" href="MyProjects">
                             <span class="oi oi-list-rich" aria-hidden="true"></span> My Projects
@@ -28,7 +28,7 @@
             </AuthorizeView>
         </div>
     </div>
-        <LoginDisplay />  
+    <LoginDisplay />
 </nav>
 
 
@@ -42,7 +42,7 @@
     private string? NavMenuFlexCssClass => collapseNavMenu ? "d-flex justify-content-end" : null;
     private string? NavMenuColCssClass => collapseNavMenu ? "col" : null;
 
-   
+
 
     private void ToggleNavMenu()
     {
