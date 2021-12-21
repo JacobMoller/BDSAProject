@@ -22,6 +22,7 @@ public class ProjectsController : ControllerBase
     }
 
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(typeof(ProjectDTO), StatusCodes.Status200OK)]
     [HttpGet("{id}")]
     public async Task<ActionResult<ProjectDTO>> Get(int id)

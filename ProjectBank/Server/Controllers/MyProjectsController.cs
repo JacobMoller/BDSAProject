@@ -17,6 +17,7 @@ public class MyProjectsController : ControllerBase
     
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(List<ProjectDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [HttpGet]
     public async Task<List<ProjectDTO>> Get()
             => (await _projectRepository.ReadProjectsBySupervisorIdAsync(GetObjectId())).ToList();
